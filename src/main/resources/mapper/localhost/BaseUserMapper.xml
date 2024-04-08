@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mz.mapper.localhost.BaseUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.mz.model.base.BaseUser">
+        <!--@Table base_user-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="tenantId" column="tenant_id" jdbcType="INTEGER"/>
+        <result property="manageArea" column="manage_area" jdbcType="VARCHAR"/>
+        <result property="manageAreaName" column="manage_area_name" jdbcType="VARCHAR"/>
+        <result property="areaCode" column="area_code" jdbcType="VARCHAR"/>
+        <result property="loginName" column="login_name" jdbcType="VARCHAR"/>
+        <result property="phoneNo" column="phone_no" jdbcType="VARCHAR"/>
+        <result property="rawPwdMd5" column="raw_pwd_md5" jdbcType="VARCHAR"/>
+        <result property="rawPwd" column="raw_pwd" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="pwdSalt" column="pwd_salt" jdbcType="VARCHAR"/>
+        <result property="pwdModifyTime" column="pwd_modify_time" jdbcType="TIMESTAMP"/>
+        <result property="realName" column="real_name" jdbcType="VARCHAR"/>
+        <result property="userLevel" column="user_level" jdbcType="INTEGER"/>
+        <result property="userType" column="user_type" jdbcType="INTEGER"/>
+        <result property="useState" column="use_state" jdbcType="INTEGER"/>
+        <result property="loginState" column="login_state" jdbcType="INTEGER"/>
+        <result property="loginTime" column="login_time" jdbcType="TIMESTAMP"/>
+        <result property="appLoginTime" column="app_login_time" jdbcType="TIMESTAMP"/>
+        <result property="creatTime" column="creat_time" jdbcType="TIMESTAMP"/>
+        <result property="creatUser" column="creat_user" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryAllEnterpriseList" resultType="com.mz.model.base.BaseUser">
+        SELECT
+            bu.*
+        FROM
+            base_user bu, base_user_role bur, base_role br, base_main_body bmb
+        WHERE bu.id = bur.user_id
+        AND bur.role_id = br.id
+        AND br.main_body_id = bmb.id
+        AND bu.use_state = 1  AND br.use_state = 1 AND bmb.use_state = 1
+        <if test="mainBodyType != null">
+            AND bmb.main_body_type = #{mainBodyType}
+        </if>
+        <if test="tenantId != null">
+            and bu.tenant_id = #{tenantId}
+        </if>
+        <if test="areaCode != null and areaCode != ''">
+            and bu.area_code = #{areaCode}
+        </if>
+        <if test="phoneNo != null and phoneNo != ''">
+            AND bu.phone_no = #{phoneNo}
+        </if>
+        <if test="userType != null">
+            and bu.user_type = #{userType}
+        </if>
+    </select>
+
+    <select id="queryAllList" resultType="com.mz.model.base.BaseUser">
+        select *
+        from base_user
+       where use_state = 1
+        <if test="tenantId != null">
+            and tenant_id = #{tenantId}
+        </if>
+        <if test="areaCode != null and areaCode != ''">
+            and area_code = #{areaCode}
+        </if>
+        <if test="userType != null">
+            and user_type = #{userType}
+        </if>
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, tenant_id,manage_area,manage_area_name, area_code, login_name, phone_no, password, pwd_salt, pwd_modify_time, real_name, user_level, user_type, use_state, login_state, login_time,app_login_time, creat_time, creat_user
+        from base_user
+        where id = #{id}
+    </select>
+    <!--查询单个-->
+    <select id="queryByIdForManege" resultType="com.mz.model.base.vo.BaseUserVO">
+        select
+        u.id, u.tenant_id as tenantId, u.manage_area,u.manage_area_name,u.area_code as areaCode , u.login_name as loginName , u.phone_no as phoneNo, u.real_name as realName, u.user_level as userLevel, u.user_type as userType,
+        u.use_state as useState, u.login_time as loginTime, u.creat_time as creatTime, u.creat_user as creatUser,t.tenant_name as tenantName
+        from base_user u, base_tenant t
+        <where>
+            u.tenant_id = t.id
+            and u.id = #{id}
+        </where>
+    </select>
+    <!--查询单个-->
+    <select id="queryByName" resultMap="BaseResultMap">
+        select
+          id, tenant_id, manage_area,manage_area_name,area_code, login_name, phone_no, password, pwd_salt, pwd_modify_time, real_name, user_level, user_type, use_state, login_state, login_time,app_login_time, creat_time, creat_user
+        from base_user
+        where login_name = #{loginName}
+    </select>
+    <!--查询单个-->
+    <select id="queryByAreaCodeAndType" resultMap="BaseResultMap">
+        select
+          id, tenant_id, manage_area,manage_area_name,area_code, login_name, phone_no, password, pwd_salt, pwd_modify_time, real_name, user_level, user_type, use_state, login_state, login_time,app_login_time, creat_time, creat_user
+        from base_user
+        where  1=1
+        <if test="areaCode != null and areaCode != ''">
+            and area_code = #{areaCode}
+        </if>
+          <if test="userType != null">
+            and user_type = #{userType}
+        </if>
+
+    </select>
+    <select id="queryByPhoneNo" resultMap="BaseResultMap">
+        select
+          id, tenant_id, manage_area,manage_area_name,area_code, login_name, phone_no, password, pwd_salt, pwd_modify_time, real_name, user_level, user_type, use_state, login_state, login_time,app_login_time, creat_time, creat_user
+        from base_user
+        where (login_name = #{mobilePhone} or phone_no = #{mobilePhone}) and tenant_id = #{tenantId}
+        and use_state
+        order by creat_time desc
+        limit 1
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit"   resultType="com.mz.model.base.vo.BaseUserVO">
+        select
+        DISTINCT(u.id), u.tenant_id as tenantId, u.manage_area,u.manage_area_name,u.area_code as areaCode , u.login_name as loginName , u.phone_no as phoneNo, u.real_name as realName, u.user_level as userLevel, u.user_type as userType,
+        u.use_state as useState, u.login_time as loginTime, u.creat_time as creatTime, u.creat_user as creatUser
+        from base_user u
+        <if test="mainBodyId != null ">
+        left join  (SELECT ur.user_id,r.main_body_id,MIN(bd.id),bd.dept_id
+                        from base_user_role ur,base_role r,base_duty bd
+                        where ur.role_id = r.id and bd.role_id =r.id  and ur.duty_id = bd.id
+                        <if test="deptId != null">
+                            and bd.dept_id  = #{deptId}
+                        </if>
+                        GROUP BY ur.user_id,r.main_body_id,bd.dept_id
+                        ) a  on  a.user_id = u.id
+                        <if test="mainBodyId != '-1'and currentType == 1 ">
+                            and a.main_body_id  = #{mainBodyId}
+                        </if>
+
+        </if>
+        <where>
+            <if test="tenantId != null">
+                and u.tenant_id = #{tenantId}
+            </if>
+            <if test="mainBodyId != null">
+                <!--当前主体（党组织）-->
+                <if test="mainBodyId != '-1' ">
+                    <if test="currentType == 1">
+                       and a.main_body_id  = #{mainBodyId}
+                    </if>
+                    <if test="currentType == 2">
+                        and a.main_body_id  != #{mainBodyId} and a.main_body_id  is not null
+                    </if>
+                </if>
+                <!--其他主体（党组织）-->
+                <if test="mainBodyId == '-1' ">
+                    and a.main_body_id  is null
+                </if>
+                <if test="deptId != null">
+                    and a.dept_id  = #{deptId}
+                </if>
+            </if>
+            <if test="loginName != null and loginName != ''">
+                and u.login_name like "%"#{loginName}"%"
+            </if>
+            <if test="realName != null and realName != ''">
+                and u.real_name like "%"#{realName}"%"
+            </if>
+            <if test="busId != null"> <!--用户反馈抄送人筛除已抄送的人-->
+                and u.id not in (SELECT mo.user_id FROM tab_pb_mission_object mo,tab_pb_mission_distribute md
+                WHERE mo.distribute_id = md.id AND mo.distribute_type = 2 AND mo.user_id is not null AND md.bus_id  = #{busId} )
+            </if>
+            <if test="loginName != null and loginName != ''">
+                and u.login_name like "%"#{loginName}"%"
+            </if>
+            <if test="useState != null and useState != 3">
+                and u.use_state = #{useState}
+            </if>
+        </where>
+        order by u.creat_time desc
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryLimitByLevel"   resultType="com.mz.model.base.vo.BaseUserVO">
+        select
+        DISTINCT(u.id), u.tenant_id as tenantId, u.manage_area,u.manage_area_name,u.area_code as areaCode , u.login_name as loginName , u.phone_no as phoneNo, u.real_name as realName, u.user_level as userLevel, u.user_type as userType,
+        u.use_state as useState,  u.login_time as loginTime, u.creat_time as creatTime, u.creat_user as creatUser,t.tenant_name as tenantName
+        ,b.mainBodyNameS
+        from base_tenant t,base_user u
+        left JOIN(SELECT GROUP_CONCAT(a.main_body_name) as mainBodyNameS,a.user_id FROM
+        (SELECT  ur.user_id,br.main_body_id,bmd.main_body_name
+        FROM base_user_role ur,base_role br,base_main_body bmd
+        WHERE ur.role_id = br.id AND br.main_body_id = bmd.id
+        GROUP BY ur.user_id,br.main_body_id,bmd.main_body_name) a GROUP BY user_id  ) b on b.user_id = u.id
+        <where>
+         u.tenant_id = t.id
+            <if test="tenantId != null">
+                and u.tenant_id = #{tenantId}
+            </if>
+            <if test="loginName != null and loginName != ''">
+                and u.login_name like "%"#{loginName}"%"
+            </if>
+            <if test="realName != null and realName != ''">
+                and u.real_name like "%"#{realName}"%"
+            </if>
+            <if test="userLevel != null">
+                and u.user_level = #{userLevel}
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, tenant_id, manage_area,manage_area_name,area_code, login_name, phone_no, password, pwd_salt, pwd_modify_time, real_name, user_level, user_type, use_state, login_state, login_time,app_login_time, creat_time, creat_user
+        from base_user
+        <where>
+            <if test="id != null">
+                and id != #{id}   <!--这里查询不等于传入的ID，作为修改时验证名称重复问题，其他情况查询不存在传入ID的情况-->
+            </if>
+            <if test="tenantId != null">
+                and tenant_id = #{tenantId}
+            </if>
+            <if test="areaCode != null and areaCode != ''">
+                and area_code = #{areaCode}
+            </if>
+            <if test="loginName != null and loginName != ''">
+                and login_name = #{loginName}<!--查询完全匹配，用于判断名称重复，需要查询like，另外传参数-->
+            </if>
+            <if test="phoneNo != null and phoneNo != ''">
+                and phone_no = #{phoneNo}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="pwdSalt != null and pwdSalt != ''">
+                and pwd_salt = #{pwdSalt}
+            </if>
+            <if test="realName != null and realName != ''">
+                and real_name = #{realName}
+            </if>
+            <if test="userLevel != null">
+                and user_level = #{userLevel}
+            </if>
+            <if test="userType != null">
+                and user_type = #{userType}
+            </if>
+            <if test="useState != null">
+                and use_state = #{useState}
+            </if>
+            <if test="loginState != null">
+                and login_state = #{loginState}
+            </if>
+            <if test="loginTime != null">
+                and login_time = #{loginTime}
+            </if>
+            <if test="creatTime != null">
+                and creat_time = #{creatTime}
+            </if>
+            <if test="creatUser != null and creatUser != ''">
+                and creat_user = #{creatUser}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into base_user(id,tenant_id,  manage_area,manage_area_name,area_code, login_name, phone_no, password, pwd_salt, pwd_modify_time, real_name, user_level, user_type, use_state, login_state, login_time,app_login_time, creat_time, creat_user)
+        values (#{id},#{tenantId}, #{manageArea}, #{manageAreaName}, #{areaCode}, #{loginName}, #{phoneNo}, #{password},#{pwdSalt}, #{pwdModifyTime}, #{realName}, #{userLevel}, #{userType}, #{useState}, #{loginState}, #{loginTime},#{appLoginTime}, #{creatTime}, #{creatUser})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update base_user
+        <set>
+            <if test="tenantId != null">
+                tenant_id = #{tenantId},
+            </if>
+            <if test="manageArea != null and manageArea != ''">
+                manage_area = #{manageArea},
+            </if>
+            <if test="manageAreaName != null and manageAreaName != ''">
+                manage_area_name = #{manageAreaName},
+            </if>
+            <if test="areaCode != null and areaCode != ''">
+                area_code = #{areaCode},
+            </if>
+            <if test="loginName != null and loginName != ''">
+                login_name = #{loginName},
+            </if>
+            <if test="phoneNo != null and phoneNo != ''">
+                phone_no = #{phoneNo},
+            </if>
+            <if test="rawPwdMd5 != null and rawPwdMd5 != ''">
+                raw_pwd_md5 = #{rawPwdMd5},
+            </if>
+            <if test="rawPwd != null and rawPwd != ''">
+                raw_pwd = #{rawPwd},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="pwdSalt != null and pwdSalt != ''">
+                pwd_salt = #{pwdSalt},
+            </if>
+            <if test="pwdModifyTime != null">
+                pwd_modify_time = #{pwdModifyTime},
+            </if>
+            <if test="realName != null and realName != ''">
+                real_name = #{realName},
+            </if>
+            <if test="userLevel != null">
+                user_level = #{userLevel},
+            </if>
+            <if test="userType != null">
+                user_type = #{userType},
+            </if>
+            <if test="useState != null">
+                use_state = #{useState},
+            </if>
+            <if test="loginState != null">
+                login_state = #{loginState},
+            </if>
+            <if test="loginTime != null and loginTime != ''">
+                login_time = #{loginTime},
+            </if>
+            <if test="appLoginTime != null and appLoginTime != ''">
+                app_login_time = #{appLoginTime},
+            </if>
+            <if test="creatTime != null">
+                creat_time = #{creatTime},
+            </if>
+            <if test="creatUser != null and creatUser != ''">
+                creat_user = #{creatUser},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--通过主键修改用户可用状态-->
+    <update id="changeUserState">
+        update base_user
+        <set>
+            <if test="useState != null">
+                use_state = #{useState},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--通过主键修改用户等级-->
+    <update id="changeLevle">
+        update base_user
+        <set>
+            <if test="userLevel != null">
+                user_level = #{userLevel},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from base_user where id = #{id}
+    </delete>
+    <!--查询镇级以上的用户 -->
+    <select id="queryIdentityForUser" resultType="string">
+       select min(bmb.area_code) as area_code
+        from base_user_role ur,base_role bd,base_main_body bmb,base_user u
+        where ur.role_id = bd.id AND bd.main_body_id = bmb.id  AND ur.user_id = u.id
+        and bmb.use_state = 1 and u.use_state = 1 and u.phone_no is not null AND u.phone_no !=''
+        AND bmb.main_body_type  =1  <!--镇府部门-->
+        <if test="userId != null">
+            and u.id = #{userId}
+        </if>
+    </select>
+    <select id="queryUserIdByRealName" resultType="java.lang.String">
+        SELECT b.id
+        FROM base_user b
+                 JOIN (SELECT MIN(user_level) AS minLevel
+                       FROM base_user
+                       WHERE tenant_id = #{tenantId}
+                         AND real_name = #{realName}) AS t ON b.user_level = t.minLevel
+        WHERE b.real_name = #{realName}
+          AND b.tenant_id = #{tenantId}
+    </select>
+    <select id="queryUserByGrid"  resultType="com.mz.model.base.BaseUser">
+        SELECT u.*
+        FROM base_user u,base_user_role ur,base_duty bd
+        WHERE u.id = ur.user_id and ur.duty_id = bd.id
+        <if test="tenantId != null">
+            and u.tenant_id = #{tenantId}
+        </if>
+        <if test="dutyTypeCodeArr != null ">
+            and bd.duty_type_code in
+            <foreach collection="dutyTypeCodeArr" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+          and bd.grid_id = #{gridId}
+          limit 1
+    </select>
+
+</mapper>

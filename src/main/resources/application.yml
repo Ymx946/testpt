@@ -1,0 +1,346 @@
+server:
+  port: 8086
+  servlet:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+    context-path: /future-datacenter
+  tomcat:
+    max-http-form-post-size: -1
+  compression:
+    enabled: false
+    min-response-size: 4096
+  shutdown: graceful #开启优雅停机
+
+  undertow:
+    accesslog: # 是否打开 undertow 日志，默认为 false
+      enabled: false
+      # 设置访问日志所在目录
+      dir: ./logs
+    # 阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程
+    # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+    # 每块buffer的空间大小,越小的空间被利用越充分，不要设置太大，以免影响其他应用，合适即可
+    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作
+    # 如果每次需要 ByteBuffer 的时候都去申请，对于堆内存的 ByteBuffer 需要走 JVM 内存分配流程（TLAB -> 堆），对于直接内存则需要走系统调用，这样效率是很低下的。
+    # 所以，一般都会引入内存池。在这里就是 `BufferPool`。
+    # 目前，UnderTow 中只有一种 `DefaultByteBufferPool`，其他的实现目前没有用。
+    # 这个 DefaultByteBufferPool 相对于 netty 的 ByteBufArena 来说，非常简单，类似于 JVM TLAB 的机制
+    # 对于 bufferSize，最好和你系统的 TCP Socket Buffer 配置一样
+    # `/proc/sys/net/ipv4/tcp_rmem` (对于读取)
+    # `/proc/sys/net/ipv4/tcp_wmem` (对于写入)
+    # 在内存大于 128 MB 时，bufferSize 为 16 KB 减去 20 字节，这 20 字节用于协议头
+    buffer-size: 16364
+    # 是否分配的直接内存(NIO直接分配的堆外内存)
+    # 是否分配的直接内存(NIO直接分配的堆外内存)，这里开启，所以java启动参数需要配置下直接内存大小，减少不必要的GC
+    # 在内存大于 128 MB 时，默认就是使用直接内存的
+    direct-buffers: true
+    threads: # 默认情况下，io 线程大小为可用 CPU 数量 * 2，即读线程个数为可用 CPU 数量，写线程个数也为可用 CPU 数量。
+      # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个读线程和一个写线程
+      io: 8
+      # 阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程
+      # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+      worker: 128
+    # http post body 大小，默认为 -1B ，即不限制
+    max-http-post-size: -1B
+    # 是否在启动时创建 filter，默认为 true，不用修改
+    eager-filter-init: true
+    # 限制路径参数数量，默认为 1000
+    max-parameters: 1000
+    # 限制 http header 数量，默认为 200
+    max-headers: 200
+    # 限制 http header 中 cookies 的键值对数量，默认为 200
+    max-cookies: 200
+    # 是否允许 / 与 %2F 转义。/ 是 URL 保留字,除非你的应用明确需要，否则不要开启这个转义，默认为 false
+    allow-encoded-slash: false
+    # 是否允许 URL 解码，默认为 true，除了 %2F 其他的都会处理
+    decode-url: true
+    # url 字符编码集，默认是 utf-8
+    url-charset: utf-8
+    # 响应的 http header 是否会加上 'Connection: keep-alive'，默认为 true
+    always-set-keep-alive: true
+    # 请求超时，默认是不超时，我们的微服务因为可能有长时间的定时任务，所以不做服务端超时，都用客户端超时，所以我们保持这个默认配置
+    no-request-timeout: -1
+    # 是否在跳转的时候保持 path，默认是关闭的，一般不用配置
+    preserve-path-on-forward: false
+    options: # spring boot 没有抽象的 xnio 相关配置在这里配置，对应 org.xnio.Options 类
+      #      socket:
+      #        SSL_ENABLED: false
+      # spring boot 没有抽象的 undertow 相关配置在这里配置，对应 io.undertow.UndertowOptions 类
+      server:
+        ALLOW_UNKNOWN_PROTOCOLS: false
+
+#加载配置yml文件 application开头可以不用写
+spring:
+  application:
+    name: future-datacenter
+
+  profiles:
+    active: '@profileActive@'
+  #      active: test
+
+  devtools:
+    add-properties: true
+
+  cloud:
+    nacos:
+      discovery:
+        enabled: true
+        namespace: futurerural
+        server-addr: 8.136.114.2:8848
+
+  lifecycle:
+    timeout-per-shutdown-phase: 20s #设置缓存时间 默认30s
+
+  main:
+    banner-mode: off
+    allow-bean-definition-overriding: true
+
+  servlet:
+    context-path: /
+    multipart:
+      enabled: true
+      max-file-size: 2048MB
+      max-request-size: 1024MB
+      # 设置文件缓存的临界点,超过则先保存到临时目录,默认为0,所有文件都会进行缓存
+      file-size-threshold: 200MB
+
+  resources:
+    static-locations: classpath:/templates/
+
+  thymeleaf:
+    cache: false
+
+  redis:
+    lettuce:
+      pool:
+        max-active: 200 #连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1 # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
+        max-idle: 20 # 连接池中的最大空闲连接
+        min-idle: 5 # 连接池中的最小空闲连接
+    timeout: 60000 # 连接超时时间 单位 ms（毫秒）
+
+  jackson: #    default-property-inclusion: NON_NULL
+    serialization:
+      write-dates-as-timestamps: true
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  datasource:
+    #    druid:
+    #      initial-size: 5                                       # 初始化大小
+    #      min-idle: 10                                          # 最小连接数
+    #      max-active: 20                                        # 最大连接数
+    #      max-wait: 60000                                       # 获取连接时的最大等待时间
+    #      min-evictable-idle-time-millis: 300000                # 一个连接在池中最小生存的时间，单位是毫秒
+    #      max-evictable-idle-time-millis: 900000                    # 配置一个连接在池中最大生存的时间，单位是毫秒
+    #      time-between-eviction-runs-millis: 60000              # 多久才进行一次检测需要关闭的空闲连接，单位是毫秒
+    #      filters: stat,wall,log4j                              # 配置扩展插件：stat-监控统计，log4j-日志，wall-防火墙（防止SQL注入），去掉后，监控界面的sql无法统计
+    #      validation-query: SELECT 1                            # 检测连接是否有效的 SQL语句，为空时以下三个配置均无效
+    #      test-on-borrow: true                                  # 申请连接时执行validationQuery检测连接是否有效，默认true，开启后会降低性能
+    #      test-on-return: true                                  # 归还连接时执行validationQuery检测连接是否有效，默认false，开启后会降低性能
+    #      test-while-idle: true                                 # 申请连接时如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效，默认false，建议开启，不影响性能
+    #      stat-view-servlet:
+    #        url-pattern: /druid/*
+    #        enabled: false                                       # 是否开启 StatViewServlet
+    #        #        allow: 127.0.0.1                                    # 访问监控页面 白名单，默认127.0.0.1
+    #        reset-enable: false                                 # 禁用 HTML 中 Reset All 按钮
+    #        # deny: 192.168.56.1                                # 访问监控页面 黑名单
+    #        login-username: admin                               # 访问监控页面 登陆账号
+    #        login-password: mzadmin                              # 访问监控页面 登陆密码
+    #      filter:
+    #        stat:
+    #          enabled: true                                     # 是否开启 FilterStat，默认true
+    #          log-slow-sql: true                                # 是否开启 慢SQL 记录，默认false
+    #          slow-sql-millis: 5000                             # 慢 SQL 的标准，默认 3000，单位：毫秒
+    #          merge-sql: false                                  # 合并多个连接池的监控数据，默认false
+    #      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；记录慢SQL
+    #      #      aop-patterns: com.mz.mapper.localhost.*
+    #      # 配置 DruidStatFilter
+    #      web-stat-filter:
+    #        enabled: true
+    #        url-pattern: /*
+    #        exclusions: .js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*
+    #数据源类型
+    hikari:
+      #连接池名称，默认HikariPool-1
+      pool-name: FutureRuralServerHikariPool
+      # 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count), core_count 为core的数量,  effective_spindle_count 为挂载的磁盘数量
+      maximum-pool-size: 50
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      # 允许连接在连接池中空闲的最长时间（以毫秒为单位），超时则被释放（retired），缺省:10分钟
+      idle-timeout: 180000
+      # 数据库连接超时时间,默认30秒，即30000，如果小于250毫秒，则被重置回30秒。
+      connection-timeout: 30000
+      # 空闲时保持最小连接数 该值默认为10，小于0或大于maximum-pool-size，都会重置为maximum-pool-size
+      minimum-idle: 5
+      # 测试sql
+      connection-test-query: /**ping*/
+      # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      auto-commit: true
+      data-source-properties:
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        cachePrepStmts: true
+        useServerPrepStmts: true
+
+logging:
+  level:
+    org.springframework.data.mongodb.core: INFO
+
+mybatis-plus:
+  type-aliases-package: com.mz.mapper
+  mapper-locations: classpath*:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    lazy-loading-enabled: true
+    multiple-result-sets-enabled: true
+    default-executor-type: simple
+    default-statement-timeout: 100000
+    log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
+  global-config:
+    banner: false
+    enable-sql-runner: true
+
+#pagehelper分页插件
+pagehelper:
+  helper-dialect: mysql
+  reasonable: false
+  support-methods-arguments: true
+  params: count=countSql
+  rowBoundsWithCount: true
+  offset-as-page-num: true
+  page-size-zero: true
+  banner: false
+
+aliyun:
+  oss: #测试图片路径
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    basicurl: mzsz/datacenter/images/
+    osshost: https://img.mzszxc.com/
+    bucketname: mzsz
+    accessid: LTAI5tKrjAwJCiLmoFWkkx4S
+    accesskey: vVx6xFfGSEa4wh4fLM5OJraMoUFYtZ
+tlssdkappid: 1400544394
+tlssdkappkey: 4bf4703ce20a4bb2c6f47d17d111d36c4260b19c3036881e0ed74bb1f740f7b2
+
+# 文件路径
+file:
+  filePath: /usr/local/nginx/html/
+  fileFolder: file/
+  fileCertPath: /usr/local/tomcat-8080/webapps/cert/
+
+#word模板路径
+wordtemplates: templates/
+#小程序第三方管理参数
+domain: dev.mzszxc.com
+component_appid: wx0190030e9a90ea72
+component_secret: 8d1ccb2da562a1b2dd6cf939370e6437
+token: mzszxc305
+encodingaeskey: mzszxcabcdefghijklmnopqrstuvwxyz01234567891
+redirect_uri: http://dev.mzszxc.com/mzpcsystem/#/baseData/distribution?appId=
+
+#fastdfs:
+#  charset: UTF-8
+#  connect_timeout_in_seconds: 5
+#  network_timeout_in_seconds: 30
+#  tracker_server: 127.0.0.1:22122
+# -Djavax.net.debug=all
+# wss连接握手证书不可信解决方法 https://blog.csdn.net/faye0412/article/details/6883879
+wcs:
+  local: ws://115.236.167.66:3098
+  uri: ws://115.236.167.66:3098
+  username: admin
+  password: Vbox_10086
+  key: Vbox_10086
+  sdkType: java
+  version: 1
+  subscribes:
+    - alarm
+    - device
+    - resource
+  device:
+    sync: true
+    path: /
+    count: 50
+    verbose: 10
+  fileServer:
+    port: 4080
+
+tcp:
+  server:
+    port: 3200
+    address: 115.236.167.66
+  client:
+    timeout: 6000
+    poolSize: 3
+
+#本项目域名
+localUrl: https://test.mzszxc.com/
+localIp: http://8.136.114.2:8086
+
+ribbon:
+  http:
+    client:
+      enabled: false
+  okhttp:
+    enabled: true
+feign:
+  client:
+    url: ${localUrl}futurerural
+    config:
+      default:
+        loggerLevel: full
+        readTimeout: 60000
+        connectTimeout: 60000
+  httpclient:
+    enabled: false
+    disable-ssl-validation: false
+  okhttp:
+    enabled: true
+  compression:
+    request:
+      enabled: true
+      mime-types:
+        - image/png
+        - image/jpeg
+        - image/jpg
+        - text/xml
+        - text/html
+        - text/css
+        - application/javascript
+        - application/octet-stream
+        - application/xml
+        - application/json
+        - text/plain
+      min-request-size: 10000
+    response:
+      enabled: true
+      useGzipDecoder: true
+
+wx:
+  mini:
+    keyPath: classpath:client1.p12 # 商户p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
+    busAppId: fwfd112
+    busMchId: 234234
+    busMchKey: 12341234
+    busSubAppId: werwer1231
+    busSubMchId: fsafwe1111
+
+# 微信异步回调 url
+wxAppletNotifyUrl: https://dev.mzszxc.com/future-rural/mobileMallOrder/wxAppletNotifyUrl
+wxAppletReceiveNotifyUrl: https://dev.mzszxc.com/future-rural/mobileReceiveOrderItem/wxAppletNotifyUrl
+
+nacos:
+  logging:
+    default:
+      config:
+        enabled: false
+
+url:
+  api:
+    prefix:
+      server: datacenter

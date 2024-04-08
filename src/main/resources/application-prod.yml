@@ -1,0 +1,82 @@
+spring:
+  datasource:
+    dynamic:
+      primary: master
+      strict: false
+      datasource:
+        master:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          type: com.zaxxer.hikari.HikariDataSource
+          #一体化正式
+          url: jdbc:mysql://rm-bp1y95l974v0ak0i1.mysql.rds.aliyuncs.com:3306/wlxckf?allowMultiQueries=true&autoReconnect=true&useUnicode=true&rewriteBatchedStatements=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+          jdbc-url: ${spring.datasource.dynamic.datasource.master.url}
+          username: mzdata
+          password: mz2021!@#
+        slave:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          type: com.zaxxer.hikari.HikariDataSource
+          #测试数据库(外网)
+          url: jdbc:mysql://rm-bp1y95l974v0ak0i1.mysql.rds.aliyuncs.com:3306/wlxckf?allowMultiQueries=true&autoReconnect=true&useUnicode=true&rewriteBatchedStatements=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+          jdbc-url: ${spring.datasource.dynamic.datasource.slave.url}
+          username: mzdata
+          password: mz2021!@#
+
+  redis:
+    host: 47.118.49.82
+    port: 6379
+    password: mzsz123456
+    database: 0 #一体化正式
+    timeout: 100000
+
+  data:
+    mongodb:
+      host: 47.118.49.82 #指定MongoDB服务地址
+      port: 27017 #指定端口，默认就为27017
+      database: wlxckf #指定使用的数据库
+      authentication-database: admin # 登录认证的逻辑库名
+      username: mzdata #用户名
+      password: mz2021!@# #密码
+      auto-index-creation: true
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.118.49.82:8848
+
+logging:
+  config: classpath:log/logback-prod-spring.xml
+  file:
+    path: ./logs
+
+# SpringBoot 监控神器—Actuator
+#省平台服务地址--对接用户使用
+agriUrl: https://test.mzszxc.com/agrifuturerural/
+
+# 文件路径
+file:
+  filePath: /usr/local/nginx/html/
+  fileFolder: file/
+  fileCertPath: /home/mz/tomcat-8080/webapps/cert/
+
+
+
+localUrl: https://dev.mzszxc.com/
+localIp: http://47.118.49.82:8080
+
+
+#linx系统（正式和测试）IP获取城市geoLite数据库文件
+geoLite:
+  geodatebase: /home/mz/geoLite/GeoLite2-City.mmdb
+  geodatebase2018: /home/mz/geoLite/GeoLite2-City2018.mmdb
+
+#tinify_key: QjznRm8Dtnnqhpms8vrL1fNbgc6QmszH
+tinify:
+  key: QjznRm8Dtnnqhpms8vrL1fNbgc6QmszH
+#溯源暗码
+trancecode: hgsjmz0713
+#溯源域名
+tranceurl: https://dev.mzszxc.com/trace/#/?
+
+# 微信异步回调 url
+wxAppletNotifyUrl: https://dev.mzszxc.com/future-rural/mobileMallOrder/wxAppletNotifyUrl
+wxAppletReceiveNotifyUrl: https://dev.mzszxc.com/future-rural/mobileReceiveOrderItem/wxAppletNotifyUrl
