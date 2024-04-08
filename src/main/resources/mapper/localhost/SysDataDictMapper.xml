@@ -79,7 +79,7 @@
           id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state
         from sys_data_dict
         <where>
-            <if test="id != null">
+            <if test="id != null and id != ''">
                 and id != #{id}<!--这里查询不等于传入的ID，作为修改时验证名称重复问题，其他情况查询不存在传入ID的情况-->
             </if>
             <if test="dictTypeCode != null and dictTypeCode != ''">

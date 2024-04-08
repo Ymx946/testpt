@@ -1,7 +1,12 @@
 package com.mz.service.base.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
+import com.mz.common.ConstantsUtil;
 import com.mz.common.context.PageInfo;
 import com.mz.common.util.IdWorker;
 import com.mz.common.util.Result;
@@ -25,7 +30,7 @@ import java.util.Map;
  * @since 2021-03-17 10:58:51
  */
 @Service("sysDataDictService")
-public class SysDataDictServiceImpl implements SysDataDictService {
+public class SysDataDictServiceImpl extends ServiceImpl<SysDataDictMapper,SysDataDict> implements SysDataDictService {
     @Resource
     private SysDataDictMapper sysDataDictMapper;
 
@@ -176,14 +181,22 @@ public class SysDataDictServiceImpl implements SysDataDictService {
             SysDataDict findSysDataDict = new SysDataDict();
             findSysDataDict.setDictTypeCode(sysDataDict.getDictTypeCode());
             findSysDataDict.setDictCode(sysDataDict.getDictCode());
-            findSysDataDict.setId(sysDataDict.getId());//<!--这里查询不等于传入的ID，作为修改时验证名称重复问题，其他情况查询不存在传入ID的情况-->
+            findSysDataDict.setId(sysDataDict.getId());
             List<SysDataDict> nameDeftList = sysDataDictMapper.queryAll(findSysDataDict);
             if (nameDeftList != null && nameDeftList.size() > 0) {
-                return Result.failed("数据字典代码重复");
-            } else {
-                this.sysDataDictMapper.update(sysDataDict);
-                return Result.success(sysDataDictMapper.queryById(sysDataDict.getId()));
+                return Result.failed("该类型数据字典代码重复");
             }
+            SysDataDict find = new SysDataDict();
+            find.setDictTypeCode(sysDataDict.getDictTypeCode());
+            find.setDictName(sysDataDict.getDictName());
+            find.setId(sysDataDict.getId());
+            List<SysDataDict> list = queryAllByName(find);
+            if (CollectionUtil.isNotEmpty(list)) {
+                return Result.failed("该类型数据字典名称重复");
+            }
+            this.sysDataDictMapper.update(sysDataDict);
+            return Result.success(sysDataDictMapper.queryById(sysDataDict.getId()));
+
         } else {
             SysDataDict findSysDataDict = new SysDataDict();
             findSysDataDict.setDictTypeCode(sysDataDict.getDictTypeCode());
@@ -191,17 +204,38 @@ public class SysDataDictServiceImpl implements SysDataDictService {
             List<SysDataDict> nameDeftList = sysDataDictMapper.queryAll(findSysDataDict);
             if (nameDeftList != null && nameDeftList.size() > 0) {
                 return Result.failed("数据字典代码重复");
-            } else {
-                IdWorker idWorker = new IdWorker(0L, 0L);
-                long newId = idWorker.nextId();
-                sysDataDict.setId(String.valueOf(newId));
-                this.sysDataDictMapper.insert(sysDataDict);
-                return Result.success(sysDataDict);
-
             }
+            SysDataDict find = new SysDataDict();
+            find.setDictTypeCode(sysDataDict.getDictTypeCode());
+            find.setDictName(sysDataDict.getDictName());
+            find.setId(sysDataDict.getId());
+            List<SysDataDict> list = queryAllByName(find);
+            if (CollectionUtil.isNotEmpty(list)) {
+                return Result.failed("该类型数据字典名称重复");
+            }
+            IdWorker idWorker = new IdWorker(0L, 0L);
+            long newId = idWorker.nextId();
+            sysDataDict.setId(String.valueOf(newId));
+            this.sysDataDictMapper.insert(sysDataDict);
+            return Result.success(sysDataDict);
         }
     }
-
+    @Override
+    public List<SysDataDict> queryAllByName(SysDataDict vo) {
+        LambdaQueryChainWrapper<SysDataDict> lambdaQuery = lambdaQuery();
+        lambdaQuery.eq(SysDataDict::getUseState, ConstantsUtil.IS_DONT_DEL);
+        if (ObjectUtil.isNotEmpty(vo.getId())) {
+            lambdaQuery.ne(SysDataDict::getId, vo.getId());
+        }
+        if (ObjectUtil.isNotEmpty(vo.getDictTypeCode())) {
+            lambdaQuery.eq(SysDataDict::getDictTypeCode, vo.getDictTypeCode());
+        }
+        if (ObjectUtil.isNotEmpty(vo.getDictName())) {
+            lambdaQuery.eq(SysDataDict::getDictName, vo.getDictName());
+        }
+        List<SysDataDict> roomList = lambdaQuery.orderByDesc(SysDataDict::getDictCode).list();
+        return roomList;
+    }
     /**
      * 修改数据
      *

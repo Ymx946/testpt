@@ -126,5 +126,6 @@ public interface SysDataDictService {
      * 根据跳转方式查询不同的数据字典
      */
     List<SysDataDict> queryAllByJumpWay(SysDataDict pojo, Integer jumpWay);
+    List<SysDataDict> queryAllByName(SysDataDict vo);
 
 }
