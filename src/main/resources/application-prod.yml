@@ -8,7 +8,7 @@ spring:
           driver-class-name: com.mysql.cj.jdbc.Driver
           type: com.zaxxer.hikari.HikariDataSource
           #一体化正式
-          url: jdbc:mysql://rm-bp1y95l974v0ak0i1.mysql.rds.aliyuncs.com:3306/wlxckf?allowMultiQueries=true&autoReconnect=true&useUnicode=true&rewriteBatchedStatements=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+          url: jdbc:mysql://rm-bp1y95l974v0ak0i1.mysql.rds.aliyuncs.com:3306/mzdata?allowMultiQueries=true&autoReconnect=true&useUnicode=true&rewriteBatchedStatements=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
           jdbc-url: ${spring.datasource.dynamic.datasource.master.url}
           username: mzdata
           password: mz2021!@#
@@ -16,7 +16,7 @@ spring:
           driver-class-name: com.mysql.cj.jdbc.Driver
           type: com.zaxxer.hikari.HikariDataSource
           #测试数据库(外网)
-          url: jdbc:mysql://rm-bp1y95l974v0ak0i1.mysql.rds.aliyuncs.com:3306/wlxckf?allowMultiQueries=true&autoReconnect=true&useUnicode=true&rewriteBatchedStatements=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+          url: jdbc:mysql://rm-bp1y95l974v0ak0i1.mysql.rds.aliyuncs.com:3306/mzdata?allowMultiQueries=true&autoReconnect=true&useUnicode=true&rewriteBatchedStatements=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
           jdbc-url: ${spring.datasource.dynamic.datasource.slave.url}
           username: mzdata
           password: mz2021!@#

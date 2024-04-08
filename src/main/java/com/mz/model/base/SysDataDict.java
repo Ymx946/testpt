@@ -1,4 +1,4 @@
-package com.mz.common.model;
+package com.mz.model.base;
 
 import lombok.Getter;
 import lombok.Setter;

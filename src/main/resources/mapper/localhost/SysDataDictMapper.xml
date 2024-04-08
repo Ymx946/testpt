@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mz.mapper.localhost.SysDataDictMapper">
+
+    <resultMap id="BaseResultMap" type="com.mz.model.base.SysDataDict">
+        <!--@Table sys_data_dict-->
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="dictTypeCode" column="dict_type_code" jdbcType="VARCHAR"/>
+        <result property="dictTypeName" column="dict_type_name" jdbcType="VARCHAR"/>
+        <result property="dictCode" column="dict_code" jdbcType="VARCHAR"/>
+        <result property="dictName" column="dict_name" jdbcType="VARCHAR"/>
+        <result property="areaCode" column="area_code" jdbcType="VARCHAR"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="useState" column="use_state" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state
+        from sys_data_dict
+        where id = #{id}
+    </select>
+
+    <!--查询单个-->
+    <select id="queryByCodeWithArea" resultMap="BaseResultMap">
+        select
+        id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state
+        from sys_data_dict
+        where dict_type_code = #{dictTypeCode}
+        and dict_code = #{dictCode}
+        <if test="areaCode != null and areaCode != ''">
+            and area_code = #{areaCode}
+        </if>
+
+    </select>
+    <!--查询单个-->
+    <select id="queryByCode" resultMap="BaseResultMap">
+        select
+          id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state
+        from sys_data_dict
+        where dict_type_code = #{dictTypeCode}
+        and dict_code = #{dictCode}
+    </select>
+
+    <!--查询单个-->
+    <select id="queryByName" resultMap="BaseResultMap">
+        select
+          id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state
+        from sys_data_dict
+        where dict_type_code = #{dictTypeCode}
+        and dict_name = #{dictName}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state
+        from sys_data_dict
+        <where>
+            <if test="dictTypeCode != null and dictTypeCode != ''">
+                and dict_type_code = #{dictTypeCode}
+            </if>
+            <if test="dictTypeName != null and dictTypeName != ''">
+                and dict_type_name like "%"#{dictTypeName}"%"
+            </if>
+            <if test="dictName != null and dictName != ''">
+                and dict_name like "%"#{dictName}"%"
+            </if>
+            <if test="areaCode != null and areaCode != ''">
+                and area_code = #{areaCode}
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state
+        from sys_data_dict
+        <where>
+            <if test="id != null">
+                and id != #{id}<!--这里查询不等于传入的ID，作为修改时验证名称重复问题，其他情况查询不存在传入ID的情况-->
+            </if>
+            <if test="dictTypeCode != null and dictTypeCode != ''">
+                and dict_type_code = #{dictTypeCode}
+            </if>
+            <if test="dictTypeName != null and dictTypeName != ''">
+                and dict_type_name = #{dictTypeName}<!--查询完全匹配，用于判断名称重复，需要查询like，另外传参数-->
+            </if>
+            <if test="dictCode != null and dictCode != ''">
+                and dict_code = #{dictCode}
+            </if>
+            <if test="dictName != null and dictName != ''">
+                and dict_name like "%"#{dictName}"%"
+            </if>
+            <if test="areaCode != null and areaCode != ''">
+                and area_code = #{areaCode}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+            <if test="useState != null">
+                and use_state = #{useState}
+            </if>
+        </where>
+        order by CONVERT(dict_code,SIGNED) asc
+    </select>
+    <!--通过根据大类查询小类查询-->
+    <select id="querySubByMajor" resultMap="BaseResultMap">
+        select
+          id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state
+        from sys_data_dict
+        <where>
+            use_state = 1
+            <if test="dictTypeCode != null and dictTypeCode != ''">
+                and dict_type_code = #{dictTypeCode}
+            </if>
+            <if test="dictCode != null and dictCode != ''">
+                and dict_code like #{dictCode}"%"
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_data_dict(id,dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state)
+        values (#{id},#{dictTypeCode}, #{dictTypeName}, #{dictCode}, #{dictName}, #{areaCode}, #{remarks}, #{useState})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sys_data_dict
+        <set>
+            <if test="dictTypeCode != null and dictTypeCode != ''">
+                dict_type_code = #{dictTypeCode},
+            </if>
+            <if test="dictTypeName != null and dictTypeName != ''">
+                dict_type_name = #{dictTypeName},
+            </if>
+            <if test="dictCode != null and dictCode != ''">
+                dict_code = #{dictCode},
+            </if>
+            <if test="dictName != null and dictName != ''">
+                dict_name = #{dictName},
+            </if>
+            <if test="areaCode != null and areaCode != ''">
+                area_code = #{areaCode},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="useState != null">
+                use_state = #{useState},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from sys_data_dict where id = #{id}
+    </delete>
+
+</mapper>
