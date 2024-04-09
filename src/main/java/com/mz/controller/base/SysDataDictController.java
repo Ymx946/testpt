@@ -169,7 +169,6 @@ public class SysDataDictController {
     @PostMapping("queryAllOpen2")
     public List<SysDataDict> queryAllOpen2(String dictTypeCode) {
         List<SysDataDict> list =sysDataDictService.queryAll(null, dictTypeCode, null, null);
-//        log.info("----------------SysDataDict---list--------"+ JSON.toJSONString(list));
         return list;
     }
 

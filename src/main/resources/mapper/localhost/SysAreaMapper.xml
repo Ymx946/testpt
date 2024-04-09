@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mz.mapper.localhost.SysAreaMapper">
+
+    <resultMap id="BaseResultMap" type="com.mz.model.base.SysArea">
+        <!--@Table sys_area-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="areaCode" column="area_code" jdbcType="VARCHAR"/>
+        <result property="areaName" column="area_name" jdbcType="VARCHAR"/>
+        <result property="cityClassifyCode" column="city_classify_code" jdbcType="VARCHAR"/>
+        <result property="cityClassifyName" column="city_classify_name" jdbcType="VARCHAR"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="delState" column="del_state" jdbcType="INTEGER"/>
+        <result property="state" column="state" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyUser" column="modify_user" jdbcType="VARCHAR"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, area_code, area_name,city_classify_code,city_classify_name,sort,del_state,state,create_time,create_user,modify_time,modify_user,remarks
+        from sys_area
+        where id = #{id}
+    </select>
+    <!--查询单个-->
+    <select id="queryByCode" resultMap="BaseResultMap">
+        select
+          id, area_code, area_name,city_classify_code,city_classify_name,sort,del_state,state,create_time,create_user,modify_time,modify_user,remarks
+        from sys_area
+        where area_code = #{areaCode}
+    </select>
+    <!--查询单个-->
+    <select id="queryVillageList" resultMap="BaseResultMap">
+        SELECT * FROM sys_area WHERE LENGTH(area_code) = 12 and area_code like #{areaCode}"%" and state = 1
+        ORDER BY SUBSTR(area_code FROM 10 FOR 1) desc,area_code asc
+    </select>
+    <!--查询所有-->
+    <select id="queryAllByCode" resultType="com.mz.model.base.vo.SysAreaVO">
+        select
+        area_code as areaCode, area_name as areaName
+        from sys_area
+        where state = 1
+        <if test="paraCode != null and paraCode != ''">
+            and area_code like  #{paraCode}"%"
+        </if>
+        order by area_code asc
+    </select>
+    <!--查询所有-->
+    <select id="queryAllByLen" resultType="com.mz.model.base.vo.SysAreaVO">
+        select
+        area_code as areaCode, area_name as areaName
+        from sys_area
+        where state = 1
+        <if test="len != null">
+            and LENGTH(area_code) =  #{len}
+        </if>
+        order by area_code asc
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, area_code, area_name,city_classify_code,city_classify_name,sort,del_state,state,create_time,create_user,modify_time,modify_user,remarks
+        from sys_area
+         where state = 1
+        limit #{offset}, #{limit}
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryAreaList" resultMap="BaseResultMap">
+        select
+          id, area_code, area_name,city_classify_code,city_classify_name,sort,del_state,state,create_time,create_user,modify_time,modify_user,remarks
+        from sys_area
+        <where>
+            state = 1
+            <if test="paraCode != null and paraCode != ''">
+                and area_code like  #{paraCode}"%"
+            </if>
+            <if test="len != null">
+                and LENGTH(area_code)= #{len}
+            </if>
+        </where>
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryAreaListAndSon" resultType="com.mz.model.base.vo.SysAreaVO">
+        select
+        area_code as areaCode, area_name as areaName
+        from sys_area
+        <where>
+            state = 1
+            <if test="paraCode != null and paraCode != ''">
+                and area_code like  #{paraCode}"%"
+            </if>
+            <if test="len != null">
+                and LENGTH(area_code)= #{len}
+            </if>
+            <if test="maxLen != null">
+                and LENGTH(area_code) &lt;= #{maxLen}
+            </if>
+        </where>
+    </select>
+    <!--查询指定行数据-->
+    <select id="getFullAreaNameByAreaCode" resultType="com.mz.model.base.vo.SysFullAreaVO">
+        SELECT
+        e.area_code as areaCode,
+        (case when LENGTH(e.area_code)>1 then a.area_name else "" end) as province,
+        (case when LENGTH(e.area_code)>3 then b.area_name else "" end) as city,
+        (case when LENGTH(e.area_code)>5 then c.area_name else "" end) as county,
+        (case when LENGTH(e.area_code)>8 then d.area_name else "" end) as street,
+        (case when LENGTH(e.area_code)>11 then e.area_name else "" end) as village
+        FROM
+        sys_area a,
+        sys_area b,
+        sys_area c,
+        sys_area d,
+        sys_area e
+        <where>
+            AND LEFT (e.area_code, 2) = a.area_code
+            AND LEFT (e.area_code, 4) = b.area_code
+            AND LEFT (e.area_code, 6) = c.area_code
+            AND LEFT (e.area_code, 9) = d.area_code
+            AND e.area_code=#{areaCode}
+            AND e.state =1
+        </where>
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryAreaByName" resultMap="BaseResultMap">
+        select
+          id, area_code, area_name,city_classify_code,city_classify_name,sort,del_state,state,create_time,create_user,modify_time,modify_user,remarks
+        from sys_area
+        <where>
+            state = 1
+            <if test="paraCode != null and paraCode != ''">
+                and area_code like  #{paraCode}"%"
+            </if>
+            <if test="areaName != null and areaName != ''">
+                and area_name like "%"#{areaName}"%"
+            </if>
+            <if test="len != null">
+                and LENGTH(area_code)= #{len}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, area_code, area_name,city_classify_code,city_classify_name,sort,del_state,state,create_time,create_user,modify_time,modify_user,remarks
+        from sys_area
+        <where>
+            state = 1
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="areaCode != null and areaCode != ''">
+                and area_code = #{areaCode}
+            </if>
+            <if test="areaName != null and areaName != ''">
+                and area_name = #{areaName}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllByAreaCode" resultMap="BaseResultMap">
+        select
+        id, area_code, area_name,city_classify_code,city_classify_name,sort,del_state,state,create_time,create_user,modify_time,modify_user,remarks
+        from sys_area
+        <where>
+            state = 1
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="areaCode != null and areaCode != ''">
+                and area_code like concat('%', #{areaCode}, '%')
+            </if>
+            <if test="areaName != null and areaName != ''">
+                and area_name like concat('%', #{areaName}, '%')
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_area(id, area_code, area_name,city_classify_code,city_classify_name,sort,del_state,state,create_time,create_user,modify_time,modify_user,remarks)
+        values (#{id}, #{areaCode}, #{areaName}, #{cityClassifyCode}, #{cityClassifyName}, #{sort}, #{delState}, #{state}, #{createTime}, #{createUser}, #{modifyTime}, #{modifyUser}, #{remarks})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sys_area
+        <set>
+            <if test="areaCode != null and areaCode != ''">
+                area_code = #{areaCode},
+            </if>
+            <if test="areaName != null and areaName != ''">
+                area_name = #{areaName},
+            </if>
+            <if test="cityClassifyCode != null and cityClassifyCode != ''">
+                city_classify_code = #{cityClassifyCode},
+            </if>
+            <if test="cityClassifyName != null and cityClassifyName != ''">
+                city_classify_name = #{cityClassifyName},
+            </if>
+            <if test="sort != null ">
+                sort = #{sort},
+            </if>
+            <if test="delState != null ">
+                del_state = #{delState},
+            </if>
+            <if test="state != null ">
+                state = #{state},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="createUser != null and createUser != ''">
+                create_user = #{createUser},
+            </if>
+            <if test="modifyTime != null and modifyTime != ''">
+                modify_time = #{modifyTime},
+            </if>
+            <if test="modifyUser != null and modifyUser != ''">
+                modify_user = #{modifyUser},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from sys_area where id = #{id}
+    </delete>
+
+    <!--查询指定行数据-->
+    <select id="queryByAreaName" resultMap="BaseResultMap">
+        select *
+        from sys_area
+        <where>
+            state = 1
+            <if test="areaName != null and areaName != ''">
+                and  area_name =  #{areaName}
+                and  LENGTH(area_code)=6
+            </if>
+
+            <if test="cityName != null and cityName != ''">
+                and area_code like concat((select area_code from sys_area  where area_name = #{cityName}   and  LENGTH(area_code)=4 and area_code like concat((select area_code from sys_area where area_name =  #{provinceName} and LENGTH(area_code)=2),'%')),'%')
+            </if>
+        </where>
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryByParaAndName" resultMap="BaseResultMap">
+        select *
+        from sys_area
+        <where>
+            state = 1
+            <if test="areaName != null and areaName != ''">
+                and  area_name like #{areaName}"%"
+            </if>
+            <if test="paraCode != null and paraCode != ''">
+                and area_code like #{paraCode}"%"
+            </if>
+            <if test="areaLevel != null">
+                and LENGTH(area_code)=#{areaLevel}
+            </if>
+        </where>
+   limit 1
+    </select>
+
+</mapper>
