@@ -1,5 +1,6 @@
-package com.mz.model.base;
+package com.mz.model.base.vo;
 
+import com.mz.common.model.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,8 +12,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class SysDataDictClassify  {
-    private static final long serialVersionUID = 124708190704828571L;
+public class SysDataDictClassifyVO extends BaseDTO {
     /**
     * 主键
     */
@@ -30,7 +30,7 @@ public class SysDataDictClassify  {
     */
     private Integer delState;
     /**
-    * 状态 1启用 -1停用
+    * 状态 1运行 -1维护
     */
     private Integer state;
     /**

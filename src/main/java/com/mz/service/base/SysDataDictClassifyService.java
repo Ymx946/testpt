@@ -3,6 +3,10 @@ package com.mz.service.base;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mz.common.util.Result;
 import com.mz.model.base.SysDataDictClassify;
+import com.mz.model.base.model.SysDataDictClassifyModel;
+import com.mz.model.base.vo.SysDataDictClassifyVO;
+
+import java.util.List;
 
 /**
  * 系统数据字典分类(SysDataDictClassify)表服务接口
@@ -16,5 +20,10 @@ public interface SysDataDictClassifyService  extends IService<SysDataDictClassif
      *
      */
     Result insert(SysDataDictClassify pojo, String loginID);
+
+    /**
+     * 列表
+     */
+    List<SysDataDictClassifyModel> queryAll(SysDataDictClassifyVO vo);
 
 }

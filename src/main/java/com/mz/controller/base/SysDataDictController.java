@@ -48,6 +48,12 @@ public class SysDataDictController {
     @PostMapping("insert")
     public Result insert(String id, String dictTypeCode, String dictTypeName, String dictCode, String dictName, String areaCode, String remarks, String token, HttpServletRequest request) {
         if (baseUserService.checkLogin(token, request)) {
+            if (ObjectUtil.isEmpty(dictTypeCode)) {
+                return Result.failed("类型代码不能为空");
+            }
+            if (ObjectUtil.isEmpty(dictTypeName)) {
+                return Result.failed("类型名称不能为空");
+            }
             SysDataDict sysDataDict = new SysDataDict();
             if (!StringUtils.isEmpty(id)) {
                 sysDataDict.setId(id);
@@ -231,11 +237,11 @@ public class SysDataDictController {
      */
     @SneakyThrows
     @PostMapping("queryAllByLimit")
-    public Result queryAllByLimit(Integer pageNo, Integer pageSize, String areaCode, String dictTypeCode, String dictTypeName, String dictName, String token, HttpServletRequest request) {
+    public Result queryAllByLimit(Integer pageNo, Integer pageSize, String areaCode, String dictTypeCode, String dictTypeName, String dictName, Integer useState, String token, HttpServletRequest request) {
         if (baseUserService.checkLogin(token, request)) {
             pageNo = pageNo != null ? pageNo : StringFormatUtil.PAGE_NO_DEFAULT;
             pageSize = pageSize != null ? pageSize : StringFormatUtil.PAGE_SIZE_DEFAULT;
-            return Result.success(sysDataDictService.queryAllByLimit(pageNo, pageSize, areaCode, dictTypeCode, dictTypeName, dictName));
+            return Result.success(sysDataDictService.queryAllByLimit(pageNo, pageSize, areaCode, dictTypeCode, dictTypeName, dictName, useState));
         } else {
             return Result.failedLogin();
         }

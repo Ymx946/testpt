@@ -2,12 +2,15 @@ package com.mz.service.base.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.mz.common.util.Result;
 import com.mz.framework.util.redis.RedisUtil;
 import com.mz.mapper.localhost.SysDataDictClassifyMapper;
 import com.mz.mapper.localhost.SysDataDictMapper;
 import com.mz.model.base.SysDataDict;
 import com.mz.model.base.SysDataDictClassify;
+import com.mz.model.base.model.SysDataDictClassifyModel;
+import com.mz.model.base.vo.SysDataDictClassifyVO;
 import com.mz.service.base.SysDataDictClassifyService;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
@@ -16,9 +19,13 @@ import com.mz.common.ConstantsCacheUtil;
 import com.mz.common.ConstantsUtil;
 import com.mz.common.util.IdWorker;
 import com.mz.model.base.BaseUser;
+import com.mz.service.base.SysDataDictService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +40,8 @@ public class SysDataDictClassifyImpl extends ServiceImpl<SysDataDictClassifyMapp
     private RedisUtil myRedisUtil;
     @Autowired
     public SysDataDictMapper sysDataDictMapper;
+    @Autowired
+    public SysDataDictService sysDataDictService;
 
     @Override
     public Result insert(SysDataDictClassify pojo, String loginID){
@@ -68,11 +77,57 @@ public class SysDataDictClassifyImpl extends ServiceImpl<SysDataDictClassifyMapp
             pojo.setState(ConstantsUtil.STATE_NORMAL);
             save(pojo);
         }else{
+            SysDataDictClassify oldClassify = getById(pojo.getId());
+            if(ObjectUtil.isNotEmpty(oldClassify)){
+                if(ObjectUtil.isNotEmpty(oldClassify.getDictTypeCode()) && ObjectUtil.isNotEmpty(oldClassify.getDictTypeName())){
+                    SysDataDict sysDataDict = new SysDataDict();
+                    sysDataDict.setDictTypeCode(oldClassify.getDictTypeCode());
+                    sysDataDict.setDictTypeName(oldClassify.getDictTypeName());
+                    List<SysDataDict> oldList = sysDataDictService.queryAllByName(sysDataDict);
+                    for (SysDataDict dataDict : oldList) {
+                        if(ObjectUtil.isNotEmpty(pojo.getDictTypeCode()) && ObjectUtil.isNotEmpty(pojo.getDictTypeName())){
+                            dataDict.setDictTypeCode(pojo.getDictTypeCode());
+                            dataDict.setDictTypeName(pojo.getDictTypeName());
+                            sysDataDictService.update(dataDict);
+                        }
+                    }
+
+                }
+            }
             pojo.setModifyUser(baseUser.getRealName());
             pojo.setModifyTime(DateUtil.now());
             updateById(pojo);
         }
         return Result.success(pojo);
     }
-
+    @Override
+    public List<SysDataDictClassifyModel> queryAll(SysDataDictClassifyVO vo) {
+        SysDataDictClassifyModel model = null;
+        List<SysDataDictClassifyModel> modelList = new ArrayList<>();
+        Integer num = 0;
+        LambdaQueryChainWrapper<SysDataDictClassify> lambdaQuery = lambdaQuery();
+        lambdaQuery.eq(SysDataDictClassify::getDelState, ConstantsUtil.IS_DONT_DEL);
+        if (ObjectUtil.isNotEmpty(vo.getDictTypeName())) {
+            lambdaQuery.like(SysDataDictClassify::getDictTypeName, vo.getDictTypeName());
+        }
+        List<SysDataDictClassify> list = lambdaQuery.orderByDesc(SysDataDictClassify::getCreateTime).orderByDesc(SysDataDictClassify::getId).list();
+        if(CollectionUtil.isNotEmpty(list)){
+            for (SysDataDictClassify sysDataDictClassify : list) {
+                model = new SysDataDictClassifyModel();
+                BeanUtils.copyProperties(sysDataDictClassify,model);
+                if(ObjectUtil.isNotEmpty(sysDataDictClassify.getDictTypeCode()) && ObjectUtil.isNotEmpty(sysDataDictClassify.getDictTypeName())){
+                    SysDataDict sysDataDict = new SysDataDict();
+                    sysDataDict.setDictTypeCode(sysDataDictClassify.getDictTypeCode());
+                    sysDataDict.setDictTypeName(sysDataDictClassify.getDictTypeName());
+                    List<SysDataDict> oldList = sysDataDictService.queryAllByName(sysDataDict);
+                    if(CollectionUtil.isNotEmpty(oldList)){
+                        num = oldList.size();
+                    }
+                }
+                model.setDataDictNum(num);
+                modelList.add(model);
+            }
+        }
+        return modelList;
+    }
 }

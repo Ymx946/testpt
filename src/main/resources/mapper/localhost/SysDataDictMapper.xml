@@ -70,6 +70,9 @@
             <if test="areaCode != null and areaCode != ''">
                 and area_code = #{areaCode}
             </if>
+            <if test="useState != null">
+                and use_state = #{useState}
+            </if>
         </where>
     </select>
 
