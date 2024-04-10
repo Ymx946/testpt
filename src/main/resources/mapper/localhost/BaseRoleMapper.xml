@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mz.mapper.localhost.BaseRoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.mz.model.base.BaseRole">
+        <!--@Table base_role-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="tenantId" column="tenant_id" jdbcType="INTEGER"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+        <result property="deptId" column="dept_id" jdbcType="INTEGER"/>
+        <result property="mainBodyId" column="main_body_id" jdbcType="INTEGER"/>
+        <result property="rolerLevel" column="roler_level" jdbcType="INTEGER"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="useState" column="use_state" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, tenant_id, role_name, dept_id, main_body_id, roler_level, remarks, use_state,duty_type_code,duty_type_name,sys_duty_role_id,system_belong
+    </sql>
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from base_role
+        where id = #{id}
+    </select>
+    <!--根据主体类型和系统角色ID查询对应角色（有角色的更新关联，没有的新增觉得）-->
+    <select id="querySysRoleByMainType" resultType="com.mz.model.base.BaseRole">
+        SELECT m.id as mainBodyId,r.id ,r.sys_duty_role_id
+        FROM base_main_body m
+                 LEFT JOIN base_role r on r.main_body_id = m.id and r.sys_duty_role_id  =  #{sysDutyRoleId}
+        WHERE m.use_state = 1
+        <if test="tenantId != null">
+            and  m.tenant_id  = #{tenantId}
+        </if>
+        <if test="mainBodyType != null">
+            and  m.main_body_type  = #{mainBodyType}
+        </if>
+    </select>
+    <!--查询单个-->
+    <select id="queryByLevel" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from base_role
+        <where>
+            <if test="tenantId != null">
+                and tenant_id = #{tenantId}
+            </if>
+            <if test="rolerLevel != null">
+                and roler_level = #{rolerLevel}
+            </if>
+            <if test="mainBodyId != null">
+                and main_body_id = #{mainBodyId}
+            </if>
+        </where>
+        order by id asc
+        limit 1
+    </select>
+    <!--查询应用没有权限的角色-->
+    <select id="queryNoListForSys" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from base_role
+        <where>
+            id not in (
+                select brn.role_id
+                from base_role br,base_role_node brn,sys_node sn
+                WHERE br.id = brn.role_id AND brn.node_id = sn.id
+                AND sn.sys_code =#{sysCode}
+                <if test="tenantId != null">
+                    and br.tenant_id = #{tenantId}
+                </if>
+                <if test="mainBodyId != null">
+                    and br.main_body_id = #{mainBodyId}
+                </if>
+            )
+            <if test="tenantId != null">
+                and tenant_id = #{tenantId}
+            </if>
+            <if test="mainBodyId != null">
+                and main_body_id = #{mainBodyId}
+            </if>
+
+        </where>
+    </select>
+    <!--查询应用没有权限的角色-->
+    <select id="queryListForSys" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from base_role
+        <where>
+            id  in (
+                select brn.role_id
+                from base_role br,base_role_node brn,sys_node sn
+                WHERE br.id = brn.role_id AND brn.node_id = sn.id
+                AND sn.sys_code =#{sysCode}
+                <if test="roleLevel != null">
+                    and br.roler_level = #{roleLevel}
+                </if>
+            )
+        </where>
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from base_role
+        <where>
+        <if test="tenantId != null">
+            and tenant_id = #{tenantId}
+        </if>
+        <if test="deptId != null">
+            and dept_id = #{deptId}
+        </if>
+        <if test="mainBodyId != null">
+            and main_body_id = #{mainBodyId}
+        </if>
+        <if test="roleName != null and roleName != ''">
+            and  role_name like "%"#{roleName}"%"
+        </if>
+        </where>
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllForUser"  resultType="com.mz.model.base.vo.BaseRoleVO">
+        select
+            r.id , r.tenant_id as tenantId, r.role_name as roleName, r.dept_id as deptId, r.main_body_id as mainBodyId, r.roler_level as rolerLevel,
+               r.remarks, r.use_state as useState
+        ,r.duty_type_code,r.duty_type_name,r.sys_duty_role_id,r.system_belong
+             ,dept.dept_code as deptCode, dept.dept_name as deptName ,mb.main_body_code as mainBodyCode ,mb.main_body_name as mainBodyName
+        <if test="userId != null">
+             , ur.user_id as userId
+        </if>
+        from base_role r
+            left join base_dept dept on r.dept_id = dept.id
+        left join base_main_body mb on r.main_body_id = mb.id
+        <if test="userId != null">
+            left join base_user_role ur on  r.id = ur.role_id and ur.user_id = #{userId}
+        </if>
+        <where>
+            <if test="tenantId != null">
+                and r.tenant_id = #{tenantId}
+             </if>
+            <if test="deptId != null">
+                and r.dept_id = #{deptId}
+             </if>
+             <if test="mainBodyId != null">
+                 and r.main_body_id = #{mainBodyId}
+            </if>
+            and r.roler_level >3  <!--管理员角色，不能b被赋予用户，由建立租户或者主体时自动赋予-->
+        </where>
+    order by r.main_body_id asc
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from base_role
+        <where>
+            <if test="id != null">
+                and id != #{id} <!--用于修改验证名称重复-->
+            </if>
+            <if test="tenantId != null">
+                and tenant_id = #{tenantId}
+            </if>
+            <if test="sysDutyRoleId != null">
+                and sys_duty_role_id = #{sysDutyRoleId}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and role_name = #{roleName}<!--名称重复验证-->
+            </if>
+            <if test="deptId != null">
+                and dept_id = #{deptId}
+            </if>
+            <if test="mainBodyId != null">
+                and main_body_id = #{mainBodyId}
+            </if>
+            <if test="rolerLevel != null">
+                and roler_level = #{rolerLevel}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+            <if test="useState != null">
+                and use_state = #{useState}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into base_role(id,tenant_id, role_name, dept_id, main_body_id, roler_level, remarks, use_state,duty_type_code,duty_type_name,sys_duty_role_id,system_belong)
+        values ( #{id}, #{tenantId}, #{roleName}, #{deptId}, #{mainBodyId}, #{rolerLevel}, #{remarks}, #{useState}, #{dutyTypeCode}, #{dutyTypeName}, #{sysDutyRoleId}, #{systemBelong})
+    </insert>
+    <insert id="batchInsert" parameterType="com.mz.model.base.BaseRole">
+        insert into base_role(id,tenant_id, role_name, dept_id, main_body_id, roler_level, remarks, use_state,duty_type_code,duty_type_name,sys_duty_role_id,system_belong)
+        <foreach collection="list" item="p" open=" values" separator="," >
+            ( #{p.id}, #{p.tenantId}, #{p.roleName}, #{p.deptId}, #{p.mainBodyId}, #{p.rolerLevel}, #{p.remarks}, #{p.useState}, #{p.dutyTypeCode}, #{p.dutyTypeName}, #{p.sysDutyRoleId}, #{p.systemBelong})
+        </foreach>
+    </insert>
+    <!--通过主键修改数据-->
+    <update id="update">
+        update base_role
+        <set>
+            <if test="tenantId != null">
+                tenant_id = #{tenantId},
+            </if>
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName},
+            </if>
+            <if test="deptId != null">
+                dept_id = #{deptId},
+            </if>
+            <if test="mainBodyId != null">
+                main_body_id = #{mainBodyId},
+            </if>
+            <if test="rolerLevel != null">
+                roler_level = #{rolerLevel},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="useState != null">
+                use_state = #{useState},
+            </if>
+            <if test="dutyTypeCode != null and dutyTypeCode != ''">
+                duty_type_code = #{dutyTypeCode},
+            </if>
+            <if test="dutyTypeName != null and dutyTypeName != ''">
+                duty_type_name = #{dutyTypeName},
+            </if>
+            <if test="sysDutyRoleId != null ">
+                sys_duty_role_id = #{sysDutyRoleId},
+            </if>
+            <if test="systemBelong != null ">
+                system_belong = #{systemBelong},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键变更可用状态-->
+    <update id="changeUseState">
+        update base_role
+        <set>
+            <if test="useState != null">
+                use_state = #{useState},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from base_role where id = #{id}
+    </delete>
+
+</mapper>

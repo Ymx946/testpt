@@ -21,7 +21,7 @@ import javax.annotation.Resource;
  * @since 2021-03-17 10:58:50
  */
 @RestController
-@RequestMapping(value = {"server/sysArea", "sysArea"})
+@RequestMapping(value = {"datacenter/sysArea", "sysArea"})
 @Slf4j
 public class SysAreaController {
     /**

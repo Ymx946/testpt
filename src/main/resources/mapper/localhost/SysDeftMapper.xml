@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mz.mapper.localhost.SysDeftMapper">
+
+    <resultMap id="BaseResultMap" type="com.mz.model.base.SysDeft">
+        <!--@Table sys_deft-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="sysCode" column="sys_code" jdbcType="VARCHAR"/>
+        <result property="sysName" column="sys_name" jdbcType="VARCHAR"/>
+        <result property="sysType" column="sys_type" jdbcType="INTEGER"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="sysLogo" column="sys_logo" jdbcType="VARCHAR"/>
+        <result property="sysManage" column="sys_manage" jdbcType="INTEGER"/>
+        <result property="sysIntroduce" column="sys_introduce" jdbcType="VARCHAR"/>
+        <result property="releaseScope" column="release_scope" jdbcType="VARCHAR"/>
+        <result property="scopeName" column="scope_name" jdbcType="VARCHAR"/>
+        <result property="belongType" column="belong_type" jdbcType="INTEGER"/>
+        <result property="supplierName" column="supplier_name" jdbcType="VARCHAR"/>
+        <result property="applicationType" column="application_type" jdbcType="INTEGER"/>
+        <result property="useType" column="use_type" jdbcType="INTEGER"/>
+        <result property="sysAddr" column="sys_addr" jdbcType="INTEGER"/>
+        <result property="areaLevel" column="area_level" jdbcType="VARCHAR"/>
+        <result property="creatTime" column="creat_time" jdbcType="VARCHAR"/>
+        <result property="creatUser" column="creat_user" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="VARCHAR"/>
+        <result property="modifyUser" column="modify_user" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+            id, sys_code, sys_name, sys_type, remarks, sys_logo, sys_manage, sys_introduce, release_scope, scope_name, belong_type, supplier_name, application_type,use_type,sys_addr,area_level,creat_time, creat_user, modify_time, modify_user
+        from sys_deft
+        where id = #{id}
+    </select>
+
+    <!--查询单个-->
+    <select id="queryByCode" resultMap="BaseResultMap">
+        select
+            id, sys_code, sys_name, sys_type, remarks, sys_logo, sys_manage, sys_introduce, release_scope, scope_name, belong_type, supplier_name, application_type,use_type,sys_addr,area_level,creat_time, creat_user, modify_time, modify_user
+        from sys_deft
+        where sys_code = #{sysCode}
+        limit 1
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+        id, sys_code, sys_name, sys_type, remarks, sys_logo, sys_manage, sys_introduce, release_scope, scope_name, belong_type, supplier_name, application_type,use_type,sys_addr,area_level,creat_time, creat_user, modify_time, modify_user
+        from sys_deft
+        <where>
+            <if test="sysName != null and sysName != ''">
+                and sys_name like "%"#{sysName}"%"
+            </if>
+            <if test="sysType != null">
+                and sys_type = #{sysType}
+            </if>
+<!--            <if test="areaLevel != null and areaLevel != ''">-->
+<!--                and area_level like "%"#{areaLevel}"%"-->
+<!--            </if>-->
+            <if test="belongType != null">
+                and belong_type = #{belongType}
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap" >
+        select
+        id, sys_code, sys_name, sys_type, remarks, sys_logo, sys_manage, sys_introduce, release_scope, scope_name, belong_type, supplier_name,application_type, use_type,sys_addr,area_level,creat_time, creat_user, modify_time, modify_user
+        from sys_deft
+        <where>
+            <if test="id != null">
+                and id != #{id}<!--这里查询不等于传入的ID，作为修改时验证名称重复问题，其他情况查询不存在传入ID的情况-->
+            </if>
+            <if test="sysCode != null and sysCode != ''">
+                and sys_code = #{sysCode}<!--查询完全匹配，用于判断名称重复，需要查询like，另外传参数-->
+            </if>
+            <if test="sysName != null and sysName != ''">
+                and sys_name = #{sysName}<!--查询完全匹配，用于判断名称重复，需要查询like，另外传参数-->
+            </if>
+            <if test="sysType != null">
+                and sys_type = #{sysType}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks like "%"#{remarks}"%"
+            </if>
+            <if test="sysLogo != null and sysLogo != ''">
+                and sys_logo = #{sysLogo}
+            </if>
+        </where>
+    </select>
+
+    <!--通过租户ID条件查询 2-系统-->
+    <select id="queryAllForTenant" resultMap="BaseResultMap">
+        select
+        d.id, d.sys_code, d.sys_name, d.sys_type, d.remarks, d.sys_logo,d.sys_manage
+        from sys_deft d,sys_tenant_power p where p.sys_id = d.id and p.tenant_id = #{tenantId}
+        <if test="applicationType !=null">
+            and d.application_type = #{applicationType}
+        </if>
+
+    </select>
+
+
+    <!--通过租户ID条件查询 查所有-->
+    <select id="queryAllBySys" resultType="com.mz.model.base.vo.SysDeftVO">
+        select
+            d.id, d.sys_code as sysCode, d.sys_name as sysName, d.sys_type as sysType , d.remarks, d.sys_logo as sysLogo,d.sys_manage as sysManage,p.tenant_id as tenantId
+        from sys_deft d
+        left join sys_tenant_power p on p.sys_id = d.id and p.tenant_id = #{tenantId}
+    </select>
+
+    <!--通过租户ID条件查询 1应用-->
+    <select id="queryAllWithClassify" resultType="com.mz.model.base.vo.SysDeftSelectVO">
+        select
+            d.id, d.sys_code as sysCode, d.sys_name as sysName, d.sys_type as sysType , d.remarks, d.sys_logo as sysLogo,d.sys_manage as sysManage
+            , d.sys_introduce as sysIntroduce, d.release_scope as releaseScope, d.scope_name as scopeName, d.belong_type as belongType, d.supplier_name as supplierName, d.application_type as applicationType,d.use_type
+                ,d.sys_addr
+             ,CASE WHEN cs.classify_id is not NULL THEN 1 else 2 END as selectState,CASE WHEN csn.classify_id is not NULL THEN 1 else 2 END as otherSelect
+        from sys_tenant_power p,sys_deft d
+         left join sys_tenant_classify_sys cs on cs.sys_id = d.id and cs.tenant_id = #{tenantId} AND cs.classify_id = #{classifyId}
+         left join sys_tenant_classify_sys csn on csn.sys_id = d.id and csn.tenant_id = #{tenantId} AND csn.classify_id != #{classifyId}
+        WHERE  p.sys_id = d.id and p.tenant_id = #{tenantId} and d.application_type = 1
+    </select>
+
+    <!--通过租户ID条件查询1应用-->
+    <select id="queryAllWithMainBody" resultType="com.mz.model.base.vo.SysDeftSelectVO">
+        select distinct
+        d.id, d.sys_code as sysCode, d.sys_name as sysName, d.sys_type as sysType , d.remarks, d.sys_logo as
+        sysLogo,d.sys_manage as sysManage
+        , d.sys_introduce as sysIntroduce, d.release_scope as releaseScope, d.scope_name as scopeName, d.belong_type as
+        belongType, d.supplier_name as supplierName, d.application_type as applicationType,d.use_type
+        ,d.sys_addr,d.area_level
+        ,CASE WHEN mbs.main_body_id is NULL THEN 1 else 2 END as openState
+        ,us.sys_code
+        from sys_tenant_power p,sys_tenant_classify_sys cs,sys_deft d
+        left join base_main_body_sys mbs on mbs.sys_id = d.id and mbs.tenant_id = #{tenantId} and mbs.main_body_id =
+        #{mainBodyId}
+        left join (
+        select n.sys_code from base_user_role ur,base_role_node rn,sys_node n,base_role r
+        where ur.role_id = r.id and ur.user_id = #{userId} and r.main_body_id = #{mainBodyId}
+        and rn.role_id = ur.role_id and rn.node_id = n.id
+        group by n.sys_code) us on us.sys_code = d.sys_code
+        WHERE p.sys_id = d.id AND cs.sys_id = d.id and p.tenant_id = #{tenantId}
+        and d.application_type = 1
+        and case when d.release_scope is null THEN 1=1 else #{areaCode} like CONCAT(d.release_scope,'%')
+        end <!--查询区域范围为空和区域代码在范围内的系统-->
+        <if test="classifyId != null">
+            AND cs.classify_id = #{classifyId}
+        </if>
+        <if test="tenantId != null">
+            AND cs.tenant_id = #{tenantId}
+        </if>
+        <if test="useType != null">
+            AND d.use_type like "%"#{useType}"%"
+        </if>
+        <if test="areaLevel != null and areaLevel != ''">
+            AND d.area_level like "%"#{areaLevel}"%"
+        </if>
+        <if test="openState != null">
+            <if test="openState == 1">  <!--已开通-->
+                AND mbs.main_body_id is NULL
+            </if>
+            <if test="openState == 2"><!--未开通-->
+                AND mbs.main_body_id is not NULL
+            </if>
+        </if>
+        <if test="userLevel != null">
+            <if test="userLevel > 3">
+                and  us.sys_code is not null
+            </if>
+        </if>
+        order by d.sys_code asc
+        <if test="limit != null">
+            limit #{limit}
+        </if>
+    </select>
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAllByIds" resultMap="BaseResultMap">
+        select
+          id, sys_code, sys_name, sys_type, remarks, sys_logo,sys_manage
+        from sys_deft
+        where id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="queryAllDeftList" resultType="com.mz.model.base.model.SysDeftModel">
+        SELECT    t.id,  t.sys_code,  t.sys_name,  t.sys_type,  t.remarks,  t.sys_logo,  t.sys_manage, t.sys_introduce,  t.release_scope,  t.scope_name,  t.belong_type,
+                  t.supplier_name,  t.application_type,  t.use_type,  t.sys_addr, t.area_level, t.creat_time,  t.creat_user,  t.modify_time,  t.modify_user,  r.click_time
+        ,cs.classify_id
+        FROM    base_software_group g,base_software_group_classify_sys cs,sys_deft t
+                    JOIN    base_user_click_use_record r  ON  t.id  =  r.node_id
+                    JOIN  (
+            SELECT    node_id,  MAX(click_time)  AS  max_click_time
+            FROM    base_user_click_use_record
+            WHERE    user_id    = #{userId}
+            GROUP    BY    node_id
+        )  AS  subquery  ON  r.node_id  =  subquery.node_id  AND  r.click_time  =  subquery.max_click_time
+        where  g.id = cs.group_id and cs.sys_id = t.id AND cs.classify_id is not null
+        <if test="tenantId != null">
+            and g.tenant_id = #{tenantId}
+        </if>
+        <if test="mainBodyType != null">
+            and g.main_body_type = #{mainBodyType}
+        </if>
+        <if test="manageType != null">
+            and g.manage_type = #{manageType}
+        </if>
+        ORDER    BY    click_time  DESC
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_deft(id,sys_code, sys_name, sys_type, remarks, sys_logo, sys_manage, sys_introduce, release_scope, scope_name, belong_type, supplier_name,application_type, use_type,sys_addr,area_level,creat_time, creat_user, modify_time, modify_user)
+        values (#{id},#{sysCode}, #{sysName}, #{sysType}, #{remarks}, #{sysLogo}, #{sysManage}, #{sysIntroduce}, #{releaseScope}, #{scopeName}, #{belongType}, #{supplierName},#{applicationType},#{useType},#{sysAddr},#{areaLevel}, #{creatTime}, #{creatUser}, #{modifyTime}, #{modifyUser})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sys_deft
+        <set>
+            <if test="sysCode != null and sysCode != ''">
+                sys_code = #{sysCode},
+            </if>
+            <if test="sysName != null and sysName != ''">
+                sys_name = #{sysName},
+            </if>
+            <if test="sysType != null">
+                sys_type = #{sysType},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="sysLogo != null and sysLogo != ''">
+                sys_logo = #{sysLogo},
+            </if>
+            <if test="sysManage != null">
+                sys_manage = #{sysManage},
+            </if>
+                sys_introduce = #{sysIntroduce},
+                release_scope = #{releaseScope},
+                scope_name = #{scopeName},
+            <if test="belongType != null">
+                belong_type = #{belongType},
+            </if>
+                supplier_name = #{supplierName},
+            <if test="applicationType != null">
+                application_type = #{applicationType},
+            </if>
+            <if test="useType != null">
+                use_type = #{useType},
+            </if>
+            sys_addr = #{sysAddr},
+            <if test="areaLevel != null and areaLevel != ''">
+                area_level = #{areaLevel},
+            </if>
+            <if test="creatTime != null and creatTime != ''">
+                creat_time = #{creatTime},
+            </if>
+            <if test="creatUser != null and creatUser != ''">
+                creat_user = #{creatUser},
+            </if>
+            <if test="modifyTime != null and modifyTime != ''">
+                modify_time = #{modifyTime},
+            </if>
+            <if test="modifyUser != null and modifyUser != ''">
+                modify_user = #{modifyUser},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from sys_deft where id = #{id}
+    </delete>
+    <!--根据新应用分类关联查询-->
+    <select id="queryAllWithClassifySys" resultType="com.mz.model.base.vo.SysDeftSelectVO">
+        select
+            t.*
+             ,case WHEN cs.id is null then 2  ELSE 1 end as selectState
+        from sys_deft t
+          LEFT JOIN base_software_group_classify_sys cs on cs.sys_id = t.id and cs.classify_id =  #{classifyId}
+        <where>
+            t.id not in (
+            SELECT sys_id FROM base_software_group_classify_sys WHERE group_id = #{groupId} and classify_id !=#{classifyId})
+            <if test="sysCode != null and sysCode != ''">
+                and t.sys_code like "%"#{sysCode}"%"
+            </if>
+            <if test="sysName != null and sysName != ''">
+                and t.sys_name like "%"#{sysName}"%"
+            </if>
+        </where>
+    </select>
+
+</mapper>

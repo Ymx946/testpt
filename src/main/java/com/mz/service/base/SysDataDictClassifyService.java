@@ -25,5 +25,9 @@ public interface SysDataDictClassifyService  extends IService<SysDataDictClassif
      * 列表
      */
     List<SysDataDictClassifyModel> queryAll(SysDataDictClassifyVO vo);
+    /**
+     * 列表
+     */
+    List<SysDataDictClassify> queryAllByCode(SysDataDictClassifyVO vo);
 
 }

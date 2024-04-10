@@ -25,7 +25,7 @@ import java.util.List;
  * @since 2024-04-08 18:08:54
  */
 @RestController
-@RequestMapping("sysDataDictClassify")
+@RequestMapping(value = {"datacenter/sysDataDictClassify", "sysDataDictClassify"})
 @Slf4j
 public class SysDataDictClassifyController {
     /**

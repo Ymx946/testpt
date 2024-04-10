@@ -188,6 +188,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     /**
      * 获取用户
      */
+    @Override
     public BaseUser getUser(HttpServletRequest request) {
         // session
 //        BaseUser sessionBaseUser = SessionUtil.getUser(request);

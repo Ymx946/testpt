@@ -48,5 +48,6 @@ public interface BaseUserService {
      * @return 1登录成功2用户不存在3密码错误4登录异常
      */
     Result userLogin(String loginName, String password, String systemCode, String sysCodes, Integer appLogin, HttpServletRequest request);
+    BaseUser getUser(HttpServletRequest request);
 
 }

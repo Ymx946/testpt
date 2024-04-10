@@ -48,21 +48,21 @@ public class SysDataDictClassifyImpl extends ServiceImpl<SysDataDictClassifyMapp
         String baseUserStr = myRedisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + loginID);
         JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
         BaseUser baseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
-        SysDataDict find = new SysDataDict();
+        SysDataDictClassifyVO find = new SysDataDictClassifyVO();
         if (ObjectUtil.isNotEmpty(pojo.getId())){
-            find.setId(String.valueOf(pojo.getId()));
+            find.setId(pojo.getId());
         }
         find.setDictTypeCode(pojo.getDictTypeCode());
-        List<SysDataDict> codeList = sysDataDictMapper.queryAll(find);
+        List<SysDataDictClassify> codeList = queryAllByCode(find);
         if(CollectionUtil.isNotEmpty(codeList)){
             return Result.failed("该类型代码已存在");
         }
-        SysDataDict find1 = new SysDataDict();
+        SysDataDictClassifyVO find1 = new SysDataDictClassifyVO();
         if (ObjectUtil.isNotEmpty(pojo.getId())){
-            find1.setId(String.valueOf(pojo.getId()));
+            find1.setId(pojo.getId());
         }
         find1.setDictTypeName(pojo.getDictTypeName());
-        List<SysDataDict> nameList = sysDataDictMapper.queryAll(find1);
+        List<SysDataDictClassify> nameList = queryAllByCode(find1);
         if(CollectionUtil.isNotEmpty(nameList)){
             return Result.failed("该类型名称已存在");
         }
@@ -129,5 +129,22 @@ public class SysDataDictClassifyImpl extends ServiceImpl<SysDataDictClassifyMapp
             }
         }
         return modelList;
+    }
+
+    @Override
+    public List<SysDataDictClassify> queryAllByCode(SysDataDictClassifyVO vo) {
+        LambdaQueryChainWrapper<SysDataDictClassify> lambdaQuery = lambdaQuery();
+        lambdaQuery.eq(SysDataDictClassify::getDelState, ConstantsUtil.IS_DONT_DEL);
+        if (ObjectUtil.isNotEmpty(vo.getId())) {
+            lambdaQuery.ne(SysDataDictClassify::getId, vo.getId());
+        }
+        if (ObjectUtil.isNotEmpty(vo.getDictTypeCode())) {
+            lambdaQuery.eq(SysDataDictClassify::getDictTypeCode, vo.getDictTypeCode());
+        }
+        if (ObjectUtil.isNotEmpty(vo.getDictTypeName())) {
+            lambdaQuery.eq(SysDataDictClassify::getDictTypeName, vo.getDictTypeName());
+        }
+        List<SysDataDictClassify> list = lambdaQuery.orderByDesc(SysDataDictClassify::getCreateTime).orderByDesc(SysDataDictClassify::getId).list();
+        return list;
     }
 }
