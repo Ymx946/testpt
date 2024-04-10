@@ -54,7 +54,7 @@ public interface SysDeftService {
      * @param tenantId 租户ID
      * @return 对象列表
      */
-     Result queryAllForTenant(String tenantId,Integer applicationType, HttpServletRequest request);
+     Result queryAllForTenant(String sysName);
 
     /**
      * 查询租户有权限的应用（包含分类选中状态）

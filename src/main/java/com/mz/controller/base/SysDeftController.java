@@ -78,13 +78,9 @@ public class SysDeftController {
      * @return 单条数据
      */
     @PostMapping("queryAllByTenant")
-    public Result queryAllByTenant(String tenantId, Integer applicationType, String token, HttpServletRequest request) {
+    public Result queryAllByTenant(String token, String sysName,HttpServletRequest request) {
         if (baseUserService.checkLogin(token, request)) {
-            BaseUser baseUser = baseUserService.getUser(request);
-            if (!StringUtils.isEmpty(baseUser.getTenantId())) {
-                tenantId = baseUser.getTenantId();
-            }
-            return this.sysDeftService.queryAllForTenant(tenantId, applicationType, request);
+            return this.sysDeftService.queryAllForTenant(sysName);
         } else {
             return Result.failedLogin();
         }

@@ -54,15 +54,13 @@ public interface SysDeftMapper {
      * @param tenantId 租户ID
      * @return 对象列表
      */
-    List<SysDeft> queryAllForTenant(@Param("tenantId") String tenantId, @Param("applicationType") Integer applicationType);
+    List<SysDeft> queryAllForTenant(@Param("tenantId") String tenantId, @Param("applicationType") Integer applicationType,@Param("sysName")String sysName);
 
     /**
      * 通过租户ID查询有权限的系统列表
-     *
-     * @param tenantId 租户ID
      * @return 对象列表
      */
-    List<SysDeftVO> queryAllBySys(String tenantId);
+    List<SysDeftVO> queryAllBySys(String sysName);
 
     /**
      * 查询租户有权限的应用（包含分类选中状态）

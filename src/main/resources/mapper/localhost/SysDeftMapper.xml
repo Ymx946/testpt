@@ -99,6 +99,9 @@
         <if test="applicationType !=null">
             and d.application_type = #{applicationType}
         </if>
+            <if test="sysName != null and sysName != ''">
+                AND d.sys_name like "%"#{sysName}"%"
+            </if>
 
     </select>
 
@@ -106,9 +109,13 @@
     <!--通过租户ID条件查询 查所有-->
     <select id="queryAllBySys" resultType="com.mz.model.base.vo.SysDeftVO">
         select
-            d.id, d.sys_code as sysCode, d.sys_name as sysName, d.sys_type as sysType , d.remarks, d.sys_logo as sysLogo,d.sys_manage as sysManage,p.tenant_id as tenantId
+            d.id, d.sys_code as sysCode, d.sys_name as sysName, d.sys_type as sysType , d.remarks, d.sys_logo as sysLogo,d.sys_manage as sysManage
         from sys_deft d
-        left join sys_tenant_power p on p.sys_id = d.id and p.tenant_id = #{tenantId}
+        <where>
+            <if test="sysName != null and sysName != ''">
+                AND d.sys_name like "%"#{sysName}"%"
+            </if>
+        </where>
     </select>
 
     <!--通过租户ID条件查询 1应用-->

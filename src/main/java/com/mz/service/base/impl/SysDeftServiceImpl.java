@@ -95,27 +95,12 @@ public class SysDeftServiceImpl implements SysDeftService {
 
     /**
      * 通过租户ID查询有权限的系统列表
-     *
-     * @param tenantId 租户ID
      * @return 对象列表
      */
     @Override
-    public Result queryAllForTenant(String tenantId, Integer applicationType, HttpServletRequest request) {
-        BaseUser baseUser = baseUserService.getUser(request);
-
-        if (baseUser.getUserLevel() == 1) {//超级管理员查询全部系统定义信息，根据传入的租户ID，标记系统是否给该租户赋予权限;超级管理员除外的用户，不用传租户ID，以用户信息的租户ID为准
-            List<SysDeftVO> sysDeftVOS = sysDeftMapper.queryAllBySys(tenantId);
-            for (SysDeftVO sysDeftVO : sysDeftVOS) {
-                if (sysDeftVO.getTenantId() != null) {
-                    sysDeftVO.setPowerHas(1);
-                } else {
-                    sysDeftVO.setPowerHas(2);
-                }
-            }
-            return Result.success(sysDeftVOS);
-        } else {
-            return Result.success(this.sysDeftMapper.queryAllForTenant(baseUser.getTenantId(), applicationType));
-        }
+    public Result queryAllForTenant(String sysName) {
+        List<SysDeftVO> sysDeftVOS = sysDeftMapper.queryAllBySys(sysName);
+        return Result.success(sysDeftVOS);
     }
 
     /**

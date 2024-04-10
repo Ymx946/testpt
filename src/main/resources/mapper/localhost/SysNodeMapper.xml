@@ -60,7 +60,6 @@
           id, sys_code, node_code, node_name, node_show_name, para_node_code, para_node_name, node_url,name_path, node_type, node_icon, node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,operating_booklet,create_time,create_user,modify_time,modify_user
         from sys_node
         <where>
-            use_state = 1
             <if test="sysCode != null and sysCode != ''">
                 and sys_code = #{sysCode}
             </if>

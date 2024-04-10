@@ -96,7 +96,7 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
         String[] sysCodeArr = null;
         BaseUser baseUser = baseUserService.getUser(request);
         if (baseUser.getUserLevel() > 1) {//除了超级管理员
-            List<SysDeft> sysDeftList = this.sysDeftMapper.queryAllForTenant(baseUser.getTenantId(), applicationType);
+            List<SysDeft> sysDeftList = this.sysDeftMapper.queryAllForTenant(baseUser.getTenantId(), applicationType,null);
             if (sysDeftList != null && sysDeftList.size() > 0) {
                 sysCodeArr = new String[sysDeftList.size()];
                 int i = 0;
@@ -369,21 +369,6 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
             sysNode.setCreateTime(DateUtil.now());
             sysNode.setCreateUser(baseUser.getRealName());
             this.sysNodeMapper.insert(sysNode);
-            //新增节点查询该系统代码有权限的主体管理员角色，自动赋予权限
-            List<BaseRole> baseRoleList = baseRoleService.queryListForSys(sysNode.getSysCode(), 3);
-            if (CollectionUtil.isNotEmpty(baseRoleList)) {
-                List<BaseRoleNode> baseRoleNodeList = new ArrayList<BaseRoleNode>();
-                for (BaseRole baseRole : baseRoleList) {
-                    BaseRoleNode baseRoleNode = new BaseRoleNode();
-                    baseRoleNode.setId(String.valueOf(idWorker.nextId()));
-                    baseRoleNode.setRoleId(baseRole.getId());
-                    baseRoleNode.setNodeId(sysNode.getId());
-                    baseRoleNodeList.add(baseRoleNode);
-                }
-                if (baseRoleNodeList != null && baseRoleNodeList.size() > 0) {
-                    baseRoleNodeMapper.batchInsert(baseRoleNodeList);
-                }
-            }
             return Result.success(sysNode);
         }
     }
