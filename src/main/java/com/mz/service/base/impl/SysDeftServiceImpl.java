@@ -142,31 +142,7 @@ public class SysDeftServiceImpl implements SysDeftService {
                     return Result.failed("系统代码重复");
                 } else {
                     this.sysDeftMapper.update(sysDeft);
-
-                    //查询分类关联应用信息同步信息
-                    BaseSoftwareGroupClassifySysVO findClassifySysVO = new BaseSoftwareGroupClassifySysVO();
-                    findClassifySysVO.setSysId(Long.valueOf(sysDeft.getId()));
-                    List<BaseSoftwareGroupClassifySys> sysList = baseSoftwareGroupClassifySysService.queryAll(findClassifySysVO);
-                    if (CollectionUtil.isNotEmpty(sysList)) {
-                        String areaName = "";
-                        if (!StringUtils.isEmpty(sysDeft.getReleaseScope())) {
-                            SysArea sysArea = sysAreaService.queryByCode(sysDeft.getReleaseScope());
-                            areaName = sysArea.getAreaName();
-                        }
-                        for (BaseSoftwareGroupClassifySys sys : sysList) {
-                            sys.setSysCode(sysDeft.getSysCode());
-                            sys.setSysName(sysDeft.getSysName());
-                            sys.setSysLogo(sysDeft.getSysLogo());
-                            sys.setReleaseScope(sysDeft.getReleaseScope());
-                            sys.setReleaseScopeName(areaName);
-                            sys.setScopeName(sysDeft.getScopeName());
-                            sys.setBelongType(sysDeft.getBelongType());
-                            sys.setAreaLevel(sysDeft.getAreaLevel());
-                        }
-                        baseSoftwareGroupClassifySysService.updateBatchById(sysList);
-                    }
                     return Result.success(sysDeftMapper.queryById(sysDeft.getId()));
-
                 }
             }
         } else {
