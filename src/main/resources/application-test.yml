@@ -23,7 +23,7 @@ spring:
           password: mz2022!@#
 
   redis:
-    host: 47.118.49.82
+    host: 47.99.156.3
     port: 6379
     password: mzsz123456
     database: 14 #测试

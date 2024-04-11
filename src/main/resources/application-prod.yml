@@ -22,7 +22,7 @@ spring:
           password: mz2021!@#
 
   redis:
-    host: 47.118.49.82
+    host: 47.99.156.3
     port: 6379
     password: mzsz123456
     database: 0 #一体化正式
