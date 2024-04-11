@@ -14,6 +14,12 @@
         <if test="state != null">
             and state = #{state}
         </if>
+        <if test="startTime != null and startTime != ''">
+            AND creat_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND creat_time &lt;= #{endTime}" 23:59:59"
+        </if>
         <if test="bannerObjArr != null">
             AND (
             <foreach collection="bannerObjArr" index="index" item="item" open="(" separator="and" close=")">
@@ -21,6 +27,6 @@
             </foreach>
             )
         </if>
-        order by modify_time desc
+        order by creat_time desc
     </select>
 </mapper>

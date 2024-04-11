@@ -23,6 +23,10 @@ public class ExportUpdateRecordModel {
     */
     private String versionNo;
     /**
+     * 系统名称
+     */
+    private String systemName;
+    /**
      * 更新时间
      */
     private String updateTime;

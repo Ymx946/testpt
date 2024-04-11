@@ -42,6 +42,14 @@ public class SystemDataUpdateRecordVO extends BaseDTO {
     */
     private String versionNo;
     /**
+     * 系统代码
+     */
+    private String systemCode;
+    /**
+     * 系统名称
+     */
+    private String systemName;
+    /**
     * 更新时间
     */
     private String updateTime;

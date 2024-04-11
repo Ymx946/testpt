@@ -1,5 +1,6 @@
 package com.mz.model.base.vo;
 
+import com.mz.common.model.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,7 +10,15 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-public class SysNodeVo {
+public class SysNodeVo extends BaseDTO {
+    /**
+     * 开始时间
+     */
+    private String startTime;
+    /**
+     * 结束时间
+     */
+    private String endTime;
     /**
      * 登录人的id
      */

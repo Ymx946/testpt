@@ -161,7 +161,7 @@ public class SysDeftController {
         if (baseUserService.checkLogin(token, request)) {
             pageNo = pageNo != null ? pageNo : StringFormatUtil.PAGE_NO_DEFAULT;
             pageSize = pageSize != null ? pageSize : StringFormatUtil.PAGE_SIZE_DEFAULT;
-            return Result.success(this.sysDeftService.queryAllByLimit(pageNo, pageSize, sysName, sysType, belongType, request));
+            return Result.success(this.sysDeftService.queryAllByLimit(pageNo, pageSize, sysName, sysType, belongType,null,null));
         } else {
             return Result.failedLogin();
         }

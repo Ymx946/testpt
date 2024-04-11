@@ -16,6 +16,7 @@ import com.mz.model.base.vo.BaseSoftwareGroupClassifySysVO;
 import com.mz.model.base.vo.SysDeftSelectVO;
 import com.mz.model.base.vo.SysDeftVO;
 import com.mz.service.base.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,9 +76,9 @@ public class SysDeftServiceImpl implements SysDeftService {
      * @return 对象列表
      */
     @Override
-    public PageInfo<SysDeft> queryAllByLimit(int offset, int limit, String sysName, Integer sysType, Integer belongType, HttpServletRequest request) {
+    public PageInfo<SysDeft> queryAllByLimit(int offset, int limit, String sysName, Integer sysType, Integer belongType, String startTime,  String endTime) {
         PageHelper.startPage(offset, limit);
-        List<SysDeft> list = sysDeftMapper.queryAllByLimit(sysName, sysType, belongType);
+        List<SysDeft> list = sysDeftMapper.queryAllByLimit(sysName, sysType, belongType,startTime,endTime);
         return new PageInfo<SysDeft>(list);
     }
 

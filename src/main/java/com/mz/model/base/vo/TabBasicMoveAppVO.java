@@ -13,6 +13,14 @@ import lombok.ToString;
 @ToString
 public class TabBasicMoveAppVO extends BaseDTO {
     /**
+     * 开始时间
+     */
+    private String startTime;
+    /**
+     * 结束时间
+     */
+    private String endTime;
+    /**
      * 发布对象
      */
     private Integer[] bannerObjArr;

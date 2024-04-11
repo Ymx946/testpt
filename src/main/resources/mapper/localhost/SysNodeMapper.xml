@@ -462,4 +462,36 @@
         </if>
         order by n.node_code asc
     </select>
+    <select id="queryAllOrderByTime" resultType="com.mz.model.base.SysNode">
+        select
+        id, sys_code, node_code, node_name, node_show_name, para_node_code, para_node_name, node_url,name_path, node_type, node_icon, node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,operating_booklet,create_time,create_user,modify_time,modify_user
+        from sys_node
+        <where>
+            <if test="sysCode != null and sysCode != ''">
+                and sys_code = #{sysCode}
+            </if>
+            <if test="nodeName != null and nodeName != ''">
+                and node_name like "%"#{nodeName}"%"
+            </if>
+            <if test="paraNodeCode != null and paraNodeCode != ''">
+                and para_node_code = #{paraNodeCode}
+            </if>
+            <if test="nodeType != null">
+                and node_type = #{nodeType}
+            </if>
+            <if test="button != null">
+                and button = #{button}
+            </if>
+            <if test="useState != null">
+                and use_state = #{useState}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND creat_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND creat_time &lt;= #{endTime}" 23:59:59"
+            </if>
+        </where>
+        order by create_time desc
+    </select>
 </mapper>

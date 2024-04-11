@@ -665,6 +665,13 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
         return Result.success(a);
     }
 
+    @Override
+    public PageInfo<SysNode> queryAllOrderByTime(SysNodeVo vo) {
+        PageHelper.startPage(vo.getPageNo(), vo.getPageSize());
+        List<SysNode> list = sysNodeMapper.queryAllOrderByTime(vo);
+        return new PageInfo<SysNode>(list);
+    }
+
 
     public List<SysNodeSelectModel> getSonNodes(SysNodeSelectModel sysNodeVo, Map<String, List<SysNode>> nodeListMap, List<Long> selectNodeIdList) {
         List<SysNodeSelectModel> list = null;

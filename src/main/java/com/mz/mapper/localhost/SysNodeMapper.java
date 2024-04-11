@@ -2,6 +2,7 @@ package com.mz.mapper.localhost;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mz.model.base.SysNode;
+import com.mz.model.base.vo.SysNodeVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -130,6 +131,7 @@ public interface SysNodeMapper extends BaseMapper<SysNode> {
                                   @Param("useState") Integer useState,
                                   @Param("sysCodeArr") String[] sysCodeArr);
 
+    List<SysNode> queryAllOrderByTime(SysNodeVo vo);
     /**
      * 通过实体作为筛选条件查询
      *

@@ -113,5 +113,6 @@ public interface SysNodeService extends IService<SysNode> {
      * 复制节点信息
      */
      Result copySysNode(SysNodeVo vo);
+    PageInfo<SysNode> queryAllOrderByTime(SysNodeVo vo);
 
 }

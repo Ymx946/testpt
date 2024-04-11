@@ -47,7 +47,6 @@ public class SystemDataServiceNodeController {
      * @return 对象列表
      */
     @NeedLogin
-    @Transactional
     @PostMapping("insert")
     public Result insert(SystemDataServiceNode pojo, @RequestHeader(value = "loginID") String loginID) {
         if (StringUtils.isEmpty(loginID)) {
@@ -125,7 +124,6 @@ public class SystemDataServiceNodeController {
      * @return 对象列表
      */
     @NeedLogin
-    @Transactional
     @PostMapping("changeState")
     public Result changeState(Long id, Integer state, @RequestHeader(value = "loginID") String loginID) {
         if (id == null) {
@@ -187,7 +185,6 @@ public class SystemDataServiceNodeController {
      * @return 对象列表
      */
     @NeedLogin
-    @Transactional
     @PostMapping("delPojo")
     public Result delPojo(Long id) {
         if (id == null) {

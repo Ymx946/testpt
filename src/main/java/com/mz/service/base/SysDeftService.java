@@ -39,7 +39,7 @@ public interface SysDeftService {
      * @param limit 查询条数
      * @return 对象列表
      */
-    PageInfo<SysDeft> queryAllByLimit(int offset, int limit, String sysName, Integer sysType,Integer belongType, HttpServletRequest request);
+    PageInfo<SysDeft> queryAllByLimit(int offset, int limit, String sysName, Integer sysType,Integer belongType,String startTime,  String endTime);
 
     /**
      * 查询多条数据
@@ -51,7 +51,6 @@ public interface SysDeftService {
     /**
      * 通过租户ID查询有权限的系统列表
      *
-     * @param tenantId 租户ID
      * @return 对象列表
      */
      Result queryAllForTenant(String sysName);

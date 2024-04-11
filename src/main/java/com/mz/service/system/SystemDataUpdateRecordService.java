@@ -1,8 +1,11 @@
 package com.mz.service.system;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mz.common.util.Result;
 import com.mz.model.system.SystemDataUpdateRecord;
 import com.mz.common.context.PageInfo;
+import com.mz.model.system.model.SystemDataUpdateRecordModel;
+import com.mz.model.system.vo.SelectSearchVO;
 import com.mz.model.system.vo.SystemDataUpdateRecordVO;
 
 import java.util.List;
@@ -18,9 +21,26 @@ public interface SystemDataUpdateRecordService  extends IService<SystemDataUpdat
      * 保存
      *
      */
-    SystemDataUpdateRecord insert(SystemDataUpdateRecord pojo,String loginID);
-    
+    SystemDataUpdateRecord insert(SystemDataUpdateRecord pojo,String loginID,String jsonStr);
+
+    /**
+     * 分页列表
+     */
     PageInfo<SystemDataUpdateRecord> queryAllByLimit(SystemDataUpdateRecordVO vo);
+
+    /**
+     * 查询所有
+     */
     List<SystemDataUpdateRecord> queryAll(SystemDataUpdateRecordVO vo);
+
+    /**
+     * 详情
+     */
+    SystemDataUpdateRecordModel queryById(Long id);
+
+    /**
+     * 下发数据选择列表
+     */
+    Result queryBusForSelect(SelectSearchVO vo);
 
 }

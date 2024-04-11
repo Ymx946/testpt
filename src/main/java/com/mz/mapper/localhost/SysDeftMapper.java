@@ -36,7 +36,7 @@ public interface SysDeftMapper {
      *
      * @return 对象列表
      */
-    List<SysDeft> queryAllByLimit(@Param("sysName") String sysName, @Param("sysType") Integer sysType, @Param("belongType") Integer belongType);
+    List<SysDeft> queryAllByLimit(@Param("sysName") String sysName, @Param("sysType") Integer sysType, @Param("belongType") Integer belongType, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
 
     /**

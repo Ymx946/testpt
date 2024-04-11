@@ -5,55 +5,44 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 服务节点版本更新记录(SystemDataUpdateRecord)实体类
- *
- * @author makejava
- * @since 2023-12-29 10:01:10
+ *版本更新记录下发数据表(SystemDataUpdateSendData)实体类
  */
 @SuppressWarnings("serial")
 @Setter
 @Getter
 @ToString
-public class SystemDataUpdateRecord  {
-    private static final long serialVersionUID = 855804138903059127L;
+public class SystemDataUpdateSendData  {
+    private static final long serialVersionUID = -15819035110003051L;
     /**
     * 主键
     */
     private Long id;
     /**
-    * 节点id
+    * 更新记录ID
     */
-    private Long nodeId;
+    private Long recordId;
     /**
-    * 节点名称
+    * 下发数据类型代码
     */
-    private String nodeName;
+    private String sendDataTypeCode;
     /**
-    * 版本号
+    * 下发数据类型名称
     */
-    private String versionNo;
+    private String sendDataTypeName;
     /**
-     * 系统代码
-     */
-    private String systemCode;
-    /**
-     * 系统名称
-     */
-    private String systemName;
-    /**
-    * 维护时间
+    * 下发数据业务ID
     */
-    private String updateTime;
+    private Long sendDataId;
     /**
-    * 更新内容
+    * 下发数据名称
     */
-    private String updateContent;
+    private String sendDataName;
     /**
     * 逻辑删除
     */
     private Integer delState;
     /**
-    * 状态 0-未下发 1已下发 -1下发失败
+    * 状态
     */
     private Integer state;
     /**

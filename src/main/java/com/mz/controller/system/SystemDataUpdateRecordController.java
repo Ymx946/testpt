@@ -2,10 +2,13 @@ package com.mz.controller.system;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import com.alibaba.fastjson.JSONObject;
+import com.mz.common.ConstantsCacheUtil;
 import com.mz.common.util.ExcelUtils;
 import com.mz.model.base.BaseUser;
 import com.mz.model.system.SystemDataUpdateRecord;
 import com.mz.model.system.model.ExportUpdateRecordModel;
+import com.mz.model.system.vo.SelectSearchVO;
 import com.mz.model.system.vo.SystemDataServiceNodeVO;
 import com.mz.model.system.vo.SystemDataUpdateRecordVO;
 import com.mz.service.system.SystemDataUpdateRecordService;
@@ -46,21 +49,22 @@ public class SystemDataUpdateRecordController {
      * @return 对象列表
      * */
     @NeedLogin
-    @Transactional
     @PostMapping("insert")
-    public Result insert(SystemDataUpdateRecord pojo, @RequestHeader(value = "loginID") String loginID) {
+    public Result insert(SystemDataUpdateRecord pojo,String  jsonStr, @RequestHeader(value = "loginID") String loginID) {
         if (StringUtils.isEmpty(loginID)) {
             return Result.failed("loginID不能为空");
         }
         if (pojo.getNodeId()==null) {
             return Result.failed("节点ID不能为空");
         }
+        if (StringUtils.isEmpty(pojo.getSystemCode())) {
+            return Result.failed("系统代码不能为空");
+        }
         if (StringUtils.isEmpty(pojo.getVersionNo())) {
             return Result.failed("版本号不能为空");
         }
         try {
-            this.systemDataUpdateRecordService.insert(pojo,loginID);
-            return Result.success();
+            return Result.success(this.systemDataUpdateRecordService.insert(pojo,loginID,jsonStr));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
@@ -79,7 +83,7 @@ public class SystemDataUpdateRecordController {
             return Result.failed("ID必填");
         }
         try {
-            return Result.success(this.systemDataUpdateRecordService.getById(id));
+            return Result.success(this.systemDataUpdateRecordService.queryById(id));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
@@ -131,11 +135,10 @@ public class SystemDataUpdateRecordController {
         }
     }
     /**
-     * 删除
+     * 变更状态
      * @return 对象列表
      * */
     @NeedLogin
-    @Transactional
     @PostMapping("changeState")
     public Result changeState(Long id,Integer state) {
         if (id==null) {
@@ -160,7 +163,6 @@ public class SystemDataUpdateRecordController {
      * @return 对象列表
      * */
     @NeedLogin
-    @Transactional
     @PostMapping("delPojo")
     public Result delPojo(Long id) {
         if (id==null) {
@@ -201,6 +203,7 @@ public class SystemDataUpdateRecordController {
             List<String> fieldList = new ArrayList<String>();
             fieldList.add("日期");
             fieldList.add("版本号");
+            fieldList.add("系统名称");
             fieldList.add("更新时间");
             fieldList.add("更新内容");
             long t1 = System.currentTimeMillis();
@@ -209,6 +212,28 @@ public class SystemDataUpdateRecordController {
             System.out.printf("write over! cost:%sms%n", (t2 - t1));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 版本更新下发数据选择列表
+     *
+     * @return 对象列表
+     */
+    @NeedLogin
+    @GetMapping("queryBusForSelect")
+    public Result queryBusForSelect(SelectSearchVO vo, @RequestHeader(value = "loginID") String loginID) {
+        if (StringUtils.isEmpty(loginID)) {
+            return Result.failed("loginID不能为空");
+        }
+        if (vo.getType() == null) {
+            return Result.failed("类型不能为空");
+        }
+        try {
+            return Result.success(this.systemDataUpdateRecordService.queryBusForSelect(vo));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
         }
     }
 
