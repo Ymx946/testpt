@@ -62,7 +62,7 @@ public class SystemDataUpdateRecordVO extends BaseDTO {
     */
     private Integer delState;
     /**
-    * 状态
+    * 状态 0-未下发 1已下发 -1下发失败
     */
     private Integer state;
     /**

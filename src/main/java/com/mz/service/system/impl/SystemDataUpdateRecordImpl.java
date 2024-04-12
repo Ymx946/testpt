@@ -122,6 +122,9 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
         if(!StringUtils.isEmpty(vo.getVersionNo())){
             lambdaQuery.like(SystemDataUpdateRecord::getVersionNo,vo.getVersionNo());
         }
+        if(ObjectUtil.isNotEmpty(vo.getState())){
+            lambdaQuery.eq(SystemDataUpdateRecord::getState,vo.getState());
+        }
         if(!StringUtils.isEmpty(vo.getUpdateContent())){
             lambdaQuery.like(SystemDataUpdateRecord::getUpdateContent,vo.getUpdateContent());
         }
