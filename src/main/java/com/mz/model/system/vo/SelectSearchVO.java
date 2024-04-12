@@ -17,6 +17,26 @@ public class SelectSearchVO extends BaseDTO {
     */
     private Integer type;
     /**
+     * 类型1-监管端2-农企端
+     */
+    private Integer sysType;
+    /**
+     * 所属类型 1-自建 2-第三方
+     */
+    private Integer belongType;
+    /**
+     * 发布对象1村民2村友3游客4村委(多选)
+     */
+    private String bannerObj;
+    /**
+     * 应用类型 1-服务大厅 2-我的
+     */
+    private Integer appType;
+    /**
+     * 类型1-菜单 2-按钮
+     */
+    private Integer nodeType;
+    /**
      * 开始时间
      */
     private String startTime;

@@ -77,7 +77,14 @@
             <if test="useState != null">
                 and use_state = #{useState}
             </if>
+            <if test="startTime != null and startTime != ''">
+                AND create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND create_time &lt;= #{endTime}" 23:59:59"
+            </if>
         </where>
+        order by create_time desc
     </select>
 
     <!--通过实体作为筛选条件查询-->
@@ -132,7 +139,7 @@
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
         insert into sys_data_dict(id,dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state, create_time, create_user, modify_time, modify_user)
-        values (#{id},#{dictTypeCode}, #{dictTypeName}, #{dictCode}, #{dictName}, #{areaCode}, #{remarks}, #{useState}, #{create_time}, #{create_user}, #{modify_time}, #{modify_user})
+        values (#{id},#{dictTypeCode}, #{dictTypeName}, #{dictCode}, #{dictName}, #{areaCode}, #{remarks}, #{useState}, #{createTime}, #{createUser}, #{modifyTime}, #{modifyUser})
     </insert>
 
     <!--通过主键修改数据-->

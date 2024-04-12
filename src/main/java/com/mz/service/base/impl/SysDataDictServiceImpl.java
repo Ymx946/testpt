@@ -168,9 +168,9 @@ public class SysDataDictServiceImpl extends ServiceImpl<SysDataDictMapper,SysDat
      * @return 对象列表
      */
     @Override
-    public PageInfo<SysDataDict> queryAllByLimit(int offset, int limit, String areaCode, String dictTypeCode, String dictTypeName, String dictName,Integer useState) {
+    public PageInfo<SysDataDict> queryAllByLimit(int offset, int limit, String areaCode, String dictTypeCode, String dictTypeName, String dictName,Integer useState,String startTime,String endTime) {
         PageHelper.startPage(offset, limit);
-        List<SysDataDict> list = sysDataDictMapper.queryAllByLimit(offset, limit, areaCode, dictTypeCode, dictTypeName, dictName,useState);
+        List<SysDataDict> list = sysDataDictMapper.queryAllByLimit(offset, limit, areaCode, dictTypeCode, dictTypeName, dictName,useState,startTime,endTime);
         return new PageInfo<SysDataDict>(list);
     }
 

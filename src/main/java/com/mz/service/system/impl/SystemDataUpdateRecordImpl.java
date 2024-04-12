@@ -155,26 +155,32 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
         String endTime = vo.getEndTime();
         String name = vo.getName();
         Integer state = vo.getState();
-        if (vo.getType().intValue() == 1) {//1-数据字典// 可用状态(1可用2不可用)
-            PageInfo<SysDataDict> pageInfo = sysDataDictService.queryAllByLimit(pageNo, pageSize, areaCode, null, null, name, state);
+        Integer sysType = vo.getSysType();
+        Integer belongType = vo.getBelongType();
+        Integer nodeType = vo.getNodeType();
+        if (vo.getType().intValue() == 1) {//1-数据字典
+            PageInfo<SysDataDict> pageInfo = sysDataDictService.queryAllByLimit(pageNo, pageSize, areaCode, null, null, name, state,startTime,endTime);
             return Result.success(pageInfo);
-        } else if (vo.getType().intValue() == 2) {//2-PC应用市场 //没有state
-            PageInfo<SysDeft> pageInfo = sysDeftService.queryAllByLimit(pageNo, pageSize, name, null, null, startTime, endTime);
+        } else if (vo.getType().intValue() == 2) {//2-PC应用市场
+            PageInfo<SysDeft> pageInfo = sysDeftService.queryAllByLimit(pageNo, pageSize, name, sysType, belongType, startTime, endTime);
             return Result.success(pageInfo);
-        } else if (vo.getType().intValue() == 3) {//3-移动应用市场 //没有state
+        } else if (vo.getType().intValue() == 3) {//3-移动应用市场
             TabBasicMoveAppVO find = new TabBasicMoveAppVO();
             find.setPageNo(pageNo);
             find.setPageSize(pageSize);
             find.setAppName(name);
+            find.setAppType(vo.getAppType());
+            find.setBannerObj(vo.getBannerObj());
             find.setStartTime(startTime);
             find.setEndTime(endTime);
             PageInfo<TabBasicMoveApp> pageInfo = tabBasicMoveAppService.queryAllByLimit(find);
             return Result.success(pageInfo);
-        } else if (vo.getType().intValue() == 4) {//4-节点管理 //可用状态(1可用2不可用)
+        } else if (vo.getType().intValue() == 4) {//4-节点管理
             SysNodeVo find = new SysNodeVo();
             find.setPageNo(pageNo);
             find.setPageSize(pageSize);
             find.setNodeName(name);
+            find.setNodeType(nodeType);
             find.setStartTime(startTime);
             find.setEndTime(endTime);
             find.setUseState(state);

@@ -236,11 +236,11 @@ public class SysDataDictController {
      */
     @SneakyThrows
     @PostMapping("queryAllByLimit")
-    public Result queryAllByLimit(Integer pageNo, Integer pageSize, String areaCode, String dictTypeCode, String dictTypeName, String dictName, Integer useState, String token, HttpServletRequest request) {
+    public Result queryAllByLimit(Integer pageNo, Integer pageSize, String areaCode, String dictTypeCode, String dictTypeName, String dictName, Integer useState,String startTime,String endTime, String token, HttpServletRequest request) {
         if (baseUserService.checkLogin(token, request)) {
             pageNo = pageNo != null ? pageNo : StringFormatUtil.PAGE_NO_DEFAULT;
             pageSize = pageSize != null ? pageSize : StringFormatUtil.PAGE_SIZE_DEFAULT;
-            return Result.success(sysDataDictService.queryAllByLimit(pageNo, pageSize, areaCode, dictTypeCode, dictTypeName, dictName, useState));
+            return Result.success(sysDataDictService.queryAllByLimit(pageNo, pageSize, areaCode, dictTypeCode, dictTypeName, dictName, useState,startTime,endTime));
         } else {
             return Result.failedLogin();
         }

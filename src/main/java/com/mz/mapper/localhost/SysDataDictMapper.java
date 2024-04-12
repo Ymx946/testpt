@@ -62,7 +62,9 @@ public interface SysDataDictMapper extends BaseMapper<SysDataDict> {
                                       @Param("dictTypeCode") String dictTypeCode,
                                       @Param("dictTypeName") String dictTypeName,
                                       @Param("dictName") String dictName,
-                                      @Param("useState") Integer useState);
+                                      @Param("useState") Integer useState,
+                                      @Param("startTime") String startTime,
+                                      @Param("endTime") String endTime);
 
 
     /**
