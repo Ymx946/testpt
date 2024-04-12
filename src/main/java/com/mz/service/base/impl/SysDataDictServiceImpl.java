@@ -2,6 +2,7 @@ package com.mz.service.base.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,8 +12,10 @@ import com.mz.common.context.PageInfo;
 import com.mz.common.util.IdWorker;
 import com.mz.common.util.Result;
 import com.mz.mapper.localhost.SysDataDictMapper;
+import com.mz.model.base.BaseUser;
 import com.mz.model.base.SysDataDict;
 import com.mz.model.base.vo.SysDataDictSubVO;
+import com.mz.service.base.BaseUserService;
 import com.mz.service.base.SysDataDictService;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +36,8 @@ import java.util.Map;
 public class SysDataDictServiceImpl extends ServiceImpl<SysDataDictMapper,SysDataDict> implements SysDataDictService {
     @Resource
     private SysDataDictMapper sysDataDictMapper;
+    @Resource
+    private BaseUserService baseUserService;
 
     /**
      * 通过ID查询单条数据
@@ -177,6 +182,9 @@ public class SysDataDictServiceImpl extends ServiceImpl<SysDataDictMapper,SysDat
      */
     @Override
     public Result insert(SysDataDict sysDataDict, HttpServletRequest request) {
+        BaseUser baseUser = baseUserService.getUser(request);
+        sysDataDict.setModifyTime(DateUtil.now());
+        sysDataDict.setModifyUser(baseUser.getRealName());
         if (sysDataDict.getId() != null) {
             SysDataDict findSysDataDict = new SysDataDict();
             findSysDataDict.setDictTypeCode(sysDataDict.getDictTypeCode());
@@ -216,6 +224,8 @@ public class SysDataDictServiceImpl extends ServiceImpl<SysDataDictMapper,SysDat
             IdWorker idWorker = new IdWorker(0L, 0L);
             long newId = idWorker.nextId();
             sysDataDict.setId(String.valueOf(newId));
+            sysDataDict.setCreateUser(baseUser.getRealName());
+            sysDataDict.setCreateTime(DateUtil.now());
             this.sysDataDictMapper.insert(sysDataDict);
             return Result.success(sysDataDict);
         }

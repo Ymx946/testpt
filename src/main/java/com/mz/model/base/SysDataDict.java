@@ -250,5 +250,21 @@ public class SysDataDict {
      * 可用状态(1可用2不可用)
      */
     private Integer useState;
+    /**
+     * 创建时间
+     */
+    private String createTime;
+    /**
+     * 创建人
+     */
+    private String createUser;
+    /**
+     * 修改时间
+     */
+    private String modifyTime;
+    /**
+     * 修改人
+     */
+    private String modifyUser;
 
 }
