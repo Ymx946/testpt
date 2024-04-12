@@ -365,26 +365,30 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                             }
                         }
                         if(CollectionUtil.isNotEmpty(dataDictList)){
-                            String result = JSON.toJSONString(dataDictList);
+                            Gson gson = new Gson();
+                            String result = gson.toJson(dataDictList);
                             String post = HttpKit.post(dataDictUrl, result);
                             JSONObject jsonObjectAuth = JSONObject.parseObject(post);
                             String returnCode = jsonObjectAuth.getString("code");
-                            if (returnCode.equals("200")) {//请求成功
+                            if (returnCode.equals("10000")) {//请求成功
                                 reissuedState = 1;
                             }else {
                                 reissuedState = -1;
                             }
                         }
                         if(CollectionUtil.isNotEmpty(sysDeftList)){
-                            String result1 = JSON.toJSONString(sysDeftList);
+                            Gson gson = new Gson();
+                            String result1 = gson.toJson(sysDeftList);
                             HttpKit.post(deftUrl, result1);
                         }
                         if(CollectionUtil.isNotEmpty(moveAppList)){
-                            String result2 = JSON.toJSONString(moveAppList);
+                            Gson gson = new Gson();
+                            String result2 = gson.toJson(moveAppList);
                             HttpKit.post(moveAppUrl, result2);
                         }
                         if(CollectionUtil.isNotEmpty(sysNodeList)){
-                            String result3 = JSON.toJSONString(sysNodeList);
+                            Gson gson = new Gson();
+                            String result3 = gson.toJson(sysNodeList);
                             HttpKit.post(nodeUrl, result3);
                         }
                     }
