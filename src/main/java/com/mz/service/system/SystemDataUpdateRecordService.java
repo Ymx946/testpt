@@ -43,4 +43,13 @@ public interface SystemDataUpdateRecordService  extends IService<SystemDataUpdat
      */
     Result queryBusForSelect(SelectSearchVO vo);
 
+    /**
+     * 下发更新记录
+     */
+    Integer issued(Long id);
+
+    /**
+     * 重新下发更新记录
+     */
+    Integer reissued(Long id);
 }

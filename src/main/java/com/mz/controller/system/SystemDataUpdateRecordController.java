@@ -2,6 +2,7 @@ package com.mz.controller.system;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.mz.common.ConstantsCacheUtil;
 import com.mz.common.util.ExcelUtils;
@@ -97,7 +98,7 @@ public class SystemDataUpdateRecordController {
      */
     @NeedLogin
     @GetMapping("queryAllByLimit")
-    public Result queryAllByLimit(SystemDataUpdateRecordVO vo ) {
+    public Result queryAllByLimit(SystemDataUpdateRecordVO vo) {
         if (vo.getNodeId()==null) {
             return Result.failed("节点id不能为空");
         }
@@ -134,30 +135,57 @@ public class SystemDataUpdateRecordController {
             return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
         }
     }
+
     /**
-     * 变更状态
+     * 下发
      * @return 对象列表
      * */
     @NeedLogin
-    @PostMapping("changeState")
-    public Result changeState(Long id,Integer state) {
+    @PostMapping("issued")
+    public Result issued(Long id) {
         if (id==null) {
             return Result.failed("id不能为空");
         }
-        if (state==null) {
-            return Result.failed("状态不能为空");
+        SystemDataUpdateRecord updateRecord = systemDataUpdateRecordService.getById(id);
+        if(ObjectUtil.isNotEmpty(updateRecord)){
+            if(ObjectUtil.isNotEmpty(updateRecord.getState()) && updateRecord.getState().intValue()==1){
+                return Result.failed("该条版本更新记录已下发");
+            }
         }
         try {
-            SystemDataUpdateRecord pojo = new SystemDataUpdateRecord();
-            pojo.setId(id);//
-            pojo.setState(state);
-            this.systemDataUpdateRecordService.updateById(pojo);
-            return Result.success();
+            return Result.success(this.systemDataUpdateRecordService.issued(id));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
         }
     }
+
+    /**
+     * 重新下发
+     * @return 对象列表
+     * */
+    @NeedLogin
+    @PostMapping("reissued")
+    public Result reissued(Long id) {
+        if (id==null) {
+            return Result.failed("id不能为空");
+        }
+        SystemDataUpdateRecord updateRecord = systemDataUpdateRecordService.getById(id);
+        if(ObjectUtil.isNotEmpty(updateRecord)){
+            if(ObjectUtil.isNotEmpty(updateRecord.getState())){
+                if(updateRecord.getState().intValue()==0 || updateRecord.getState().intValue()== -1) {
+                    return Result.failed("版本更新记录为下发状态,才可重新下发");
+                }
+            }
+        }
+        try {
+            return Result.success(this.systemDataUpdateRecordService.reissued(id));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
+        }
+    }
+
     /**
      * 删除
      * @return 对象列表

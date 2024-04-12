@@ -4,16 +4,20 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gexin.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
+import com.google.gson.Gson;
 import com.mz.common.ConstantsCacheUtil;
 import com.mz.common.ConstantsUtil;
 import com.mz.common.context.PageInfo;
 import com.mz.common.util.IdWorker;
 import com.mz.common.util.Result;
 import com.mz.common.util.StringUtils;
+import com.mz.common.util.wxaes.HttpKit;
 import com.mz.framework.util.redis.RedisUtil;
 import com.mz.mapper.system.SystemDataUpdateRecordMapper;
 import com.mz.model.base.*;
@@ -33,8 +37,10 @@ import com.mz.service.base.TabBasicMoveAppService;
 import com.mz.service.system.SystemDataServiceNodeService;
 import com.mz.service.system.SystemDataUpdateRecordService;
 import com.mz.service.system.SystemDataUpdateSendDataService;
+import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -119,6 +125,9 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
         if(!StringUtils.isEmpty(vo.getCreateTimeE())){
             lambdaQuery.le(SystemDataUpdateRecord::getCreateTime,vo.getCreateTimeE()+" 23:59:59");
         }
+        if(ObjectUtil.isNotEmpty(vo.getSystemCode())){
+            lambdaQuery.eq(SystemDataUpdateRecord::getSystemCode,vo.getSystemCode());
+        }
         if(!StringUtils.isEmpty(vo.getVersionNo())){
             lambdaQuery.like(SystemDataUpdateRecord::getVersionNo,vo.getVersionNo());
         }
@@ -191,5 +200,197 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
             return Result.success(pageInfo);
         }
         return Result.success();
+    }
+
+    @SneakyThrows
+    @Override
+    public Integer issued(Long id) {
+        SystemDataUpdateRecord dataUpdateRecord = getById(id);
+        Integer reissuedState = 0;
+        if(ObjectUtil.isNotEmpty(dataUpdateRecord)){
+            if(ObjectUtil.isNotEmpty(dataUpdateRecord.getNodeId())){
+                SystemDataServiceNode systemDataServiceNode = systemDataServiceNodeService.getById(dataUpdateRecord.getNodeId());
+                if(ObjectUtil.isNotEmpty(systemDataServiceNode)){
+                    if(ObjectUtil.isNotEmpty(systemDataServiceNode.getNodeUrl())){
+                        String url = "https://"+systemDataServiceNode.getNodeUrl()+"/future-rural";
+                        String versionUrl = url+"/tabBaseVersions/receipt";
+                        String dataDictUrl = url+"/sysDataDict/receipt";
+                        String deftUrl = url+"/sysDeft/receipt";
+                        String moveAppUrl = url+"/tabBasicMoveApp/receipt";
+                        String nodeUrl = url+"/sysNode/receipt";
+                        List<SysDataDict> dataDictList = new ArrayList<>();
+                        List<SysDeft> sysDeftList = new ArrayList<>();
+                        List<TabBasicMoveApp> moveAppList = new ArrayList<>();
+                        List<SysNode> sysNodeList = new ArrayList<>();
+                        SystemDataUpdateRecordModel model = queryById(id);
+                        if(ObjectUtil.isNotEmpty(model)){
+                            List<SystemDataUpdateSendData> systemDataUpdateSendDataList = model.getSystemDataUpdateSendDataList();
+                            if(CollectionUtil.isNotEmpty(systemDataUpdateSendDataList)){
+                                for (SystemDataUpdateSendData systemDataUpdateSendData : systemDataUpdateSendDataList) {
+                                    if(ObjectUtil.isNotEmpty(systemDataUpdateSendData.getSendDataTypeCode()) && ObjectUtil.isNotEmpty(systemDataUpdateSendData.getSendDataId())){
+                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("1")){
+                                            SysDataDict sysDataDict = sysDataDictService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
+                                            if (ObjectUtil.isNotEmpty(sysDataDict)){
+                                                dataDictList.add(sysDataDict);
+                                            }
+                                        }
+                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("2")){
+                                            SysDeft sysDeft = sysDeftService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
+                                            if (ObjectUtil.isNotEmpty(sysDeft)){
+                                                sysDeftList.add(sysDeft);
+                                            }
+                                        }
+                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("3")){
+                                            TabBasicMoveApp moveApp = tabBasicMoveAppService.getById(systemDataUpdateSendData.getSendDataId());
+                                            if (ObjectUtil.isNotEmpty(moveApp)){
+                                                moveAppList.add(moveApp);
+                                            }
+                                        }
+                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("4")){
+                                            SysNode sysNode = sysNodeService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
+                                            if (ObjectUtil.isNotEmpty(sysNode)){
+                                                sysNodeList.add(sysNode);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if(CollectionUtil.isNotEmpty(dataDictList)){
+                            Gson gson = new Gson();
+                            String result = gson.toJson(dataDictList);
+                            HttpKit.post(dataDictUrl, result);
+                        }
+                        if(CollectionUtil.isNotEmpty(sysDeftList)){
+                            Gson gson = new Gson();
+                            String result1 = gson.toJson(sysDeftList);
+                            HttpKit.post(deftUrl, result1);
+                        }
+                        if(CollectionUtil.isNotEmpty(moveAppList)){
+                            Gson gson = new Gson();
+                            String result2 = gson.toJson(moveAppList);
+                            HttpKit.post(moveAppUrl, result2);
+                        }
+                        if(CollectionUtil.isNotEmpty(sysNodeList)){
+                            Gson gson = new Gson();
+                            String result3 = gson.toJson(sysNodeList);
+                            HttpKit.post(nodeUrl, result3);
+                        }
+                        TabBaseVersions versions = new TabBaseVersions();
+                        versions.setId(dataUpdateRecord.getId());
+                        versions.setVersionNumber(dataUpdateRecord.getVersionNo());
+                        versions.setUpdateContent(dataUpdateRecord.getUpdateContent());
+                        versions.setSystemCode(dataUpdateRecord.getSystemCode());
+                        versions.setSystemName(dataUpdateRecord.getSystemName());
+                        versions.setState(1);
+                        versions.setDelState(1);
+                        versions.setCreateTime(DateUtil.now());
+                        versions.setCreateUser(dataUpdateRecord.getCreateUser());
+                        versions.setModifyTime(DateUtil.now());
+                        versions.setModifyUser(dataUpdateRecord.getModifyUser());
+                        if (ObjectUtil.isNotEmpty(dataUpdateRecord.getRemarks())){
+                            versions.setRemarks(dataUpdateRecord.getRemarks());
+                        }
+                        Gson gson = new Gson();
+                        String obj1 = gson.toJson(versions);
+                        String result = HttpKit.post(versionUrl, obj1);
+                        JSONObject jsonObjectAuth = JSONObject.parseObject(result);
+                        String returnCode = jsonObjectAuth.getString("code");
+                        if (returnCode.equals("10000")) {//请求成功
+                            dataUpdateRecord.setState(1);
+                            reissuedState = 1;
+                        }else {
+                            dataUpdateRecord.setState(-1);
+                            reissuedState = -1;
+                        }
+                        updateById(dataUpdateRecord);
+                    }
+                }
+            }
+        }
+        return reissuedState;
+    }
+
+    @SneakyThrows
+    @Override
+    public Integer reissued(Long id) { //1-重新下发成功 -1 重新下发失败
+        SystemDataUpdateRecord dataUpdateRecord = getById(id);
+        Integer reissuedState = 0;
+        if(ObjectUtil.isNotEmpty(dataUpdateRecord)){
+            if(ObjectUtil.isNotEmpty(dataUpdateRecord.getNodeId())){
+                SystemDataServiceNode systemDataServiceNode = systemDataServiceNodeService.getById(dataUpdateRecord.getNodeId());
+                if(ObjectUtil.isNotEmpty(systemDataServiceNode)){
+                    if(ObjectUtil.isNotEmpty(systemDataServiceNode.getNodeUrl())){
+                        String url = "https://"+systemDataServiceNode.getNodeUrl()+"/future-rural";
+                        String dataDictUrl = url+"/sysDataDict/receipt";
+                        String deftUrl = url+"/sysDeft/receipt";
+                        String moveAppUrl = url+"/tabBasicMoveApp/receipt";
+                        String nodeUrl = url+"/sysNode/receipt";
+                        List<SysDataDict> dataDictList = new ArrayList<>();
+                        List<SysDeft> sysDeftList = new ArrayList<>();
+                        List<TabBasicMoveApp> moveAppList = new ArrayList<>();
+                        List<SysNode> sysNodeList = new ArrayList<>();
+                        SystemDataUpdateRecordModel model = queryById(id);
+                        if(ObjectUtil.isNotEmpty(model)){
+                            List<SystemDataUpdateSendData> systemDataUpdateSendDataList = model.getSystemDataUpdateSendDataList();
+                            if(CollectionUtil.isNotEmpty(systemDataUpdateSendDataList)){
+                                for (SystemDataUpdateSendData systemDataUpdateSendData : systemDataUpdateSendDataList) {
+                                    if(ObjectUtil.isNotEmpty(systemDataUpdateSendData.getSendDataTypeCode()) && ObjectUtil.isNotEmpty(systemDataUpdateSendData.getSendDataId())){
+                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("1")){
+                                            SysDataDict sysDataDict = sysDataDictService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
+                                            if (ObjectUtil.isNotEmpty(sysDataDict)){
+                                                dataDictList.add(sysDataDict);
+                                            }
+                                        }
+                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("2")){
+                                            SysDeft sysDeft = sysDeftService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
+                                            if (ObjectUtil.isNotEmpty(sysDeft)){
+                                                sysDeftList.add(sysDeft);
+                                            }
+                                        }
+                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("3")){
+                                            TabBasicMoveApp moveApp = tabBasicMoveAppService.getById(systemDataUpdateSendData.getSendDataId());
+                                            if (ObjectUtil.isNotEmpty(moveApp)){
+                                                moveAppList.add(moveApp);
+                                            }
+                                        }
+                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("4")){
+                                            SysNode sysNode = sysNodeService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
+                                            if (ObjectUtil.isNotEmpty(sysNode)){
+                                                sysNodeList.add(sysNode);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if(CollectionUtil.isNotEmpty(dataDictList)){
+                            String result = JSON.toJSONString(dataDictList);
+                            String post = HttpKit.post(dataDictUrl, result);
+                            JSONObject jsonObjectAuth = JSONObject.parseObject(post);
+                            String returnCode = jsonObjectAuth.getString("code");
+                            if (returnCode.equals("200")) {//请求成功
+                                reissuedState = 1;
+                            }else {
+                                reissuedState = -1;
+                            }
+                        }
+                        if(CollectionUtil.isNotEmpty(sysDeftList)){
+                            String result1 = JSON.toJSONString(sysDeftList);
+                            HttpKit.post(deftUrl, result1);
+                        }
+                        if(CollectionUtil.isNotEmpty(moveAppList)){
+                            String result2 = JSON.toJSONString(moveAppList);
+                            HttpKit.post(moveAppUrl, result2);
+                        }
+                        if(CollectionUtil.isNotEmpty(sysNodeList)){
+                            String result3 = JSON.toJSONString(sysNodeList);
+                            HttpKit.post(nodeUrl, result3);
+                        }
+                    }
+                }
+            }
+        }
+        return reissuedState;
     }
 }
