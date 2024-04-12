@@ -230,7 +230,7 @@ public class SystemDataUpdateRecordController {
             return Result.failed("类型不能为空");
         }
         try {
-            return Result.success(this.systemDataUpdateRecordService.queryBusForSelect(vo));
+            return this.systemDataUpdateRecordService.queryBusForSelect(vo);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
