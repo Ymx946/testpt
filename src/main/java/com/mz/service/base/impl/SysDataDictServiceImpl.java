@@ -170,7 +170,7 @@ public class SysDataDictServiceImpl extends ServiceImpl<SysDataDictMapper,SysDat
     @Override
     public PageInfo<SysDataDict> queryAllByLimit(int offset, int limit, String areaCode, String dictTypeCode, String dictTypeName, String dictName,Integer useState,String startTime,String endTime) {
         PageHelper.startPage(offset, limit);
-        List<SysDataDict> list = sysDataDictMapper.queryAllByLimit(offset, limit, areaCode, dictTypeCode, dictTypeName, dictName,useState,startTime,endTime);
+        List<SysDataDict> list = sysDataDictMapper.queryAllByLimits(offset, limit, areaCode, dictTypeCode, dictTypeName, dictName,useState,startTime,endTime);
         return new PageInfo<SysDataDict>(list);
     }
 

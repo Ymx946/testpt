@@ -65,7 +65,15 @@ public interface SysDataDictMapper extends BaseMapper<SysDataDict> {
                                       @Param("useState") Integer useState,
                                       @Param("startTime") String startTime,
                                       @Param("endTime") String endTime);
-
+    List<SysDataDict> queryAllByLimits(@Param("offset") int offset,
+                                      @Param("limit") int limit,
+                                      @Param("areaCode") String areaCode,
+                                      @Param("dictTypeCode") String dictTypeCode,
+                                      @Param("dictTypeName") String dictTypeName,
+                                      @Param("dictName") String dictName,
+                                      @Param("useState") Integer useState,
+                                      @Param("startTime") String startTime,
+                                      @Param("endTime") String endTime);
 
     /**
      * 通过实体作为筛选条件查询

@@ -87,6 +87,36 @@
         order by create_time desc
     </select>
 
+    <select id="queryAllByLimits" resultMap="BaseResultMap">
+        select
+        id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state, create_time, create_user, modify_time, modify_user
+        from sys_data_dict
+        <where>
+            <if test="dictTypeCode != null and dictTypeCode != ''">
+                and dict_type_code = #{dictTypeCode}
+            </if>
+            <if test="dictTypeName != null and dictTypeName != ''">
+                and dict_type_name like "%"#{dictTypeName}"%"
+            </if>
+            <if test="dictName != null and dictName != ''">
+                and dict_name like "%"#{dictName}"%"
+            </if>
+            <if test="areaCode != null and areaCode != ''">
+                and area_code = #{areaCode}
+            </if>
+            <if test="useState != null">
+                and use_state = #{useState}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND create_time &lt;= #{endTime}" 23:59:59"
+            </if>
+        </where>
+        order by CONVERT(dict_code,SIGNED) asc
+    </select>
+
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="BaseResultMap">
         select
