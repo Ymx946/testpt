@@ -92,6 +92,7 @@ public interface SysDataDictService {
      * @return 对象列表
      */
     PageInfo<SysDataDict> queryAllByLimit(int offset, int limit, String areaCode, String dictTypeCode, String dictTypeName, String dictName,Integer useState,String startTime,String endTime);
+    PageInfo<SysDataDict> queryAllByLimits(int offset, int limit, String areaCode, String dictTypeCode, String dictTypeName, String dictName,Integer useState,String startTime,String endTime);
 
     /**
      * 新增数据

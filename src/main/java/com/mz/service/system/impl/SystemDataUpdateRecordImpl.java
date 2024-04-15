@@ -171,7 +171,7 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
         Integer belongType = vo.getBelongType();
         Integer nodeType = vo.getNodeType();
         if (vo.getType().intValue() == 1) {//1-数据字典
-            PageInfo<SysDataDict> pageInfo = sysDataDictService.queryAllByLimit(pageNo, pageSize, areaCode, null, null, name, state,startTime,endTime);
+            PageInfo<SysDataDict> pageInfo = sysDataDictService.queryAllByLimits(pageNo, pageSize, areaCode, null, null, name, state,startTime,endTime);
             return Result.success(pageInfo);
         } else if (vo.getType().intValue() == 2) {//2-PC应用市场
             PageInfo<SysDeft> pageInfo = sysDeftService.queryAllByLimit(pageNo, pageSize, name, sysType, belongType, startTime, endTime);
