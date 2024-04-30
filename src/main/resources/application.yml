@@ -204,6 +204,10 @@ mybatis-plus:
   global-config:
     banner: false
     enable-sql-runner: true
+    db-config:
+      insert-strategy: NOT_EMPTY
+      update-strategy: NOT_EMPTY
+      where-strategy: NOT_EMPTY
 
 #pagehelper分页插件
 pagehelper:
