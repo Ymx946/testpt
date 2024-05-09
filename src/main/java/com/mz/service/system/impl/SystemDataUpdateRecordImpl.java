@@ -294,11 +294,13 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                         Gson gson = new Gson();
                         String obj1 = gson.toJson(versions);
                         String result = HttpKit.post(versionUrl, obj1);
-                        JSONObject jsonObjectAuth = JSONObject.parseObject(result);
-                        String returnCode = jsonObjectAuth.getString("code");
-                        if (returnCode.equals("10000")) {//请求成功
-                            dataUpdateRecord.setState(1);
-                            reissuedState = 1;
+                        if(result.contains("10000")){
+                            JSONObject jsonObjectAuth = JSONObject.parseObject(result);
+                            String returnCode = jsonObjectAuth.getString("code");
+                            if (returnCode.equals("10000")) {//请求成功
+                                dataUpdateRecord.setState(1);
+                                reissuedState = 1;
+                            }
                         }else {
                             dataUpdateRecord.setState(-1);
                             reissuedState = -1;
@@ -364,15 +366,17 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                                 }
                             }
                         }
-                        if(CollectionUtil.isNotEmpty(dataDictList)){
+                        if(CollectionUtil.isNotEmpty(dataDictList)) {
                             Gson gson = new Gson();
                             String result = gson.toJson(dataDictList);
                             String post = HttpKit.post(dataDictUrl, result);
-                            JSONObject jsonObjectAuth = JSONObject.parseObject(post);
-                            String returnCode = jsonObjectAuth.getString("code");
-                            if (returnCode.equals("10000")) {//请求成功
-                                reissuedState = 1;
-                            }else {
+                            if (result.contains("10000")) {
+                                JSONObject jsonObjectAuth = JSONObject.parseObject(post);
+                                String returnCode = jsonObjectAuth.getString("code");
+                                if (returnCode.equals("10000")) {//请求成功
+                                    reissuedState = 1;
+                                }
+                            } else {
                                 reissuedState = -1;
                             }
                         }
