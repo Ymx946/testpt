@@ -64,6 +64,12 @@ public class SystemDataUpdateRecordController {
         if (StringUtils.isEmpty(pojo.getVersionNo())) {
             return Result.failed("版本号不能为空");
         }
+        if (ObjectUtil.isEmpty(pojo.getIterateStartTime())) {
+            return Result.failed("迭代起始日期不能为空");
+        }
+        if (ObjectUtil.isEmpty(pojo.getIterateEndTime())) {
+            return Result.failed("迭代截止日期不能为空");
+        }
         try {
             return Result.success(this.systemDataUpdateRecordService.insert(pojo,loginID,jsonStr));
         } catch (Exception e) {

@@ -49,6 +49,14 @@ public class SystemDataUpdateRecord  {
     */
     private String updateContent;
     /**
+     * 迭代起始日期
+     */
+    private String iterateStartTime;
+    /**
+     * 迭代截止日期
+     */
+    private String iterateEndTime;
+    /**
     * 逻辑删除
     */
     private Integer delState;

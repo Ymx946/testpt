@@ -249,6 +249,7 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                                         if(systemDataUpdateSendData.getSendDataTypeCode().equals("4")){
                                             SysNode sysNode = sysNodeService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
                                             if (ObjectUtil.isNotEmpty(sysNode)){
+                                                sysNode.setOperatingBooklet(null);
                                                 sysNodeList.add(sysNode);
                                             }
                                         }
@@ -359,6 +360,7 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                                         if(systemDataUpdateSendData.getSendDataTypeCode().equals("4")){
                                             SysNode sysNode = sysNodeService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
                                             if (ObjectUtil.isNotEmpty(sysNode)){
+                                                sysNode.setOperatingBooklet(null);
                                                 sysNodeList.add(sysNode);
                                             }
                                         }
