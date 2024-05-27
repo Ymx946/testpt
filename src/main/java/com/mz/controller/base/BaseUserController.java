@@ -80,6 +80,15 @@ public class BaseUserController {
     }
 
     /**
+     * 用户登出
+     */
+    @SneakyThrows
+    @PostMapping("userLoginOut")
+    public Result userLoginOut(HttpServletRequest request) {
+        return baseUserService.userLoginOut(request);
+    }
+
+    /**
      * 检查密码是否超过90天
      */
     @NeedLogin

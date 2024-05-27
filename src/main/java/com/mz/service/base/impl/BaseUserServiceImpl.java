@@ -139,6 +139,20 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     /**
+     * 登出
+     *
+     * @return 是否成功
+     */
+    public Result userLoginOut(HttpServletRequest request) {
+        String loginIDStr = request.getHeader("loginID");// 请求头有登录ID，则根据ID去库中获取用户信息
+        List<String> redisKeyList = new ArrayList<>();
+        redisKeyList.add(ConstantsCacheUtil.LOGIN_TOKEN + loginIDStr);
+        redisKeyList.add(ConstantsCacheUtil.LOGIN_USER_INFO + loginIDStr);
+        redisUtil.delete(redisKeyList);
+        return Result.success();
+    }
+
+    /**
      * 获取用户
      */
     public BaseUser getUserRedis(HttpServletRequest request) {

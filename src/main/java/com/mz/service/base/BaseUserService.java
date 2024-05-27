@@ -33,6 +33,13 @@ public interface BaseUserService {
     boolean checkLogin(String token, HttpServletRequest request);
 
     /**
+     * 登出
+     *
+     * @return 是否成功
+     */
+    Result userLoginOut(HttpServletRequest request);
+
+    /**
      * 修改密码
      *
      * @param newPwd 新密码
