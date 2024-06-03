@@ -212,7 +212,7 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                 SystemDataServiceNode systemDataServiceNode = systemDataServiceNodeService.getById(dataUpdateRecord.getNodeId());
                 if(ObjectUtil.isNotEmpty(systemDataServiceNode)){
                     if(ObjectUtil.isNotEmpty(systemDataServiceNode.getNodeUrl())){
-                        String url = "https://"+systemDataServiceNode.getNodeUrl()+"/future-rural";
+                        String url = "https://"+systemDataServiceNode.getNodeUrl();
                         String versionUrl = url+"/tabBaseVersions/receipt";
                         String dataDictUrl = url+"/sysDataDict/receipt";
                         String deftUrl = url+"/sysDeft/receipt";
