@@ -78,7 +78,7 @@ spring:
 
   profiles:
     active: '@profileActive@'
-  #      active: test
+  #    active: test
 
   devtools:
     add-properties: true
@@ -89,6 +89,8 @@ spring:
         enabled: true
         namespace: futurerural
         server-addr: 8.136.114.2:8848
+        username: nacos
+        password: mz@123456
 
   lifecycle:
     timeout-per-shutdown-phase: 20s #设置缓存时间 默认30s

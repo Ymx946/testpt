@@ -21,7 +21,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 public class DataCenterApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-//        System.setProperty("nacos.logging.default.config.enabled", "false");
+        System.setProperty("nacos.logging.default.config.enabled", "false");
         SpringApplication.run(DataCenterApplication.class, args);
         log.info("====================芒种数据中心启动成功==================");
     }
