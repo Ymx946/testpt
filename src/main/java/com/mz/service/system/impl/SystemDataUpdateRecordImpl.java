@@ -37,13 +37,9 @@ import com.mz.service.system.SystemDataUpdateSendDataService;
 import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 服务节点版本更新记录(SystemDataUpdateRecord)表服务实现类
