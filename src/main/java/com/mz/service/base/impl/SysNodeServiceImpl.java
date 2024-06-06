@@ -368,21 +368,6 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
             sysNode.setCreateTime(DateUtil.now());
             sysNode.setCreateUser(baseUser.getRealName());
             this.sysNodeMapper.insert(sysNode);
-            //新增节点查询该系统代码有权限的主体管理员角色，自动赋予权限
-            List<BaseRole> baseRoleList = baseRoleService.queryListForSys(sysNode.getSysCode(), 3);
-            if (CollectionUtil.isNotEmpty(baseRoleList)) {
-                List<BaseRoleNode> baseRoleNodeList = new ArrayList<BaseRoleNode>();
-                for (BaseRole baseRole : baseRoleList) {
-                    BaseRoleNode baseRoleNode = new BaseRoleNode();
-                    baseRoleNode.setId(String.valueOf(idWorker.nextId()));
-                    baseRoleNode.setRoleId(baseRole.getId());
-                    baseRoleNode.setNodeId(sysNode.getId());
-                    baseRoleNodeList.add(baseRoleNode);
-                }
-                if (baseRoleNodeList != null && baseRoleNodeList.size() > 0) {
-                    baseRoleNodeMapper.batchInsert(baseRoleNodeList);
-                }
-            }
         }
         sysNode = dealLevelName(sysNode.getId());
         return Result.success(sysNode);
