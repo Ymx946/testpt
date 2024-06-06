@@ -310,7 +310,6 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
                     sysNodeMapper.update(sonSysNode);
                 }
             }
-            return Result.success(this.queryById(sysNode.getId()));
         } else {
             if (!StringUtils.isEmpty(sysNode.getParaNodeCode())) {//上级代码不为空则更新上级机构分类的末级状态
                 SysNode fiandSysNode = new SysNode();
@@ -369,8 +368,47 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
             sysNode.setCreateTime(DateUtil.now());
             sysNode.setCreateUser(baseUser.getRealName());
             this.sysNodeMapper.insert(sysNode);
-            return Result.success(sysNode);
+            //新增节点查询该系统代码有权限的主体管理员角色，自动赋予权限
+            List<BaseRole> baseRoleList = baseRoleService.queryListForSys(sysNode.getSysCode(), 3);
+            if (CollectionUtil.isNotEmpty(baseRoleList)) {
+                List<BaseRoleNode> baseRoleNodeList = new ArrayList<BaseRoleNode>();
+                for (BaseRole baseRole : baseRoleList) {
+                    BaseRoleNode baseRoleNode = new BaseRoleNode();
+                    baseRoleNode.setId(String.valueOf(idWorker.nextId()));
+                    baseRoleNode.setRoleId(baseRole.getId());
+                    baseRoleNode.setNodeId(sysNode.getId());
+                    baseRoleNodeList.add(baseRoleNode);
+                }
+                if (baseRoleNodeList != null && baseRoleNodeList.size() > 0) {
+                    baseRoleNodeMapper.batchInsert(baseRoleNodeList);
+                }
+            }
         }
+        sysNode = dealLevelName(sysNode.getId());
+        return Result.success(sysNode);
+    }
+
+    /**
+     * 处理层级名称
+     * @param id
+     * @return
+     */
+    public SysNode dealLevelName(String id) {
+        SysNode sysNode = queryById(id);
+        if(sysNode.getNodeCode().length()>=2){
+            SysNode paraSysNode = sysNodeMapper.queryByCode(sysNode.getNodeCode().substring(0,2), sysNode.getSysCode());
+            sysNode.setNodeLevelName(paraSysNode.getNodeName());
+        }
+        if(sysNode.getNodeCode().length()>=4){
+            SysNode paraSysNode = sysNodeMapper.queryByCode(sysNode.getNodeCode().substring(0,4), sysNode.getSysCode());
+            sysNode.setNodeLevelName(sysNode.getNodeLevelName()+"/"+paraSysNode.getNodeName());
+        }
+        if(sysNode.getNodeCode().length()>=6){
+            SysNode paraSysNode = sysNodeMapper.queryByCode(sysNode.getNodeCode().substring(0,6), sysNode.getSysCode());
+            sysNode.setNodeLevelName(sysNode.getNodeLevelName()+"/"+paraSysNode.getNodeName());
+        }
+        sysNodeMapper.update(sysNode);
+        return sysNode;
     }
 
     /**

@@ -125,6 +125,10 @@ public class SysNodeVo extends BaseDTO {
      */
     private Integer linkType;
     /**
+     * 层级名称
+     */
+    private String nodeLevelName;
+    /**
      * 操作手册
      */
     private String operatingBooklet;

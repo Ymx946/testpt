@@ -24,6 +24,7 @@
         <result property="orderNo" column="order_no" jdbcType="INTEGER"/>
         <result property="terminalType" column="terminal_type" jdbcType="INTEGER"/>
         <result property="linkType" column="link_type" jdbcType="INTEGER"/>
+        <result property="nodeLevelName" column="node_level_name" jdbcType="VARCHAR"/>
         <result property="operatingBooklet" column="operating_booklet" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
@@ -34,7 +35,9 @@
     <!--查询单个-->
     <select id="queryById" resultMap="BaseResultMap">
         select
-          id, sys_code, node_code, node_name,node_show_name, para_node_code, para_node_name, node_url,name_path, node_type, node_icon, node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,operating_booklet,create_time,create_user,modify_time,modify_user
+            id, sys_code, node_code, node_name,node_show_name, para_node_code, para_node_name, node_url,name_path, node_type, node_icon,
+            node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,node_level_name,
+            operating_booklet,create_time,create_user,modify_time,modify_user
         from sys_node
         where id = #{id}
     </select>
@@ -42,14 +45,16 @@
     <!--查询单个-->
     <select id="queryByCode" resultMap="BaseResultMap">
         select
-          id, sys_code, node_code, node_name,node_show_name,  para_node_code, para_node_name, node_url,name_path, node_type, node_icon, node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,operating_booklet,create_time,create_user,modify_time,modify_user
+            id, sys_code, node_code, node_name,node_show_name,  para_node_code, para_node_name, node_url,name_path, node_type, node_icon,
+            node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,node_level_name,operating_booklet,create_time,create_user,modify_time,modify_user
         from sys_node
         where use_state = 1  and node_code = #{nodeCode} and sys_code = #{sysCode}
     </select>
     <!--查询单个-->
     <select id="queryAllBySys" resultMap="BaseResultMap">
         select
-          id, sys_code, node_code, node_name, node_show_name, para_node_code, para_node_name, node_url,name_path, node_type, node_icon, node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,operating_booklet,create_time,create_user,modify_time,modify_user
+            id, sys_code, node_code, node_name, node_show_name, para_node_code, para_node_name, node_url,name_path, node_type, node_icon, node_level,
+            remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,node_level_name,operating_booklet,create_time,create_user,modify_time,modify_user
         from sys_node
         where use_state = 1 and sys_code = #{sysCode}
     </select>
@@ -57,9 +62,11 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="BaseResultMap">
         select
-          id, sys_code, node_code, node_name, node_show_name, para_node_code, para_node_name, node_url,name_path, node_type, node_icon, node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,operating_booklet,create_time,create_user,modify_time,modify_user
+        id, sys_code, node_code, node_name, node_show_name, para_node_code, para_node_name, node_url,name_path, node_type, node_icon,
+        node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,node_level_name,operating_booklet,create_time,create_user,modify_time,modify_user
         from sys_node
         <where>
+            use_state = 1
             <if test="sysCode != null and sysCode != ''">
                 and sys_code = #{sysCode}
             </if>
@@ -91,7 +98,8 @@
     <!--查询顶层-->
     <select id="queryTopAll" resultMap="BaseResultMap">
         select
-          id, sys_code, node_code, node_name, node_show_name, para_node_code, para_node_name, node_url,name_path, node_type, node_icon, node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,operating_booklet,create_time,create_user,modify_time,modify_user
+        id, sys_code, node_code, node_name, node_show_name, para_node_code, para_node_name, node_url,name_path, node_type,
+        node_icon, node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,node_level_name,link_type,operating_booklet,create_time,create_user,modify_time,modify_user
         from sys_node
         where (para_node_code is null or para_node_code = '') and use_state = 1
         <if test="sysCode != null and sysCode != ''">
@@ -103,11 +111,11 @@
     <!--查询权限节点-->
     <select id="queryAllByUserApp" resultMap="BaseResultMap">
         select
-          distinct(n.id), n.sys_code, n.node_code, n.node_name,n.node_show_name,  n.para_node_code, n.para_node_name, n.node_url,n.name_path, n.node_type, n.node_icon, n.node_level, n.remarks, n.last_stage, n.use_state,
-        n.button,n.button_name,n.order_no,n.terminal_type ,n.link_type,n.operating_booklet
+        distinct(n.id), n.sys_code, n.node_code, n.node_name,n.node_show_name,  n.para_node_code, n.para_node_name, n.node_url,n.name_path, n.node_type, n.node_icon, n.node_level, n.remarks, n.last_stage, n.use_state,
+        n.button,n.button_name,n.order_no,n.terminal_type ,n.link_type,n.node_level_name,n.operating_booklet
         from sys_node n ,base_role_node rn,base_user_role ur,base_role r
         where n.id = rn.node_id and rn.role_id = ur.role_id AND ur.role_id = r.id  and n.use_state = 1 and  r.use_state = 1 and (n.button is null or n.button != 0)
-          <if test="userId != null">
+        <if test="userId != null">
             and ur.user_id = #{userId}
         </if>
         <if test="mainBodyId != null">
@@ -127,8 +135,8 @@
     <!--查询权限节点-->
     <select id="queryAllByUser" resultMap="BaseResultMap">
         select
-          distinct(n.id), n.sys_code, n.node_code, n.node_name, n.node_show_name,n.para_node_code, n.para_node_name, n.node_url,n.name_path,n.node_type, n.node_icon, n.node_level, n.remarks, n.last_stage, n.use_state,
-                                  n.button,n.button_name, n.order_no,n.terminal_type,n.link_type,n.operating_booklet
+        distinct(n.id), n.sys_code, n.node_code, n.node_name, n.node_show_name,n.para_node_code, n.para_node_name, n.node_url,n.name_path,n.node_type, n.node_icon, n.node_level, n.remarks, n.last_stage, n.use_state,
+        n.button,n.button_name, n.order_no,n.terminal_type,n.link_type,n.node_level_name,n.operating_booklet
         from sys_node n ,base_role_node rn,base_user_role ur,base_role r,base_main_body mb
         where n.id = rn.node_id and rn.role_id = ur.role_id AND ur.role_id = r.id and n.use_state = 1 and  r.use_state = 1 AND r.main_body_id = mb.id AND mb.use_state = 1
         <if test="userId != null">
@@ -172,8 +180,8 @@
     <!--查询权限节点-->
     <select id="queryNodeByUserAndType" resultMap="BaseResultMap">
         select
-          distinct(n.id), n.sys_code, n.node_code, n.node_name, n.node_show_name,n.para_node_code, n.para_node_name, n.node_url,n.name_path, n.node_type, n.node_icon, n.node_level, n.remarks, n.last_stage,
-                                  n.use_state,n.button,n.button_name,n.order_no,n.terminal_type,n.link_type,n.operating_booklet
+        distinct(n.id), n.sys_code, n.node_code, n.node_name, n.node_show_name,n.para_node_code, n.para_node_name, n.node_url,n.name_path, n.node_type, n.node_icon, n.node_level, n.remarks, n.last_stage,
+        n.use_state,n.button,n.button_name,n.order_no,n.terminal_type,n.link_type,n.operating_booklet
         from sys_node n ,base_role_node rn,base_user_role ur,base_role r
         where n.id = rn.node_id and rn.role_id = ur.role_id AND ur.role_id = r.id and n.use_state = 1 and  r.use_state = 1
         <if test="userId != null">
@@ -203,20 +211,20 @@
     <!--查询权限节点-->
     <select id="queryAllForList" resultMap="BaseResultMap">
         select
-          n.id, n.sys_code, n.node_code, n.node_name,n.node_show_name, n.para_node_code, n.para_node_name, n.node_url,n.name_path, n.node_type, n.node_icon, n.node_level, n.remarks,
-               n.last_stage, n.use_state,n.button,n.button_name,n.order_no,n.terminal_type,n.link_type,n.operating_booklet
+        n.id, n.sys_code, n.node_code, n.node_name,n.node_show_name, n.para_node_code, n.para_node_name, n.node_url,n.name_path, n.node_type, n.node_icon, n.node_level, n.remarks,
+        n.last_stage, n.use_state,n.button,n.button_name,n.order_no,n.terminal_type,n.link_type,n.node_level_name,n.operating_booklet
         from sys_node n
         <where>
-             n.use_state = 1
-        <if test="paraNodeCode == null or paraNodeCode == ''">    <!--上级代码不存则查询顶层节点-->
-            and (n.para_node_code is null or n.para_node_code = '')
-        </if>
-        <if test="paraNodeCode != null and paraNodeCode != ''">
-            and n.para_node_code = #{paraNodeCode}
-        </if>
-        <if test="sysCode != null and sysCode != ''">
-            and n.sys_code = #{sysCode}
-        </if>
+            n.use_state = 1
+            <if test="paraNodeCode == null or paraNodeCode == ''">    <!--上级代码不存则查询顶层节点-->
+                and (n.para_node_code is null or n.para_node_code = '')
+            </if>
+            <if test="paraNodeCode != null and paraNodeCode != ''">
+                and n.para_node_code = #{paraNodeCode}
+            </if>
+            <if test="sysCode != null and sysCode != ''">
+                and n.sys_code = #{sysCode}
+            </if>
             <if test="terminalType != null">
                 and n.terminal_type = #{terminalType}
             </if>
@@ -226,14 +234,14 @@
     <!--查询节点列表-->
     <select id="queryAllClassifyNode" resultMap="BaseResultMap">
         select
-          n.id, n.sys_code, n.node_code, n.node_name,n.node_show_name, n.para_node_code, n.para_node_name, n.node_url,n.name_path, n.node_type, n.node_icon, n.node_level, n.remarks,
-               n.last_stage, n.use_state,n.button,n.button_name,n.order_no,n.terminal_type,n.link_type,n.operating_booklet
+        n.id, n.sys_code, n.node_code, n.node_name,n.node_show_name, n.para_node_code, n.para_node_name, n.node_url,n.name_path, n.node_type, n.node_icon, n.node_level, n.remarks,
+        n.last_stage, n.use_state,n.button,n.button_name,n.order_no,n.terminal_type,n.link_type,n.node_level_name,n.operating_booklet
         from sys_node n
         <where>
-             n.use_state = 1
-        <if test="sysCode != null and sysCode != ''">
-            and n.sys_code = #{sysCode}
-        </if>
+            n.use_state = 1
+            <if test="sysCode != null and sysCode != ''">
+                and n.sys_code = #{sysCode}
+            </if>
             <if test="terminalType != null">
                 and n.terminal_type = #{terminalType}
             </if>
@@ -244,7 +252,8 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="BaseResultMap">
         select
-          id, sys_code, node_code, node_name, node_show_name, para_node_code,para_node_name, node_url,name_path, node_type, node_icon, node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,operating_booklet,create_time,create_user,modify_time,modify_user
+        id, sys_code, node_code, node_name, node_show_name, para_node_code,para_node_name, node_url,name_path, node_type, node_icon,
+        node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,node_level_name,operating_booklet,create_time,create_user,modify_time,modify_user
         from sys_node
         <where>
             <if test="id != null">
@@ -360,6 +369,9 @@
             <if test="operatingBooklet != null and operatingBooklet != ''">
                 operating_booklet = #{operatingBooklet},
             </if>
+            <if test="nodeLevelName != null and nodeLevelName != ''">
+                node_level_name = #{nodeLevelName},
+            </if>
             <if test="createTime != null and createTime != ''">
                 create_time = #{createTime},
             </if>
@@ -385,18 +397,18 @@
             <if test="nodeCode != null and nodeCode != ''">
                 node_code = #{nodeCode},
             </if>
-                node_name = #{nodeName},
-                node_show_name = #{nodeShowName},
-                node_url = #{nodeUrl},
-                name_path = #{namePath},
-                node_type = #{nodeType},
-                node_icon = #{nodeIcon},
-                remarks = #{remarks},
-                button = #{button},
-                order_no = #{orderNo},
-                terminal_type = #{terminalType},
-                link_type = #{linkType},
-                operating_booklet = #{operatingBooklet},
+            node_name = #{nodeName},
+            node_show_name = #{nodeShowName},
+            node_url = #{nodeUrl},
+            name_path = #{namePath},
+            node_type = #{nodeType},
+            node_icon = #{nodeIcon},
+            remarks = #{remarks},
+            button = #{button},
+            order_no = #{orderNo},
+            terminal_type = #{terminalType},
+            link_type = #{linkType},
+            operating_booklet = #{operatingBooklet},
             <if test="createTime != null and createTime != ''">
                 create_time = #{createTime},
             </if>
@@ -427,7 +439,7 @@
         where n.id = rn.node_id and rn.role_id = ur.role_id AND ur.role_id = r.id  and n.use_state = 1 and  r.use_state = 1 and (n.button is null or n.button != 0)
         and n.id =cn.node_id AND cn.classify_id = c.id
         <if test="classifyType != null">
-         and c.classify_type =  #{classifyType}
+            and c.classify_type =  #{classifyType}
         </if>
         <if test="userId != null">
             and ur.user_id = #{userId}
@@ -452,7 +464,7 @@
         where n.use_state = 1  and (n.button is null or n.button != 0)
         and n.id =cn.node_id AND cn.classify_id = c.id
         <if test="classifyType != null">
-             and c.classify_type =  #{classifyType}
+            and c.classify_type =  #{classifyType}
         </if>
         <if test="classifyId != null">
             and cn.classify_id = #{classifyId}
@@ -461,37 +473,5 @@
             and n.terminal_type = #{terminalType}
         </if>
         order by n.node_code asc
-    </select>
-    <select id="queryAllOrderByTime" resultType="com.mz.model.base.SysNode">
-        select
-        id, sys_code, node_code, node_name, node_show_name, para_node_code, para_node_name, node_url,name_path, node_type, node_icon, node_level, remarks, last_stage, use_state,button,button_name,order_no,terminal_type,link_type,operating_booklet,create_time,create_user,modify_time,modify_user
-        from sys_node
-        <where>
-            <if test="sysCode != null and sysCode != ''">
-                and sys_code = #{sysCode}
-            </if>
-            <if test="nodeName != null and nodeName != ''">
-                and node_name like "%"#{nodeName}"%"
-            </if>
-            <if test="paraNodeCode != null and paraNodeCode != ''">
-                and para_node_code = #{paraNodeCode}
-            </if>
-            <if test="nodeType != null">
-                and node_type = #{nodeType}
-            </if>
-            <if test="button != null">
-                and button = #{button}
-            </if>
-            <if test="useState != null">
-                and use_state = #{useState}
-            </if>
-            <if test="startTime != null and startTime != ''">
-                AND modify_time &gt;= #{startTime}
-            </if>
-            <if test="endTime != null and endTime != ''">
-                AND modify_time &lt;= #{endTime}" 23:59:59"
-            </if>
-        </where>
-        order by modify_time desc
     </select>
 </mapper>
