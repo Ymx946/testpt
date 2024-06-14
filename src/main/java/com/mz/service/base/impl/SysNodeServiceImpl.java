@@ -92,7 +92,7 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
      * @return 对象列表
      */
     @Override
-    public PageInfo<SysNode> queryAllByLimit(int offset, int limit, String sysCode, Integer applicationType, String nodeName, String paraNodeCode, Integer nodeType, Integer button, Integer useState, HttpServletRequest request) {
+    public PageInfo<SysNode> queryAllByLimit(int offset, int limit, String sysCode, Integer applicationType, String nodeName, String nodeShowName,String paraNodeCode, Integer nodeType, Integer button, Integer useState, HttpServletRequest request) {
         String[] sysCodeArr = null;
         BaseUser baseUser = baseUserService.getUser(request);
         if (baseUser.getUserLevel() > 1) {//除了超级管理员
@@ -109,7 +109,7 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
             }
         }
         PageHelper.startPage(offset, limit);
-        List<SysNode> list = sysNodeMapper.queryAllByLimit(sysCode, nodeName, paraNodeCode, nodeType, button, useState, sysCodeArr);
+        List<SysNode> list = sysNodeMapper.queryAllByLimit(sysCode, nodeName,  nodeShowName,paraNodeCode, nodeType, button, useState, sysCodeArr);
         return new PageInfo<SysNode>(list);
     }
 

@@ -73,6 +73,9 @@
             <if test="nodeName != null and nodeName != ''">
                 and node_name like "%"#{nodeName}"%"
             </if>
+            <if test="nodeShowName != null and nodeShowName != ''">
+                and node_show_name like "%"#{nodeShowName}"%"
+            </if>
             <if test="paraNodeCode != null and paraNodeCode != ''">
                 and para_node_code = #{paraNodeCode}
             </if>

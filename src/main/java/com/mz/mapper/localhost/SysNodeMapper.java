@@ -125,6 +125,7 @@ public interface SysNodeMapper extends BaseMapper<SysNode> {
      */
     List<SysNode> queryAllByLimit(@Param("sysCode") String sysCode,
                                   @Param("nodeName") String nodeName,
+                                  @Param("nodeShowName") String nodeShowName,
                                   @Param("paraNodeCode") String paraNodeCode,
                                   @Param("nodeType") Integer nodeType,
                                   @Param("button") Integer button,
