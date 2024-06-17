@@ -33,7 +33,7 @@ public interface SysNodeService extends IService<SysNode> {
      * @param limit 查询条数
      * @return 对象列表
      */
-    PageInfo<SysNode> queryAllByLimit(int offset, int limit, String sysCode,Integer applicationType,String nodeName, String paraNodeCode, Integer nodeType,Integer button, Integer useState, HttpServletRequest request);
+    PageInfo<SysNode> queryAllByLimit(int offset, int limit, String sysCode,Integer applicationType,String nodeName, String nodeShowName,String paraNodeCode, Integer nodeType,Integer button, Integer useState, HttpServletRequest request);
 
     /**
      * 查询应用节点

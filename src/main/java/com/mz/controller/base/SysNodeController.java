@@ -242,11 +242,11 @@ public class SysNodeController {
      */
     @SneakyThrows
     @PostMapping("queryAllByLimit")
-    public Result queryAllByLimit(Integer pageNo, Integer pageSize, String sysCode, Integer applicationType, String nodeName, String paraNodeCode, Integer nodeType, Integer button, Integer useState, String token, HttpServletRequest request) {
+    public Result queryAllByLimit(Integer pageNo, Integer pageSize, String sysCode, Integer applicationType, String nodeName, String nodeShowName,String paraNodeCode, Integer nodeType, Integer button, Integer useState, String token, HttpServletRequest request) {
         if (baseUserService.checkLogin(token, request)) {
             pageNo = pageNo != null ? pageNo : StringFormatUtil.PAGE_NO_DEFAULT;
             pageSize = pageSize != null ? pageSize : StringFormatUtil.PAGE_SIZE_DEFAULT;
-            return Result.success(sysNodeService.queryAllByLimit(pageNo, pageSize, sysCode, applicationType, nodeName, paraNodeCode, nodeType, button, useState, request));
+            return Result.success(sysNodeService.queryAllByLimit(pageNo, pageSize, sysCode, applicationType, nodeName,  nodeShowName,paraNodeCode, nodeType, button, useState, request));
         } else {
             return Result.failedLogin();
         }
