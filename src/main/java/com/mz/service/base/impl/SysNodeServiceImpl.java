@@ -615,6 +615,10 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
             String code1 = sysNode.getNodeCode();
             sysNode.setId(String.valueOf(idWorker.nextId()));
             sysNode.setParaNodeName(sysNode5.getNodeName());
+            sysNode.setCreateTime(DateUtil.now());
+            sysNode.setModifyTime(DateUtil.now());
+            sysNode.setCreateUser(baseUser.getRealName());
+            sysNode.setModifyUser(baseUser.getRealName());
             if (sysNodeList != null && sysNodeList.size() > 0) {
                 List<SysNode> newList = new ArrayList<SysNode>();
                 newList.add(sysNode);
