@@ -570,7 +570,7 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
                     newSysNode.setCreateTime(DateUtil.now());
                     newSysNode.setModifyTime(DateUtil.now());
                     newSysNode.setCreateUser(baseUser.getRealName());
-                    newSysNode.setCreateUser(baseUser.getRealName());
+                    newSysNode.setModifyUser(baseUser.getRealName());
                     newList.add(newSysNode);
                 }
                 for (SysNode node : newList) {
@@ -640,7 +640,7 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
                     newSysNode.setCreateTime(DateUtil.now());
                     newSysNode.setModifyTime(DateUtil.now());
                     newSysNode.setCreateUser(baseUser.getRealName());
-                    newSysNode.setCreateUser(baseUser.getRealName());
+                    newSysNode.setModifyUser(baseUser.getRealName());
                     newList.add(newSysNode);
                 }
                 for (SysNode node : newList) {
