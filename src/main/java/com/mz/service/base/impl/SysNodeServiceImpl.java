@@ -518,7 +518,7 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
     @Override
     public Result copySysNode(SysNodeVo vo) {
         Boolean a = false;
-        String baseUserStr = myRedisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + vo.getLoginID());
+        String baseUserStr = myRedisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + vo.getLoginID());
         JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
         BaseUser baseUser = baseUserJson.toJavaObject(BaseUser.class);
         if (StringUtils.isEmpty(vo.getPreviousMenuId())) {
