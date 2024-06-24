@@ -49,7 +49,7 @@ public class BaseUserServiceImpl implements BaseUserService {
 
     @Override
     public Result lockAccount(Integer lockType, String userId, String loginId) {
-        BaseUser baseUser = JSONObject.toJavaObject(JSONObject.parseObject(redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + loginId)), BaseUser.class);
+        BaseUser baseUser = JSONObject.toJavaObject(JSONObject.parseObject(redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginId)), BaseUser.class);
         Integer userLevel = baseUser.getUserLevel();
         if (!(userLevel == 1 || userLevel == 2 || userLevel == 3)) {
             return Result.success("非超级管理员、主体管理员、租户管理员身份不能进行账户锁定或解锁操作");
@@ -89,7 +89,7 @@ public class BaseUserServiceImpl implements BaseUserService {
 
     @Override
     public Result checkPwd(String loginId) {
-        BaseUser baseUser = JSONObject.toJavaObject(JSONObject.parseObject(redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + loginId)), BaseUser.class);
+        BaseUser baseUser = JSONObject.toJavaObject(JSONObject.parseObject(redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginId)), BaseUser.class);
         String pwdModifyTime = baseUser.getPwdModifyTime();
 
         // 90天未设置密码登入后台弹框展示，“该账号长期未更换密码，建议修改密码，保障账号的安全性~”
@@ -147,7 +147,7 @@ public class BaseUserServiceImpl implements BaseUserService {
         String loginIDStr = request.getHeader("loginID");// 请求头有登录ID，则根据ID去库中获取用户信息
         List<String> redisKeyList = new ArrayList<>();
         redisKeyList.add(ConstantsCacheUtil.LOGIN_TOKEN + loginIDStr);
-        redisKeyList.add(ConstantsCacheUtil.LOGIN_USER_INFO + loginIDStr);
+        redisKeyList.add(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginIDStr);
         redisUtil.delete(redisKeyList);
         return Result.success();
     }
@@ -159,7 +159,7 @@ public class BaseUserServiceImpl implements BaseUserService {
         BaseUser sessionbaseUser = null;
         String loginIDStr = request.getHeader("loginID");// 请求头有登录ID，则根据ID去库中获取用户信息
         if (!StringUtils.isEmpty(loginIDStr)) {
-            String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + loginIDStr);// 获取PC的baseUser4
+            String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginIDStr);// 获取PC的baseUser4
             if (StringUtils.isEmpty(baseUserStr)) {// 没有则获取APP的baseUser
                 baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO_APP + loginIDStr);
             }
@@ -169,7 +169,7 @@ public class BaseUserServiceImpl implements BaseUserService {
             }
             if (sessionbaseUser == null) {
                 sessionbaseUser = queryById(loginIDStr);
-                redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_INFO + loginIDStr, JSON.toJSONString(sessionbaseUser, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty), 300, TimeUnit.MINUTES);
+                redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginIDStr, JSON.toJSONString(sessionbaseUser, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty), 300, TimeUnit.MINUTES);
             }
         }
         return sessionbaseUser;

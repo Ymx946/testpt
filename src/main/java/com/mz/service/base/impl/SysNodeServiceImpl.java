@@ -51,8 +51,6 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
     private SysDataDictMapper sysDataDictMapper;
     @Resource
     private SysDeftMapper sysDeftMapper;
-    @Resource
-    private BaseRoleService baseRoleService;
     @Autowired
     private RedisUtil myRedisUtil;
     @Resource

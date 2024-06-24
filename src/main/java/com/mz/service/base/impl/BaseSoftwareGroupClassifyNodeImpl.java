@@ -45,7 +45,7 @@ public class BaseSoftwareGroupClassifyNodeImpl extends ServiceImpl<BaseSoftwareG
 
     @Override
     public void insertByNode(Long classifySysId, String nodeIdS, String loginID) {
-        String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + loginID);
+        String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
         JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
         BaseUser baseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
         BaseSoftwareGroupClassifySys classifySys = baseSoftwareGroupClassifySysService.getById(classifySysId);

@@ -45,7 +45,7 @@ public class SysDataDictClassifyImpl extends ServiceImpl<SysDataDictClassifyMapp
 
     @Override
     public Result insert(SysDataDictClassify pojo, String loginID){
-        String baseUserStr = myRedisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + loginID);
+        String baseUserStr = myRedisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
         JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
         BaseUser baseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
         SysDataDictClassifyVO find = new SysDataDictClassifyVO();

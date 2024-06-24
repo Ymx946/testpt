@@ -231,7 +231,7 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
                 return ResponseCode.FAILURE_USER_KICKOUT.getCode();
             }
             // 获取PC的baseUser
-            baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + loginID);
+            baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
         }
 
         if (LoginType.APP.getCode().equals(loginType)) {
@@ -254,7 +254,7 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
             JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
             BaseUser sessionBaseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
             redisUtil.setEx(ConstantsCacheUtil.LOGIN_TOKEN + loginID, token, 300, TimeUnit.MINUTES);
-            redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_INFO + loginID, JSON.toJSONString(sessionBaseUser), 300, TimeUnit.MINUTES);
+            redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID, JSON.toJSONString(sessionBaseUser), 300, TimeUnit.MINUTES);
             return ResponseCode.SUCCESS.getCode();
         }
         return ResponseCode.SERVER_ERROR.getCode();

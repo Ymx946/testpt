@@ -36,7 +36,7 @@ public class TabActivitiFlowInfoImpl extends ServiceImpl<TabActivitiFlowInfoMapp
 
     @Override
     public TabActivitiFlowInfo insert(TabActivitiFlowInfo tabActivitiFlowInfo, String loginID) {
-        String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + loginID);
+        String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
         JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
         BaseUser baseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
         if (tabActivitiFlowInfo.getId() == null) {

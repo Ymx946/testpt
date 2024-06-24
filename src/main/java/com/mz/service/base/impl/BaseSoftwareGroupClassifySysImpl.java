@@ -39,7 +39,7 @@ public class BaseSoftwareGroupClassifySysImpl extends ServiceImpl<BaseSoftwareGr
 
     @Override
     public BaseSoftwareGroupClassifySys insert(BaseSoftwareGroupClassifySys pojo, String loginID) {
-        String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + loginID);
+        String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
         JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
         BaseUser baseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
         pojo.setModifyUser(baseUser.getRealName());

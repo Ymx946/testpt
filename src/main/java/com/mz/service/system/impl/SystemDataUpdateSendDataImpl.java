@@ -49,7 +49,7 @@ public class SystemDataUpdateSendDataImpl extends ServiceImpl<SystemDataUpdateSe
 
     @Override
     public SystemDataUpdateSendData insert(SystemDataUpdateSendData pojo, String loginID){
-        String baseUserStr = myRedisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + loginID);
+        String baseUserStr = myRedisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
         JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
         BaseUser baseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
         if(pojo.getId()==null){
