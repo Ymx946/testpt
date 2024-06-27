@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>2.3.2.RELEASE</version>
+        <version>2.6.13</version>
     </parent>
 
     <groupId>com.mz</groupId>
