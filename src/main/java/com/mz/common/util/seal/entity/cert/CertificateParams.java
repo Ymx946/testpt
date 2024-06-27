@@ -1,10 +1,8 @@
 package com.mz.common.util.seal.entity.cert;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * 证书参数

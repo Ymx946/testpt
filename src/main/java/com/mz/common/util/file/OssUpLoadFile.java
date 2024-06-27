@@ -8,7 +8,6 @@ import com.aliyun.oss.model.OSSObject;
 import com.mz.common.util.AttaVo;
 import com.mz.common.util.AudioUtil;
 import com.mz.common.util.StringFormatUtil;
-import javafx.scene.paint.Color;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
