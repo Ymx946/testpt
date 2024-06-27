@@ -88,7 +88,7 @@ public class RedisUtil {
      * @return
      */
     public String getAccessToken(String appid, String appsecret) {
-        String accessTokenKey = ConstantsCacheUtil.WXACCESSTOKEN + appid;
+        String accessTokenKey = ConstantsCacheUtil.WXACCESSTOKEN + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + appid;
         Object obj = redisTemplate.opsForValue().get(accessTokenKey);
         String token = ObjectUtil.isNotEmpty(obj) ? obj.toString() : "";
         if (StringUtils.isBlank(token)) {
@@ -108,7 +108,7 @@ public class RedisUtil {
      * @return
      */
     public String getCheckAccessToken(String appid, String appsecret) {
-        String accessTokenKey = ConstantsCacheUtil.WXCHECKACCESSTOKEN + appid;
+        String accessTokenKey = ConstantsCacheUtil.WXCHECKACCESSTOKEN + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + appid;
         Object obj = redisTemplate.opsForValue().get(accessTokenKey);
         String token = ObjectUtil.isNotEmpty(obj) ? obj.toString() : "";
         if (StringUtils.isBlank(token)) {

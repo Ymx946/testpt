@@ -108,51 +108,24 @@ public class ConstantsCacheUtil {
      * APP登录用户
      */
     public static final String LOGIN_USER_INFO_APP = "LOGIN:USER:appBaseUser";
-    /**
-     * 萤石token
-     */
-    public static final String YS_ACCESS_TOKEN = "YS:ACCESS:ysAccessToken";
-    /**
-     * 小程序码
-     */
-    public static final String WXACODE = "WX:WXACODE:WxAcode";
 
     /**
      * 微信访问的token
      */
-    public static final String WXACCESSTOKEN = "WX:ACCESSTOKEN:";
+    public static final String WXACCESSTOKEN = "WX:ACCESSTOKEN";
     /**
      * 微信校验文字、图片的accessToken
      */
-    public static final String WXCHECKACCESSTOKEN = "WX:CHECK:ACCESSTOKEN:";
+    public static final String WXCHECKACCESSTOKEN = "WX:CHECK:ACCESSTOKEN";
     /**
      * 微信检测图片
      */
-    public static final String WXCHECKIMG = "WX:CHECK:IMG:";
-    public static final String DEVICEACCESSTOKEN = "DEVICE:ACCESSTOKEN:";
-
-    /**
-     * 百度智能云token
-     */
-    public static final String BAIDU_TOKEN = "BAIDU:baiduToken";
-
-    public static final String WECHAT_MEMBER_TOKEN = "WECHAT:member";
-
-    public static final String BASEUSER_CODE_CACHE = "BASEUSER:code";
-
-    public static final String MEMBER_CODE_CACHE = "MEMBER:code";
-
-    public static final String MEMBER_COMMON_CODE_CACHE = "MEMBER:commonCode";
+    public static final String WXCHECKIMG = "WX:CHECK:IMG";
 
     /**
      * 删除所有匹配符
      */
     public static final String DELETE_ALL = "*";
-
-    /**
-     * 提交重复的token
-     */
-    public static final String DUPLICATE_TOKEN_KEY = "duplicate_token_key";
 
     /**
      * 防止短时间重复访问

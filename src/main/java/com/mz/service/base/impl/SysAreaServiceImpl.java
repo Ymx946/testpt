@@ -113,7 +113,7 @@ public class SysAreaServiceImpl extends ServiceImpl<SysAreaMapper, SysArea> impl
         if (StringUtils.isEmpty(sysareaCacheAll)) {
             List<SysArea> sysAreas = this.sysAreaMapper.queryAllByAreaCode(sysArea);
             sysareaCacheAll = JSON.toJSONString(sysAreas);
-            redisUtil.setEx(ConstantsCacheUtil.SYSAREA_CACHE_ALL_LIST + sysArea.getAreaCode(), sysareaCacheAll, ConstantsCacheUtil.REDIS_MINUTE_TEN_SECOND, TimeUnit.SECONDS);
+            redisUtil.setEx(ConstantsCacheUtil.SYSAREA_CACHE_ALL_LIST + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + sysArea.getAreaCode(), sysareaCacheAll, ConstantsCacheUtil.REDIS_MINUTE_TEN_SECOND, TimeUnit.SECONDS);
         }
         Map<String, String> sysAreaMap = JSON.parseArray(sysareaCacheAll, SysArea.class).parallelStream().collect(Collectors.toMap(SysArea::getAreaCode, SysArea::getAreaName, (key1, key2) -> key2));
         return sysAreaMap;
