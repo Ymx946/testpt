@@ -1,5 +1,6 @@
 package com.mz.controller.base;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.mz.common.util.ResponseCode;
 import com.mz.common.util.Result;
@@ -264,6 +265,7 @@ public class SysDataDictController {
             SysDataDict sysDataDict = new SysDataDict();
             sysDataDict.setId(id);
             sysDataDict.setUseState(useState);
+            sysDataDict.setModifyTime(DateUtil.now());
             this.sysDataDictService.update(sysDataDict);
             return Result.success();
         } catch (Exception e) {

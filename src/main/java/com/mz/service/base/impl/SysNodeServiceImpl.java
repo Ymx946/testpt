@@ -475,6 +475,8 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
         BaseUser baseUser = baseUserService.getUser(request);
         SysNode sysNode = new SysNode();
         sysNode.setId(id);
+        sysNode.setModifyTime(DateUtil.now());
+        sysNode.setModifyUser(baseUser.getRealName());
         sysNode.setUseState(useState);
         int a = this.sysNodeMapper.update(sysNode);
         SysNode fiandSysNode = new SysNode();
