@@ -56,5 +56,8 @@ public class SelectSearchVO extends BaseDTO {
      * 区域代码
      */
     private String areaCode;
-
+    /**
+     * 所属系统
+     */
+    private String sysCode;
 }
