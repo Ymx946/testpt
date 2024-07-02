@@ -78,7 +78,7 @@ spring:
 
   profiles:
     active: '@profileActive@'
-  #    active: test
+  #    active: dev
 
   devtools:
     add-properties: true
@@ -98,6 +98,7 @@ spring:
   main:
     banner-mode: off
     allow-bean-definition-overriding: true
+    allow-circular-references: true
 
   servlet:
     context-path: /
@@ -108,8 +109,9 @@ spring:
       # 设置文件缓存的临界点,超过则先保存到临时目录,默认为0,所有文件都会进行缓存
       file-size-threshold: 200MB
 
-  resources:
-    static-locations: classpath:/templates/
+  web:
+    resources:
+      static-locations: classpath:/templates/
 
   thymeleaf:
     cache: false
@@ -252,33 +254,6 @@ redirect_uri: http://dev.mzszxc.com/mzpcsystem/#/baseData/distribution?appId=
 #  tracker_server: 127.0.0.1:22122
 # -Djavax.net.debug=all
 # wss连接握手证书不可信解决方法 https://blog.csdn.net/faye0412/article/details/6883879
-wcs:
-  local: ws://115.236.167.66:3098
-  uri: ws://115.236.167.66:3098
-  username: admin
-  password: Vbox_10086
-  key: Vbox_10086
-  sdkType: java
-  version: 1
-  subscribes:
-    - alarm
-    - device
-    - resource
-  device:
-    sync: true
-    path: /
-    count: 50
-    verbose: 10
-  fileServer:
-    port: 4080
-
-tcp:
-  server:
-    port: 3200
-    address: 115.236.167.66
-  client:
-    timeout: 6000
-    poolSize: 3
 
 #本项目域名
 localUrl: https://test.mzszxc.com/

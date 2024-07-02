@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="10 seconds">
     <!--<include resource="org/springframework/boot/logging/logback/base.xml" />-->
-    <contextName>logback</contextName>
+    <contextName>nacos</contextName>
     <!-- 日志地址 -->
     <property name="logPath" value="./logs"></property>
     <!-- 日志级别 -->

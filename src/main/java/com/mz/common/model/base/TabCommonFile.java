@@ -1,6 +1,5 @@
 package com.mz.common.model.base;
 
-import cn.hutool.core.util.ObjectUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

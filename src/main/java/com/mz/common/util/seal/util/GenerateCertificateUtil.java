@@ -1,10 +1,8 @@
 package com.mz.common.util.seal.util;
 
-import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.util.StringUtil;
 import com.mz.common.ConstantsUtil;
 import com.mz.common.util.seal.entity.cert.Extension;
-import org.apache.commons.io.IOUtils;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.x500.X500Name;

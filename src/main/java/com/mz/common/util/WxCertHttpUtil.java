@@ -1,10 +1,5 @@
 package com.mz.common.util;
 
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.XML;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -23,7 +18,6 @@ import org.springframework.http.MediaType;
 
 import javax.net.ssl.SSLContext;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.security.KeyStore;
 
 public class WxCertHttpUtil {

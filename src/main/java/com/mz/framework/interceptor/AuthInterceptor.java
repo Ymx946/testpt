@@ -138,7 +138,7 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
      * @Description: 判断ip是否被禁用
      */
     private Boolean ipIsLock(String ip) {
-        return redisUtil.hasKey(LOCK_IP_URL_KEY + ip);
+        return redisUtil.hasKey(LOCK_IP_URL_KEY + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + ip);
     }
 
     /**
@@ -149,7 +149,7 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
         if (redisUtil.hasKey(key)) {
             long time = redisUtil.incrBy(key, 1);
             if (time >= LIMIT_TIMES) {
-                redisUtil.getLock(LOCK_IP_URL_KEY + ip, ip, IP_LOCK_TIME);
+                redisUtil.getLock(LOCK_IP_URL_KEY + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + ip, ip, IP_LOCK_TIME);
                 return false;
             }
         } else {
@@ -222,7 +222,7 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
 
         String baseUserStr = "";
         if (LoginType.PC.getCode().equals(loginType)) {
-            String redisToken = redisUtil.get(ConstantsCacheUtil.LOGIN_TOKEN + loginID);
+            String redisToken = redisUtil.get(ConstantsCacheUtil.LOGIN_TOKEN + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
             if (StringUtils.isAnyBlank(redisToken)) {
                 return ResponseCode.FAILURE_EXPIRE_TOKEN.getCode();
             }
@@ -235,7 +235,7 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
         }
 
         if (LoginType.APP.getCode().equals(loginType)) {
-            String redisAppToken = redisUtil.get(ConstantsCacheUtil.LOGIN_TOKEN_APP + loginID);
+            String redisAppToken = redisUtil.get(ConstantsCacheUtil.LOGIN_TOKEN_APP + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
             if (StringUtils.isAnyBlank(redisAppToken)) {
                 return ResponseCode.FAILURE_EXPIRE_TOKEN.getCode();
             }
@@ -243,7 +243,8 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
             if (!token.equalsIgnoreCase(redisAppToken)) {
                 return ResponseCode.FAILURE_USER_KICKOUT.getCode();
             }
-            baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO_APP + loginID);
+
+            baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO_APP + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
         }
 
         if (LoginType.APPLET.getCode().equals(loginType)) {
@@ -253,7 +254,7 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
         if (StringUtils.isNoneBlank(baseUserStr)) {
             JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
             BaseUser sessionBaseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
-            redisUtil.setEx(ConstantsCacheUtil.LOGIN_TOKEN + loginID, token, 300, TimeUnit.MINUTES);
+            redisUtil.setEx(ConstantsCacheUtil.LOGIN_TOKEN + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID, token, 300, TimeUnit.MINUTES);
             redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID, JSON.toJSONString(sessionBaseUser), 300, TimeUnit.MINUTES);
             return ResponseCode.SUCCESS.getCode();
         }
@@ -276,12 +277,12 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
             return false;
         }
 
-        String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + userKey);//获取用户信息
+        String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userKey);//获取用户信息
         if (StringUtils.isNoneBlank(baseUserStr)) {
             JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
             BaseUser sessionBaseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
-            redisUtil.setEx(ConstantsCacheUtil.LOGIN_TOKEN + userKey, token, 300, TimeUnit.MINUTES);
-            redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_INFO + userKey, JSON.toJSONString(sessionBaseUser), 300, TimeUnit.MINUTES);
+            redisUtil.setEx(ConstantsCacheUtil.LOGIN_TOKEN + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userKey, token, 300, TimeUnit.MINUTES);
+            redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userKey, JSON.toJSONString(sessionBaseUser), 300, TimeUnit.MINUTES);
             return true;
         }
         return false;

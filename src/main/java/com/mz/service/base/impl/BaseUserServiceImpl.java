@@ -36,6 +36,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     private BaseUserMapper baseUserMapper;
     @Resource
     private RedisUtil redisUtil;
+
     /**
      * 通过ID查询单条数据
      *
@@ -58,18 +59,18 @@ public class BaseUserServiceImpl implements BaseUserService {
         int lockInt = lockType.intValue();
         try {
             if (lockInt == ConstantsUtil.USER_ACCOUNT_UNLOCK) {
-                if ("LOCK".equalsIgnoreCase(redisUtil.get(ConstantsCacheUtil.LOGIN_USER_LOCK + userId))) {
+                if ("LOCK".equalsIgnoreCase(redisUtil.get(ConstantsCacheUtil.LOGIN_USER_LOCK + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId))) {
                     List<String> delKeyList = new ArrayList<>();
-                    delKeyList.add(ConstantsCacheUtil.LOGIN_USER_FAILCOUNT + userId);
-                    delKeyList.add(ConstantsCacheUtil.LOGIN_USER_LOCK + userId);
+                    delKeyList.add(ConstantsCacheUtil.LOGIN_USER_FAILCOUNT + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId);
+                    delKeyList.add(ConstantsCacheUtil.LOGIN_USER_LOCK + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId);
                     redisUtil.delete(delKeyList);
                 }
                 return Result.success("该账户解锁成功");
             }
 
             if (lockInt == ConstantsUtil.USER_ACCOUNT_LOCKED) {
-                if (!"LOCK".equalsIgnoreCase(redisUtil.get(ConstantsCacheUtil.LOGIN_USER_LOCK + userId))) {
-                    redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_LOCK + userId, "LOCK", ConstantsCacheUtil.LOGIN_USER_LOCK_MINUTES, TimeUnit.MINUTES);
+                if (!"LOCK".equalsIgnoreCase(redisUtil.get(ConstantsCacheUtil.LOGIN_USER_LOCK + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId))) {
+                    redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_LOCK + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId, "LOCK", ConstantsCacheUtil.LOGIN_USER_LOCK_MINUTES, TimeUnit.MINUTES);
                 }
                 return Result.success("该账户锁定成功");
             }
@@ -119,7 +120,7 @@ public class BaseUserServiceImpl implements BaseUserService {
             return false;
         }
 
-        String redisToken = redisUtil.get(ConstantsCacheUtil.LOGIN_TOKEN + loginIDStr);
+        String redisToken = redisUtil.get(ConstantsCacheUtil.LOGIN_TOKEN + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginIDStr);
         if ((token.equalsIgnoreCase(redisToken))) {// 先比较PC/大屏的TOKEN，验证不成功则再验证APP的TOKEN
             log.info("pc验证成功");
             BaseUser sessionBaseUser = getUserRedis(request);
@@ -128,7 +129,7 @@ public class BaseUserServiceImpl implements BaseUserService {
             }
             return true;
         } else {
-            String redisAppToken = redisUtil.get(ConstantsCacheUtil.LOGIN_TOKEN_APP + loginIDStr);
+            String redisAppToken = redisUtil.get(ConstantsCacheUtil.LOGIN_TOKEN_APP + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginIDStr);
             if (token.equalsIgnoreCase(redisAppToken)) {
                 log.info("app验证成功");
                 return true;
@@ -146,7 +147,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     public Result userLoginOut(HttpServletRequest request) {
         String loginIDStr = request.getHeader("loginID");// 请求头有登录ID，则根据ID去库中获取用户信息
         List<String> redisKeyList = new ArrayList<>();
-        redisKeyList.add(ConstantsCacheUtil.LOGIN_TOKEN + loginIDStr);
+        redisKeyList.add(ConstantsCacheUtil.LOGIN_TOKEN + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginIDStr);
         redisKeyList.add(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginIDStr);
         redisUtil.delete(redisKeyList);
         return Result.success();
@@ -161,7 +162,7 @@ public class BaseUserServiceImpl implements BaseUserService {
         if (!StringUtils.isEmpty(loginIDStr)) {
             String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginIDStr);// 获取PC的baseUser4
             if (StringUtils.isEmpty(baseUserStr)) {// 没有则获取APP的baseUser
-                baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO_APP + loginIDStr);
+                baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO_APP + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginIDStr);
             }
             if (!StringUtils.isEmpty(baseUserStr)) {
                 JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
@@ -174,6 +175,7 @@ public class BaseUserServiceImpl implements BaseUserService {
         }
         return sessionbaseUser;
     }
+
     /**
      * 修改密码
      *
@@ -199,6 +201,7 @@ public class BaseUserServiceImpl implements BaseUserService {
             return Result.failed("旧密码验证错误");
         }
     }
+
     /**
      * 获取用户
      */
@@ -215,6 +218,7 @@ public class BaseUserServiceImpl implements BaseUserService {
         BaseUser sessionBaseUser = getUserRedis(request);
         return sessionBaseUser;
     }
+
     /**
      * 用户登录
      *
@@ -235,23 +239,23 @@ public class BaseUserServiceImpl implements BaseUserService {
 //            }
 
             String userId = baseUser.getId();
-            if ("LOCK".equals(redisUtil.get(ConstantsCacheUtil.LOGIN_USER_LOCK + userId))) {
+            if ("LOCK".equals(redisUtil.get(ConstantsCacheUtil.LOGIN_USER_LOCK + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId))) {
                 ResponseCode failureUserLocked = ResponseCode.FAILURE_USER_LOCKED;
-                Long expireTime = redisUtil.getExpire(ConstantsCacheUtil.LOGIN_USER_LOCK + userId);
+                Long expireTime = redisUtil.getExpire(ConstantsCacheUtil.LOGIN_USER_LOCK + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId);
                 return Result.instance(failureUserLocked.getCode(), String.format(failureUserLocked.getMsg(), expireTime / 60));
             }
 
             String inpwd = PasswordUtil.md5(password.substring(0, 3) + pwdSalt + password.substring(3));
             if (!oldepwd.equals(inpwd)) {
-                redisUtil.incrBy(ConstantsCacheUtil.LOGIN_USER_FAILCOUNT + userId, 1);
+                redisUtil.incrBy(ConstantsCacheUtil.LOGIN_USER_FAILCOUNT + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId, 1);
                 // 计数大于5时，设置用户被锁定30分钟
                 int loginFailCount = 0;
-                if (redisUtil.hasKey(ConstantsCacheUtil.LOGIN_USER_FAILCOUNT + userId)) {
-                    loginFailCount = Integer.parseInt(redisUtil.get(ConstantsCacheUtil.LOGIN_USER_FAILCOUNT + userId));
+                if (redisUtil.hasKey(ConstantsCacheUtil.LOGIN_USER_FAILCOUNT + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId)) {
+                    loginFailCount = Integer.parseInt(redisUtil.get(ConstantsCacheUtil.LOGIN_USER_FAILCOUNT + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId));
                 }
                 if (loginFailCount >= ConstantsCacheUtil.LOGIN_FAIL_NUM) {
-                    redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_LOCK + userId, "LOCK", ConstantsCacheUtil.LOGIN_USER_LOCK_MINUTES, TimeUnit.MINUTES);
-                    redisUtil.expire(ConstantsCacheUtil.LOGIN_USER_FAILCOUNT + userId, ConstantsCacheUtil.LOGIN_USER_LOCK_MINUTES, TimeUnit.MINUTES);
+                    redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_LOCK + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId, "LOCK", ConstantsCacheUtil.LOGIN_USER_LOCK_MINUTES, TimeUnit.MINUTES);
+                    redisUtil.expire(ConstantsCacheUtil.LOGIN_USER_FAILCOUNT + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId, ConstantsCacheUtil.LOGIN_USER_LOCK_MINUTES, TimeUnit.MINUTES);
 
                     ResponseCode failureUserLocked = ResponseCode.FAILURE_USER_LOCKED;
                     return Result.instance(failureUserLocked.getCode(), String.format(failureUserLocked.getMsg(), ConstantsCacheUtil.LOGIN_USER_LOCK_MINUTES));
@@ -314,16 +318,16 @@ public class BaseUserServiceImpl implements BaseUserService {
             }
             baseUser.setAreaCode(userLoginVO.getAreaCode());// 存入Redis的用户信息代码以主体代码为准
             if (appLogin != null && appLogin == 1) {// app登录(默认一直有效)
-                redisUtil.setEx(ConstantsCacheUtil.LOGIN_TOKEN_APP + baseUser.getId(), token, 365, TimeUnit.DAYS);
-                redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_INFO_APP + baseUser.getId(), JSON.toJSONString(baseUser), 365, TimeUnit.DAYS);
+                redisUtil.setEx(ConstantsCacheUtil.LOGIN_TOKEN_APP + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + baseUser.getId(), token, 365, TimeUnit.DAYS);
+                redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_INFO_APP + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + baseUser.getId(), JSON.toJSONString(baseUser), 365, TimeUnit.DAYS);
             } else {
-                redisUtil.setEx(ConstantsCacheUtil.LOGIN_TOKEN + userId, token, 300, TimeUnit.MINUTES);
-                redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_INFO + userId, JSON.toJSONString(baseUser, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty), 300, TimeUnit.MINUTES);
+                redisUtil.setEx(ConstantsCacheUtil.LOGIN_TOKEN + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId, token, 300, TimeUnit.MINUTES);
+                redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId, JSON.toJSONString(baseUser, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty), 300, TimeUnit.MINUTES);
             }
 
             List<String> delKeyList = new ArrayList<>();
-            delKeyList.add(ConstantsCacheUtil.LOGIN_USER_FAILCOUNT + userId);
-            delKeyList.add(ConstantsCacheUtil.LOGIN_USER_LOCK + userId);
+            delKeyList.add(ConstantsCacheUtil.LOGIN_USER_FAILCOUNT + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId);
+            delKeyList.add(ConstantsCacheUtil.LOGIN_USER_LOCK + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userId);
             redisUtil.delete(delKeyList);
             return Result.success(userLoginVO);
 

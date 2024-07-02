@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>2.3.2.RELEASE</version>
+        <version>2.6.13</version>
     </parent>
 
     <groupId>com.mz</groupId>
@@ -28,9 +28,11 @@
         <dockerfile-maven.version>1.4.13</dockerfile-maven.version>
         <start-class>com.mz.FutureRuralApplication</start-class>
 
-        <spring-boot.version>2.3.2.RELEASE</spring-boot.version>
-        <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
-        <spring-cloud-alibaba.version>2.2.6.RELEASE</spring-cloud-alibaba.version>
+        <spring-boot.version>2.6.13</spring-boot.version>
+        <spring-cloud.version>2021.0.5</spring-cloud.version>
+        <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
+        <spring-cloud-starter-openfeign.version>2.2.6.RELEASE</spring-cloud-starter-openfeign.version>
+        <spring-data-commons.version>2.6.3</spring-data-commons.version>
 
         <mysql.version>8.0.22</mysql.version>
         <okhttp.version>4.10.0</okhttp.version>
@@ -59,12 +61,13 @@
         <pinyin4j.version>2.5.1</pinyin4j.version>
         <itextpdf.version>5.5.13</itextpdf.version>
         <itext-asian.version>5.2.0</itext-asian.version>
-        <bcprov-jdk15on.version>1.64</bcprov-jdk15on.version>
-        <bcpkix-jdk15on.version>1.64</bcpkix-jdk15on.version>
+        <bcprov-jdk15on.version>1.67</bcprov-jdk15on.version>
+        <bcpkix-jdk15on.version>1.67</bcpkix-jdk15on.version>
         <joda-time.version>2.10.14</joda-time.version>
         <aliyun-sdk-oss.version>3.15.0</aliyun-sdk-oss.version>
         <aliyun-java-sdk-core.version>4.5.10</aliyun-java-sdk-core.version>
         <aliyun-java-sdk-dysmsapi.version>2.2.1</aliyun-java-sdk-dysmsapi.version>
+        <gexin-rp-sdk-http.version>4.1.0.5</gexin-rp-sdk-http.version>
         <UserAgentUtils.version>1.21</UserAgentUtils.version>
         <geoip2.version>2.8.1</geoip2.version>
         <poi.version>4.1.2</poi.version>
@@ -94,14 +97,14 @@
         <isoparser.version>1.1.22</isoparser.version>
         <jsoup.version>1.15.3</jsoup.version>
         <websocket.version>1.5.1</websocket.version>
-        <integration-ip.version>5.4.5</integration-ip.version>
+        <integration-ip.version>5.5.15</integration-ip.version>
         <integration.version>2.4.4</integration.version>
         <httpmime.version>4.5.13</httpmime.version>
         <skywalking.version>8.9.0</skywalking.version>
         <logstash-logback.version>6.3</logstash-logback.version>
         <jakarta.servlet-api.version>4.0.4</jakarta.servlet-api.version>
-        <spring-web.version>5.2.15.RELEASE</spring-web.version>
-        <spring-webmvc.version>5.2.8.RELEASE</spring-webmvc.version>
+        <spring-web.version>5.3.27</spring-web.version>
+        <!--        <spring-webmvc.version>5.2.8.RELEASE</spring-webmvc.version>-->
         <spring-aspects.version>5.2.9.RELEASE</spring-aspects.version>
         <xxl-job-core.version>2.3.1</xxl-job-core.version>
         <oshi.version>6.1.2</oshi.version>
@@ -116,10 +119,12 @@
         <activiti.cloud.version>7.0.0.Beta1</activiti.cloud.version>
         <feign-form-spring.version>3.8.0</feign-form-spring.version>
         <feign-form>3.8.0</feign-form>
-        <feign-httpclient.version>10.10.1</feign-httpclient.version>
+        <feign-httpclient.version>11.10</feign-httpclient.version>
         <feign-okhttp.version>10.12</feign-okhttp.version>
         <pdfbox.version>2.0.24</pdfbox.version>
         <easyexcel.version>3.3.2</easyexcel.version>
+        <java-sdk.version>4.16.18</java-sdk.version>
+        <tinify.version>1.8.8</tinify.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -241,12 +246,12 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
-            <version>${spring-boot.version}</version>
+            <version>${spring-data-commons.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>${spring-cloud-alibaba.version}</version>
+            <version>${spring-cloud-starter-openfeign.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -303,11 +308,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring-boot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-quartz</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
@@ -707,15 +707,10 @@
             <artifactId>jakarta.servlet-api</artifactId>
             <version>${jakarta.servlet-api.version}</version>
         </dependency>
-        <!--            <dependency>-->
-        <!--                <groupId>org.springframework</groupId>-->
-        <!--                <artifactId>spring-web</artifactId>-->
-        <!--                <version>${spring-web.version}</version>-->
-        <!--            </dependency>-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>${spring-webmvc.version}</version>
+            <version>${spring-web.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

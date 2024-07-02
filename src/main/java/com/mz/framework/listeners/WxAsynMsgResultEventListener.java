@@ -36,7 +36,7 @@ public class WxAsynMsgResultEventListener {
         WxServerAsynMsg wxServerAsynMsg = wxServerAsynMsgEvent.getWxServerAsynMsg();
         String traceId = wxServerAsynMsg.getTrace_id();
         String suggest = wxServerAsynMsg.getResult().getSuggest();
-        redisUtil.setEx(ConstantsCacheUtil.WXCHECKIMG + traceId, suggest, ConstantsCacheUtil.REDIS_MINUTE_TEN_SECOND, TimeUnit.SECONDS);
+        redisUtil.setEx(ConstantsCacheUtil.WXCHECKIMG + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + traceId, suggest, ConstantsCacheUtil.REDIS_MINUTE_TEN_SECOND, TimeUnit.SECONDS);
         WxCheckMediaUtil.resultMap.put(traceId, suggest);
     }
 }
