@@ -188,7 +188,7 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
             find.setNodeType(nodeType);
             find.setStartTime(startTime);
             find.setEndTime(endTime);
-            find.setUseState(1);
+//            find.setUseState(1);
             PageInfo<SysNode> pageInfo = sysNodeService.queryAllOrderByTime(find);
             return Result.success(pageInfo);
         }
