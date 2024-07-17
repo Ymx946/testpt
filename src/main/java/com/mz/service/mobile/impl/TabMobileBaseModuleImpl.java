@@ -78,7 +78,15 @@ public class TabMobileBaseModuleImpl extends ServiceImpl<TabMobileBaseModuleMapp
         if (vo.getModuleType() != null) {
             lambdaQuery.eq(TabMobileBaseModule::getModuleType, vo.getModuleType());
         }
-        if (!org.apache.commons.lang3.StringUtils.isEmpty(vo.getModuleName())) {
+        if (ObjectUtil.isNotEmpty(vo.getStartTime())) {
+            String start = vo.getStartTime().substring(0, 10);
+            lambdaQuery.ge(TabMobileBaseModule::getModifyTime, start);
+        }
+        if (ObjectUtil.isNotEmpty(vo.getEndTime())) {
+            String end = vo.getEndTime().substring(0, 10);
+            lambdaQuery.le(TabMobileBaseModule::getModifyTime,  end+ " 23:59:59");
+        }
+        if (ObjectUtil.isNotEmpty(vo.getModuleName())) {
             lambdaQuery.like(TabMobileBaseModule::getModuleName, vo.getModuleName());
         }
         List<TabMobileBaseModule> roomList = lambdaQuery.orderByDesc(TabMobileBaseModule::getModifyTime).list();

@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class SelectSearchVO extends BaseDTO {
     /**
-     * 下发数据类型代码1-数据字典 2-PC应用市场 3-移动应用市场 4-节点管理
+     * 下发数据类型代码1-数据字典 2-PC应用市场 3-移动应用市场 4-节点管理 5-移动组件
     */
     private Integer type;
     /**
@@ -60,4 +60,8 @@ public class SelectSearchVO extends BaseDTO {
      * 所属系统
      */
     private String sysCode;
+    /**
+     * 分类1-基础组件2-业务组件
+     */
+    private Integer moduleType;
 }

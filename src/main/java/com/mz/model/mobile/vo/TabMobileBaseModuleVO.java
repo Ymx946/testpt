@@ -15,6 +15,14 @@ import lombok.ToString;
 @ToString
 public class TabMobileBaseModuleVO extends BaseDTO {
     /**
+     * 开始时间
+     */
+    private String startTime;
+    /**
+     * 结束时间
+     */
+    private String endTime;
+    /**
      * 登录人的id
      */
     private String loginID;

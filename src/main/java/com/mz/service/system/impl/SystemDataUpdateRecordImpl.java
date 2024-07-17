@@ -20,6 +20,9 @@ import com.mz.mapper.system.SystemDataUpdateRecordMapper;
 import com.mz.model.base.*;
 import com.mz.model.base.vo.SysNodeVo;
 import com.mz.model.base.vo.TabBasicMoveAppVO;
+import com.mz.model.mobile.TabMobileBaseModule;
+import com.mz.model.mobile.model.TabMobileBaseModuleModel;
+import com.mz.model.mobile.vo.TabMobileBaseModuleVO;
 import com.mz.model.system.SystemDataServiceNode;
 import com.mz.model.system.SystemDataUpdateRecord;
 import com.mz.model.system.SystemDataUpdateSendData;
@@ -31,6 +34,7 @@ import com.mz.service.base.SysDataDictService;
 import com.mz.service.base.SysDeftService;
 import com.mz.service.base.SysNodeService;
 import com.mz.service.base.TabBasicMoveAppService;
+import com.mz.service.mobile.TabMobileBaseModuleService;
 import com.mz.service.system.SystemDataServiceNodeService;
 import com.mz.service.system.SystemDataUpdateRecordService;
 import com.mz.service.system.SystemDataUpdateSendDataService;
@@ -63,6 +67,8 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
     private TabBasicMoveAppService tabBasicMoveAppService;
     @Autowired
     private SysNodeService sysNodeService;
+    @Autowired
+    private TabMobileBaseModuleService tabMobileBaseModuleService;
 
     @Override
     public SystemDataUpdateRecord insert(SystemDataUpdateRecord pojo, String loginID,String jsonStr){
@@ -163,6 +169,7 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
         Integer sysType = vo.getSysType();
         Integer belongType = vo.getBelongType();
         Integer nodeType = vo.getNodeType();
+        Integer moduleType = vo.getModuleType();
         if (vo.getType().intValue() == 1) {//1-数据字典
             PageInfo<SysDataDict> pageInfo = sysDataDictService.queryAllByLimits(pageNo, pageSize, areaCode, null, null, name, state,startTime,endTime);
             return Result.success(pageInfo);
@@ -189,8 +196,25 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
             find.setStartTime(startTime);
             find.setEndTime(endTime);
             find.setSysCode(vo.getSysCode());
-//            find.setUseState(1);
+            find.setUseState(vo.getState());
             PageInfo<SysNode> pageInfo = sysNodeService.queryAllOrderByTime(find);
+            return Result.success(pageInfo);
+        } else if (vo.getType().intValue() == 5) {//5-移动组件
+            TabMobileBaseModuleVO find = new TabMobileBaseModuleVO();
+            find.setPageNo(pageNo);
+            find.setPageSize(pageSize);
+            find.setModuleType(moduleType);
+            if(ObjectUtil.isNotEmpty(state)){
+                Integer moduleState = state;
+                if(state.intValue() == 2){
+                    moduleState = -1;
+                    find.setState(moduleState);
+                }
+            }
+            find.setStartTime(startTime);
+            find.setEndTime(endTime);
+            find.setModuleName(name);
+            PageInfo<TabMobileBaseModule> pageInfo = tabMobileBaseModuleService.queryAllByLimit(find);
             return Result.success(pageInfo);
         }
         return Result.success();
@@ -206,16 +230,19 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                 SystemDataServiceNode systemDataServiceNode = systemDataServiceNodeService.getById(dataUpdateRecord.getNodeId());
                 if(ObjectUtil.isNotEmpty(systemDataServiceNode)){
                     if(ObjectUtil.isNotEmpty(systemDataServiceNode.getNodeUrl())){
-                        String url = systemDataServiceNode.getNodeUrl();
+//                        String url = systemDataServiceNode.getNodeUrl();
+                        String url = "http://127.0.0.1:8086/future-rural";
                         String versionUrl = url+"/tabBaseVersions/receipt";
                         String dataDictUrl = url+"/sysDataDict/receipt";
                         String deftUrl = url+"/sysDeft/receipt";
                         String moveAppUrl = url+"/tabBasicMoveApp/receipt";
                         String nodeUrl = url+"/sysNode/receipt";
+                        String moduleUrl = url+"/tabMobileBaseModule/receipt";
                         List<SysDataDict> dataDictList = new ArrayList<>();
                         List<SysDeft> sysDeftList = new ArrayList<>();
                         List<TabBasicMoveApp> moveAppList = new ArrayList<>();
                         List<SysNode> sysNodeList = new ArrayList<>();
+                        List<TabMobileBaseModuleModel> moduleList = new ArrayList<>();
                         SystemDataUpdateRecordModel model = queryById(id);
                         if(ObjectUtil.isNotEmpty(model)){
                             List<SystemDataUpdateSendData> systemDataUpdateSendDataList = model.getSystemDataUpdateSendDataList();
@@ -247,6 +274,12 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                                                 sysNodeList.add(sysNode);
                                             }
                                         }
+                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("5")){
+                                            TabMobileBaseModuleModel tabMobileBaseModuleModel = tabMobileBaseModuleService.queryById(systemDataUpdateSendData.getSendDataId());
+                                            if (ObjectUtil.isNotEmpty(tabMobileBaseModuleModel)){
+                                                moduleList.add(tabMobileBaseModuleModel);
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -270,6 +303,11 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                             Gson gson = new Gson();
                             String result3 = gson.toJson(sysNodeList);
                             HttpKit.post(nodeUrl, result3);
+                        }
+                        if(CollectionUtil.isNotEmpty(moduleList)){
+                            Gson gson = new Gson();
+                            String result4 = gson.toJson(moduleList);
+                            HttpKit.post(moduleUrl, result4);
                         }
                         TabBaseVersions versions = new TabBaseVersions();
                         versions.setId(dataUpdateRecord.getId());
@@ -323,10 +361,12 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                         String deftUrl = url+"/sysDeft/receipt";
                         String moveAppUrl = url+"/tabBasicMoveApp/receipt";
                         String nodeUrl = url+"/sysNode/receipt";
+                        String moduleUrl = url+"/tabMobileBaseModule/receipt";
                         List<SysDataDict> dataDictList = new ArrayList<>();
                         List<SysDeft> sysDeftList = new ArrayList<>();
                         List<TabBasicMoveApp> moveAppList = new ArrayList<>();
                         List<SysNode> sysNodeList = new ArrayList<>();
+                        List<TabMobileBaseModuleModel> moduleList = new ArrayList<>();
                         SystemDataUpdateRecordModel model = queryById(id);
                         if(ObjectUtil.isNotEmpty(model)){
                             List<SystemDataUpdateSendData> systemDataUpdateSendDataList = model.getSystemDataUpdateSendDataList();
@@ -356,6 +396,12 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                                             if (ObjectUtil.isNotEmpty(sysNode)){
                                                 sysNode.setOperatingBooklet(null);
                                                 sysNodeList.add(sysNode);
+                                            }
+                                        }
+                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("5")){
+                                            TabMobileBaseModuleModel tabMobileBaseModuleModel = tabMobileBaseModuleService.queryById(systemDataUpdateSendData.getSendDataId());
+                                            if (ObjectUtil.isNotEmpty(tabMobileBaseModuleModel)){
+                                                moduleList.add(tabMobileBaseModuleModel);
                                             }
                                         }
                                     }
@@ -390,6 +436,11 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                             Gson gson = new Gson();
                             String result3 = gson.toJson(sysNodeList);
                             HttpKit.post(nodeUrl, result3);
+                        }
+                        if(CollectionUtil.isNotEmpty(moduleList)){
+                            Gson gson = new Gson();
+                            String result4 = gson.toJson(moduleList);
+                            HttpKit.post(moduleUrl, result4);
                         }
                     }
                 }

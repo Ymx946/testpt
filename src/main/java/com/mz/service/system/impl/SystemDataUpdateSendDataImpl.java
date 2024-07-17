@@ -8,6 +8,7 @@ import com.mz.common.util.StringUtils;
 import com.mz.framework.util.redis.RedisUtil;
 import com.mz.mapper.system.SystemDataUpdateSendDataMapper;
 import com.mz.model.base.*;
+import com.mz.model.mobile.TabMobileBaseModule;
 import com.mz.model.system.SystemDataUpdateRecord;
 import com.mz.model.system.SystemDataUpdateSendData;
 import cn.hutool.core.date.DateUtil;
@@ -22,6 +23,7 @@ import com.mz.service.base.SysDataDictService;
 import com.mz.service.base.SysDeftService;
 import com.mz.service.base.SysNodeService;
 import com.mz.service.base.TabBasicMoveAppService;
+import com.mz.service.mobile.TabMobileBaseModuleService;
 import com.mz.service.system.SystemDataUpdateSendDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,8 @@ public class SystemDataUpdateSendDataImpl extends ServiceImpl<SystemDataUpdateSe
     private TabBasicMoveAppService tabBasicMoveAppService;
     @Autowired
     private SysNodeService sysNodeService;
+    @Autowired
+    private TabMobileBaseModuleService tabMobileBaseModuleService;
 
     @Override
     public SystemDataUpdateSendData insert(SystemDataUpdateSendData pojo, String loginID){
@@ -124,6 +128,12 @@ public class SystemDataUpdateSendDataImpl extends ServiceImpl<SystemDataUpdateSe
                                 SysNode sysNode = sysNodeService.getById(sendDataId);
                                 if (ObjectUtil.isNotEmpty(sysNode) && ObjectUtil.isNotEmpty(sysNode.getNodeName())) {
                                     pojo.setSendDataName(sysNode.getNodeName());
+                                }
+                            }
+                            if (pojo.getSendDataTypeCode().equals("5")) {
+                                TabMobileBaseModule tabMobileBaseModule = tabMobileBaseModuleService.getById(sendDataId);
+                                if (ObjectUtil.isNotEmpty(tabMobileBaseModule) && ObjectUtil.isNotEmpty(tabMobileBaseModule.getModuleName())) {
+                                    pojo.setSendDataName(tabMobileBaseModule.getModuleName());
                                 }
                             }
                         }
