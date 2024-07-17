@@ -14,10 +14,9 @@ import java.util.List;
  * @author makejava
  * @since 2024-04-08 18:06:51
  */
-public interface SysDataDictClassifyService  extends IService<SysDataDictClassify>{
+public interface SysDataDictClassifyService extends IService<SysDataDictClassify> {
     /**
      * 保存
-     *
      */
     Result insert(SysDataDictClassify pojo, String loginID);
 
@@ -25,6 +24,7 @@ public interface SysDataDictClassifyService  extends IService<SysDataDictClassif
      * 列表
      */
     List<SysDataDictClassifyModel> queryAll(SysDataDictClassifyVO vo);
+
     /**
      * 列表
      */

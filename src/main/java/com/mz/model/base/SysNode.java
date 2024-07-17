@@ -16,84 +16,84 @@ import lombok.ToString;
 public class SysNode {
     private static final long serialVersionUID = 209792503102725771L;
     /**
-    * 主键
-    */
+     * 主键
+     */
     private String id;
     /**
-    * 所属系统
-    */
+     * 所属系统
+     */
     private String sysCode;
     /**
-    * 节点代码
-    */
+     * 节点代码
+     */
     private String nodeCode;
     /**
-    * 节点名称
-    */
+     * 节点名称
+     */
     private String nodeName;
     /**
-    * 节点展示名称
-    */
+     * 节点展示名称
+     */
     private String nodeShowName;
     /**
-    * 上级节点代码
-    */
+     * 上级节点代码
+     */
     private String paraNodeCode;
     /**
-    * 上级节点名称
-    */
+     * 上级节点名称
+     */
     private String paraNodeName;
     /**
-    * 地址
-    */
+     * 地址
+     */
     private String nodeUrl;
     /**
-    * 页面路径
-    */
+     * 页面路径
+     */
     private String namePath;
     /**
-    * 类型1-菜单 2-按钮
-    */
+     * 类型1-菜单 2-按钮
+     */
     private Integer nodeType;
     /**
-    * 图标
-    */
+     * 图标
+     */
     private String nodeIcon;
     /**
-    * 级别
-    */
+     * 级别
+     */
     private Integer nodeLevel;
     /**
-    * 备注
-    */
+     * 备注
+     */
     private String remarks;
     /**
-    * 是否末级
-    */
+     * 是否末级
+     */
     private Integer lastStage;
     /**
-    * 可用状态(1可用2不可用)
-    */
+     * 可用状态(1可用2不可用)
+     */
     private Integer useState;
     /**
-    * 按钮类型  1新增2修改3删除4核实
-    */
+     * 按钮类型  1新增2修改3删除4核实
+     */
     private Integer button;
     /**
-    * 按钮类型名称
-    */
+     * 按钮类型名称
+     */
     private String buttonName;
     /**
-    * 排序
-    */
+     * 排序
+     */
     private Integer orderNo;
     /**
-    * 多端类型 1-PC端、2-移动端
-    */
+     * 多端类型 1-PC端、2-移动端
+     */
     private Integer terminalType;
     /**
-    * 链接类型 1-自建路由、2-自建链接、3-第三方链接
-    */
+     * 链接类型 1-自建路由、2-自建链接、3-第三方链接
+     */
     private Integer linkType;
     /**
      * 层级名称

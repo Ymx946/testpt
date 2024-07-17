@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- *基础移动应用表(TabBasicMoveApp)
+ * 基础移动应用表(TabBasicMoveApp)
  */
 @Setter
 @Getter

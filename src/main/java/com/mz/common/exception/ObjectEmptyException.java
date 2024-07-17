@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ObjectEmptyException extends RuntimeException {
 
-    private  Integer code = ResponseCode.SUCCESS.getCode();
+    private Integer code = ResponseCode.SUCCESS.getCode();
 
     public ObjectEmptyException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
@@ -38,5 +38,5 @@ public class ObjectEmptyException extends RuntimeException {
             this.code = code;
         }
     }
-    
+
 }

@@ -9,7 +9,9 @@ import com.mz.service.base.SysDeftService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -78,7 +80,7 @@ public class SysDeftController {
      * @return 单条数据
      */
     @PostMapping("queryAllByTenant")
-    public Result queryAllByTenant(String token, String sysName,HttpServletRequest request) {
+    public Result queryAllByTenant(String token, String sysName, HttpServletRequest request) {
         if (baseUserService.checkLogin(token, request)) {
             return this.sysDeftService.queryAllForTenant(sysName);
         } else {
@@ -161,7 +163,7 @@ public class SysDeftController {
         if (baseUserService.checkLogin(token, request)) {
             pageNo = pageNo != null ? pageNo : StringFormatUtil.PAGE_NO_DEFAULT;
             pageSize = pageSize != null ? pageSize : StringFormatUtil.PAGE_SIZE_DEFAULT;
-            return Result.success(this.sysDeftService.queryAllByLimit(pageNo, pageSize, sysName, sysType, belongType,null,null));
+            return Result.success(this.sysDeftService.queryAllByLimit(pageNo, pageSize, sysName, sysType, belongType, null, null));
         } else {
             return Result.failedLogin();
         }

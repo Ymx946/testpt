@@ -16,6 +16,7 @@ import java.util.Locale;
 
 /**
  * 时间属性编辑器
+ *
  * @author Administrator
  */
 public class DateEditor extends PropertyEditorSupport {
@@ -93,7 +94,7 @@ public class DateEditor extends PropertyEditorSupport {
             setValue(null);
         } else {
             if (text != null && exactDateLength >= 0 && text.length() != exactDateLength) {
-                throw new IllegalArgumentException((new StringBuilder("Could not parse date: it is not exactly")).append(exactDateLength).append("characters long").toString());
+                throw new IllegalArgumentException("Could not parse date: it is not exactly" + exactDateLength + "characters long");
             }
             setValue(convertValue(text, toType));
         }

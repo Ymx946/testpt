@@ -16,18 +16,18 @@ import lombok.ToString;
 public class TabMedicalDoctorVO extends TabMedicalDoctor {
 
     /**
-    * 预约量
-    */
+     * 预约量
+     */
     private Integer registerNum;
 
     /**
-    * 剩余号量
-    */
+     * 剩余号量
+     */
     private Integer grandNum;
 
     /**
-    * 是否可挂号1可挂（有号）2不可挂（无号）
-    */
+     * 是否可挂号1可挂（有号）2不可挂（无号）
+     */
     private Integer registerInState;
 
 }

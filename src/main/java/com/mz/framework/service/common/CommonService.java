@@ -8,6 +8,7 @@ import java.util.Map;
 public interface CommonService {
 
     Map<String, Object> getOpenUserAccessToken(String clientId);
+
     Map<String, Object> getAccessToken();
 
     Map<String, Object> getAccessToken(String appId, String appKey);

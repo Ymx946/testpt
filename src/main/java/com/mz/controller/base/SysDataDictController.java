@@ -160,6 +160,7 @@ public class SysDataDictController {
     public Result queryAllOpen(String dictTypeCode) {
         return Result.success(sysDataDictService.queryAll(null, dictTypeCode, null, null));
     }
+
     /**
      * 通过代码查询单条数据
      *
@@ -169,7 +170,7 @@ public class SysDataDictController {
     @SneakyThrows
     @PostMapping("queryAllOpen2")
     public List<SysDataDict> queryAllOpen2(String dictTypeCode) {
-        List<SysDataDict> list =sysDataDictService.queryAll(null, dictTypeCode, null, null);
+        List<SysDataDict> list = sysDataDictService.queryAll(null, dictTypeCode, null, null);
         return list;
     }
 
@@ -237,11 +238,11 @@ public class SysDataDictController {
      */
     @SneakyThrows
     @PostMapping("queryAllByLimit")
-    public Result queryAllByLimit(Integer pageNo, Integer pageSize, String areaCode, String dictTypeCode, String dictTypeName, String dictName, Integer useState,String startTime,String endTime, String token, HttpServletRequest request) {
+    public Result queryAllByLimit(Integer pageNo, Integer pageSize, String areaCode, String dictTypeCode, String dictTypeName, String dictName, Integer useState, String startTime, String endTime, String token, HttpServletRequest request) {
         if (baseUserService.checkLogin(token, request)) {
             pageNo = pageNo != null ? pageNo : StringFormatUtil.PAGE_NO_DEFAULT;
             pageSize = pageSize != null ? pageSize : StringFormatUtil.PAGE_SIZE_DEFAULT;
-            return Result.success(sysDataDictService.queryAllByLimit(pageNo, pageSize, areaCode, dictTypeCode, dictTypeName, dictName, useState,startTime,endTime));
+            return Result.success(sysDataDictService.queryAllByLimit(pageNo, pageSize, areaCode, dictTypeCode, dictTypeName, dictName, useState, startTime, endTime));
         } else {
             return Result.failedLogin();
         }

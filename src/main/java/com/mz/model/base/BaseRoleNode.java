@@ -16,16 +16,16 @@ import lombok.ToString;
 public class BaseRoleNode {
     private static final long serialVersionUID = -54957374584693313L;
     /**
-    * 主键
-    */
+     * 主键
+     */
     private String id;
     /**
-    * 用户ID
-    */
+     * 用户ID
+     */
     private String roleId;
     /**
-    * 节点ID
-    */
+     * 节点ID
+     */
     private String nodeId;
 
 }

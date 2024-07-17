@@ -51,7 +51,7 @@ public class SignUtils {
             ByteArrayOutputStream result = SignUtils.signSeal("talhttla", courseFile + "client.p12", courseFile + "seal.png", courseFile + "家庭医生签约协议.pdf", "乙方（盖章）：", "沙建镇中心卫生院", "福建省漳州市华安县沙建镇埔岭社区66号");
 
 //            fileOutputStream = new FileOutputStream(new File(courseFile + "pdf/" + targetFile));
-            fileOutputStream = new FileOutputStream(new File(courseFile +  targetFile));
+            fileOutputStream = new FileOutputStream(new File(courseFile + targetFile));
             fileOutputStream.write(result.toByteArray());
             fileOutputStream.flush();
         } catch (Exception e) {

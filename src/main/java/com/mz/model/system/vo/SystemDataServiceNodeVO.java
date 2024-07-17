@@ -18,16 +18,16 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class SystemDataServiceNodeVO extends BaseDTO {
     /**
-    * 主键
-    */
+     * 主键
+     */
     private Long id;
     /**
-    * 节点名称
-    */
+     * 节点名称
+     */
     private String nodeName;
     /**
-    * 节点地址
-    */
+     * 节点地址
+     */
     private String nodeUrl;
     /**
      * 在线状态1在线 2不在线
@@ -42,24 +42,24 @@ public class SystemDataServiceNodeVO extends BaseDTO {
      */
     private Integer state;
     /**
-    * 创建时间
-    */
+     * 创建时间
+     */
     private String createTime;
     /**
-    * 创建人
-    */
+     * 创建人
+     */
     private String createUser;
     /**
-    * 修改时间
-    */
+     * 修改时间
+     */
     private String modifyTime;
     /**
-    * 修改人
-    */
+     * 修改人
+     */
     private String modifyUser;
     /**
-    * 备注
-    */
+     * 备注
+     */
     private String remarks;
 
 }

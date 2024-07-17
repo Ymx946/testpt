@@ -15,28 +15,28 @@ import lombok.ToString;
 @ToString
 public class SysFullAreaVO {
     /**
-    * 区域代码
-    */
+     * 区域代码
+     */
     private String areaCode;
     /**
-    * 省
-    */
+     * 省
+     */
     private String province;
     /**
-    * 市
-    */
+     * 市
+     */
     private String city;
     /**
-    * 区
-    */
+     * 区
+     */
     private String county;
     /**
-    * 街道
-    */
+     * 街道
+     */
     private String street;
     /**
-    * 社区/村
-    */
+     * 社区/村
+     */
     private String village;
 
 }

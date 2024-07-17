@@ -8,7 +8,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-@JsonInclude(value= JsonInclude.Include.NON_NULL)
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class OpenUserModel {
 
     /**

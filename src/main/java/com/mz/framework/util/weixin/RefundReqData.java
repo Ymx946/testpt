@@ -31,7 +31,7 @@ public class RefundReqData {
     private int total_fee = 0;
     private int refund_fee = 0;
 
-    private String refund_account = "REFUND_SOURCE_RECHARGE_FUNDS";
+    private final String refund_account = "REFUND_SOURCE_RECHARGE_FUNDS";
 
     /**
      * 请求退款服务 (直连模式)

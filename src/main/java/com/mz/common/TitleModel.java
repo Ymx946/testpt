@@ -17,16 +17,16 @@ import java.util.List;
 @ToString
 public class TitleModel {
     /**
-    * 表头对应数据ID
-    */
+     * 表头对应数据ID
+     */
     private Long id;
     /**
-    * 表头名称
-    */
+     * 表头名称
+     */
     private String name;
     /**
-    * 参数名
-    */
+     * 参数名
+     */
     private String dataName;
     /**
      * 二级表头名称

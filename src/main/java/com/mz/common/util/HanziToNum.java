@@ -10,11 +10,10 @@ import java.util.Map;
  */
 
 public class HanziToNum {
-    private static long result = 0;
     // HashMap
     private static final Map<String, Long> unitMap = new java.util.HashMap<String, Long>();
     private static final Map<String, Long> numMap = new java.util.HashMap<String, Long>();
-
+    private static long result = 0;
     // 字符串分离
     private static String stryi = "";
     private static String stryiwan = "";

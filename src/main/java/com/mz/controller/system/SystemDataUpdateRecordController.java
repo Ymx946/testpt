@@ -3,27 +3,21 @@ package com.mz.controller.system;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson.JSONObject;
-import com.mz.common.ConstantsCacheUtil;
+import com.aliyuncs.utils.StringUtils;
+import com.mz.common.ConstantsUtil;
 import com.mz.common.util.ExcelUtils;
-import com.mz.model.base.BaseUser;
+import com.mz.common.util.ResponseCode;
+import com.mz.common.util.Result;
+import com.mz.framework.annotation.NeedLogin;
 import com.mz.model.system.SystemDataUpdateRecord;
 import com.mz.model.system.model.ExportUpdateRecordModel;
 import com.mz.model.system.vo.SelectSearchVO;
-import com.mz.model.system.vo.SystemDataServiceNodeVO;
 import com.mz.model.system.vo.SystemDataUpdateRecordVO;
 import com.mz.service.system.SystemDataUpdateRecordService;
-import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.mz.framework.annotation.NeedLogin;
-import com.mz.common.util.Result;
-import com.aliyuncs.utils.StringUtils;
-import com.mz.common.util.ResponseCode;
-import org.springframework.transaction.annotation.Transactional;
-import com.mz.common.ConstantsUtil;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -46,16 +40,16 @@ public class SystemDataUpdateRecordController {
     @Autowired
     private SystemDataUpdateRecordService systemDataUpdateRecordService;
 
-     /**
+    /**
      * @return 对象列表
-     * */
+     */
     @NeedLogin
     @PostMapping("insert")
-    public Result insert(SystemDataUpdateRecord pojo,String  jsonStr, @RequestHeader(value = "loginID") String loginID) {
+    public Result insert(SystemDataUpdateRecord pojo, String jsonStr, @RequestHeader(value = "loginID") String loginID) {
         if (StringUtils.isEmpty(loginID)) {
             return Result.failed("loginID不能为空");
         }
-        if (pojo.getNodeId()==null) {
+        if (pojo.getNodeId() == null) {
             return Result.failed("节点ID不能为空");
         }
         if (StringUtils.isEmpty(pojo.getSystemCode())) {
@@ -71,13 +65,13 @@ public class SystemDataUpdateRecordController {
             return Result.failed("迭代截止日期不能为空");
         }
         try {
-            return Result.success(this.systemDataUpdateRecordService.insert(pojo,loginID,jsonStr));
+            return Result.success(this.systemDataUpdateRecordService.insert(pojo, loginID, jsonStr));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
         }
     }
-  
+
     /**
      * 根据主键查询
      *
@@ -85,7 +79,7 @@ public class SystemDataUpdateRecordController {
      */
     @NeedLogin
     @GetMapping("queryById")
-    public Result queryById(Long id ) {
+    public Result queryById(Long id) {
         if (null == id) {
             return Result.failed("ID必填");
         }
@@ -105,7 +99,7 @@ public class SystemDataUpdateRecordController {
     @NeedLogin
     @GetMapping("queryAllByLimit")
     public Result queryAllByLimit(SystemDataUpdateRecordVO vo) {
-        if (vo.getNodeId()==null) {
+        if (vo.getNodeId() == null) {
             return Result.failed("节点id不能为空");
         }
         try {
@@ -123,14 +117,14 @@ public class SystemDataUpdateRecordController {
      */
     @NeedLogin
     @GetMapping("queryVersionNo")
-    public Result queryVersionNo(SystemDataUpdateRecordVO vo ) {
-        if (vo.getNodeId()==null) {
+    public Result queryVersionNo(SystemDataUpdateRecordVO vo) {
+        if (vo.getNodeId() == null) {
             return Result.failed("节点id不能为空");
         }
         try {
             List<String> versionNoList = new ArrayList<>();
             List<SystemDataUpdateRecord> recordList = this.systemDataUpdateRecordService.queryAll(vo);
-            if(CollectionUtil.isNotEmpty(recordList)){
+            if (CollectionUtil.isNotEmpty(recordList)) {
                 for (SystemDataUpdateRecord systemDataUpdateRecord : recordList) {
                     versionNoList.add(systemDataUpdateRecord.getVersionNo());
                 }
@@ -144,17 +138,18 @@ public class SystemDataUpdateRecordController {
 
     /**
      * 下发
+     *
      * @return 对象列表
-     * */
+     */
     @NeedLogin
     @PostMapping("issued")
     public Result issued(Long id) {
-        if (id==null) {
+        if (id == null) {
             return Result.failed("id不能为空");
         }
         SystemDataUpdateRecord updateRecord = systemDataUpdateRecordService.getById(id);
-        if(ObjectUtil.isNotEmpty(updateRecord)){
-            if(ObjectUtil.isNotEmpty(updateRecord.getState()) && updateRecord.getState().intValue()==1){
+        if (ObjectUtil.isNotEmpty(updateRecord)) {
+            if (ObjectUtil.isNotEmpty(updateRecord.getState()) && updateRecord.getState().intValue() == 1) {
                 return Result.failed("该条版本更新记录已下发");
             }
         }
@@ -168,18 +163,19 @@ public class SystemDataUpdateRecordController {
 
     /**
      * 重新下发
+     *
      * @return 对象列表
-     * */
+     */
     @NeedLogin
     @PostMapping("reissued")
     public Result reissued(Long id) {
-        if (id==null) {
+        if (id == null) {
             return Result.failed("id不能为空");
         }
         SystemDataUpdateRecord updateRecord = systemDataUpdateRecordService.getById(id);
-        if(ObjectUtil.isNotEmpty(updateRecord)){
-            if(ObjectUtil.isNotEmpty(updateRecord.getState())){
-                if(updateRecord.getState().intValue()==0 || updateRecord.getState().intValue()== -1) {
+        if (ObjectUtil.isNotEmpty(updateRecord)) {
+            if (ObjectUtil.isNotEmpty(updateRecord.getState())) {
+                if (updateRecord.getState().intValue() == 0 || updateRecord.getState().intValue() == -1) {
                     return Result.failed("版本更新记录为下发状态,才可重新下发");
                 }
             }
@@ -194,12 +190,13 @@ public class SystemDataUpdateRecordController {
 
     /**
      * 删除
+     *
      * @return 对象列表
-     * */
+     */
     @NeedLogin
     @PostMapping("delPojo")
     public Result delPojo(Long id) {
-        if (id==null) {
+        if (id == null) {
             return Result.failed("id不能为空");
         }
         try {
@@ -225,10 +222,10 @@ public class SystemDataUpdateRecordController {
 
             List<SystemDataUpdateRecord> list = systemDataUpdateRecordService.queryAll(vo);
             List<ExportUpdateRecordModel> resultList = new ArrayList<>();
-            if(CollectionUtil.isNotEmpty(list)){
+            if (CollectionUtil.isNotEmpty(list)) {
                 for (SystemDataUpdateRecord systemDataUpdateRecord : list) {
                     ExportUpdateRecordModel model = new ExportUpdateRecordModel();
-                    BeanUtil.copyProperties(systemDataUpdateRecord,model);
+                    BeanUtil.copyProperties(systemDataUpdateRecord, model);
                     ExcelUtils.setDefaultValue(model);
                     resultList.add(model);
                 }

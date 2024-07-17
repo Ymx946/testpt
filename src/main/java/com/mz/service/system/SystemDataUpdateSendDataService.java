@@ -13,12 +13,12 @@ import java.util.List;
  * @author makejava
  * @since 2024-04-11 17:07:45
  */
-public interface SystemDataUpdateSendDataService  extends IService<SystemDataUpdateSendData>{
+public interface SystemDataUpdateSendDataService extends IService<SystemDataUpdateSendData> {
     /**
      * 保存
-     *
      */
-    SystemDataUpdateSendData insert(SystemDataUpdateSendData pojo,String loginID);
+    SystemDataUpdateSendData insert(SystemDataUpdateSendData pojo, String loginID);
+
     List<SystemDataUpdateSendData> queryAll(SystemDataUpdateSendDataVO vo);
 
     /**

@@ -11,6 +11,16 @@ public class CNToNumber {
 
     private static final String allChineseNum = "零一二三四五六七八九壹贰叁肆伍陆柒捌玖十拾百佰千仟万萬亿";
     private static final String allChineseUnit = "十拾百佰千仟万萬亿";
+    /**
+     * 中文数字
+     */
+    private static final char[] cnArr_a = new char[]{'零', '一', '二', '三', '四', '五', '六', '七', '八', '九'};
+    private static final char[] cnArr_A = new char[]{'零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'};
+    /**
+     * 中文单位
+     */
+    private static final char[] unit_a = new char[]{'亿', '万', '千', '百', '十'};
+    private static final char[] unit_A = new char[]{'亿', '萬', '仟', '佰', '拾'};
     static ChnNameValue[] chnNameValue = {
             new ChnNameValue("十", 10, false),
             new ChnNameValue("拾", 10, false),
@@ -22,16 +32,6 @@ public class CNToNumber {
             new ChnNameValue("萬", 10000, true),
             new ChnNameValue("亿", 100000000, true)
     };
-    /**
-     * 中文数字
-     */
-    private static final char[] cnArr_a = new char[]{'零', '一', '二', '三', '四', '五', '六', '七', '八', '九'};
-    private static final char[] cnArr_A = new char[]{'零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'};
-    /**
-     * 中文单位
-     */
-    private static final char[] unit_a = new char[]{'亿', '万', '千', '百', '十'};
-    private static final char[] unit_A = new char[]{'亿', '萬', '仟', '佰', '拾'};
 
     /**
      * 将汉字中的数字转换为阿拉伯数字

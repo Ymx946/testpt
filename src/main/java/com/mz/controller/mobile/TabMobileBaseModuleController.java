@@ -41,7 +41,7 @@ public class TabMobileBaseModuleController {
         if (StringUtils.isEmpty(loginID)) {
             return Result.failed("loginID不能为空");
         }
-        if(ObjectUtil.isEmpty(styleJson)){
+        if (ObjectUtil.isEmpty(styleJson)) {
             return Result.failed("列表样式不能为空");
         }
         try {

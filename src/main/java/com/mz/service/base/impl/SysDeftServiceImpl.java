@@ -1,22 +1,17 @@
 package com.mz.service.base.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.mz.common.context.PageInfo;
 import com.mz.common.util.IdWorker;
 import com.mz.common.util.Result;
-import com.mz.common.util.StringUtils;
 import com.mz.mapper.localhost.SysDeftMapper;
-import com.mz.model.base.BaseSoftwareGroupClassifySys;
 import com.mz.model.base.BaseUser;
-import com.mz.model.base.SysArea;
 import com.mz.model.base.SysDeft;
-import com.mz.model.base.vo.BaseSoftwareGroupClassifySysVO;
 import com.mz.model.base.vo.SysDeftSelectVO;
 import com.mz.model.base.vo.SysDeftVO;
 import com.mz.service.base.*;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +26,7 @@ import java.util.List;
  * @since 2021-03-17 11:00:04
  */
 @Service("sysDeftService")
-public class SysDeftServiceImpl implements SysDeftService {
+public class SysDeftServiceImpl extends ServiceImpl<SysDeftMapper, SysDeft> implements SysDeftService {
     @Resource
     private SysDeftMapper sysDeftMapper;
     @Resource
@@ -76,9 +71,9 @@ public class SysDeftServiceImpl implements SysDeftService {
      * @return 对象列表
      */
     @Override
-    public PageInfo<SysDeft> queryAllByLimit(int offset, int limit, String sysName, Integer sysType, Integer belongType, String startTime,  String endTime) {
+    public PageInfo<SysDeft> queryAllByLimit(int offset, int limit, String sysName, Integer sysType, Integer belongType, String startTime, String endTime) {
         PageHelper.startPage(offset, limit);
-        List<SysDeft> list = sysDeftMapper.queryAllByLimit(sysName, sysType, belongType,startTime,endTime);
+        List<SysDeft> list = sysDeftMapper.queryAllByLimit(sysName, sysType, belongType, startTime, endTime);
         return new PageInfo<SysDeft>(list);
     }
 
@@ -96,6 +91,7 @@ public class SysDeftServiceImpl implements SysDeftService {
 
     /**
      * 通过租户ID查询有权限的系统列表
+     *
      * @return 对象列表
      */
     @Override

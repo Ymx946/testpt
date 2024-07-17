@@ -133,6 +133,7 @@ public interface SysNodeMapper extends BaseMapper<SysNode> {
                                   @Param("sysCodeArr") String[] sysCodeArr);
 
     List<SysNode> queryAllOrderByTime(SysNodeVo vo);
+
     /**
      * 通过实体作为筛选条件查询
      *
@@ -182,7 +183,7 @@ public interface SysNodeMapper extends BaseMapper<SysNode> {
     List<SysNode> queryAllNodeForRole(@Param("userId") String userId,
                                       @Param("mainBodyId") String mainBodyId,
                                       @Param("classifyId") Long classifyId,
-                                      @Param("terminalType") Integer terminalType,@Param("classifyType") Integer classifyType);
+                                      @Param("terminalType") Integer terminalType, @Param("classifyType") Integer classifyType);
 
     /**
      * 根据系统代码查询节点
@@ -193,5 +194,5 @@ public interface SysNodeMapper extends BaseMapper<SysNode> {
     List<SysNode> queryAllNodeBySysCode(@Param("userId") String userId,
                                         @Param("mainBodyId") String mainBodyId,
                                         @Param("classifyId") Long classifyId,
-                                        @Param("terminalType") Integer terminalType,@Param("classifyType") Integer classifyType);
+                                        @Param("terminalType") Integer terminalType, @Param("classifyType") Integer classifyType);
 }

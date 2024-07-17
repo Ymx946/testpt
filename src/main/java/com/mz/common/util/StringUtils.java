@@ -22,6 +22,10 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * 下划线
      */
     private static final char SEPARATOR = '_';
+    /**
+     * 生成申请单编号
+     */
+    private static final int serialNumber = 1;
 
     /**
      * 获取参数不为空值
@@ -518,7 +522,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     /**
      * 身份证号导入处理
      */
-    public static  String dealIdNo(String idNumber) {
+    public static String dealIdNo(String idNumber) {
         idNumber = idNumber.trim(); // 去除前后空格
         char lastChar = idNumber.charAt(idNumber.length() - 1); // 获取最后一位字符
         if (lastChar == 'x') { // 判断最后一位是否为小写x
@@ -529,6 +533,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
     /**
      * 生成6位核销码
+     *
      * @return
      */
     public static final String generateVerificationCode() {
@@ -540,11 +545,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return sb.toString();
     }
-
-    /**
-     * 生成申请单编号
-     */
-    private static int serialNumber = 1;
 
     public static String generateSerialNumber() {
         String pattern = "yyMM";

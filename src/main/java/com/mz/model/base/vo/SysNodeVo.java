@@ -24,7 +24,7 @@ public class SysNodeVo extends BaseDTO {
      */
     private String loginID;
     /**
-     *上级菜单ID
+     * 上级菜单ID
      */
     private String previousMenuId;
     /**

@@ -19,12 +19,12 @@ public class ExcelStringModel {
      */
     private Integer lineNum;
     /**
-    * 列数
-    */
+     * 列数
+     */
     private Integer arrangeNum;
     /**
-    * 值
-    */
+     * 值
+     */
     private String dataValue;
 
 }

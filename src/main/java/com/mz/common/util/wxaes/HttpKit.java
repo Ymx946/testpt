@@ -222,7 +222,7 @@ public class HttpKit {
                 DataOutputStream out = new DataOutputStream(connection.getOutputStream());
 //                JSONObject obj = JSONObject.parseObject(params);
 //                out.writeBytes(obj.toString());
-                out.write(params.getBytes("UTF-8"));
+                out.write(params.getBytes(StandardCharsets.UTF_8));
                 out.flush();
                 out.close();
             }

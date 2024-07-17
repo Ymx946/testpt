@@ -52,11 +52,9 @@ public class SSLUtils {
         }
 
         public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
-            return;
         }
 
         public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
-            return;
         }
     }
 }

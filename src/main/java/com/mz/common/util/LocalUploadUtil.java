@@ -193,7 +193,7 @@ public class LocalUploadUtil {
 
 
     public enum EnumForm {
-        JPG, PNG, ZIP, RAR, TXT, PPT, DOC, DOCX, PDF, XLS, XLSX, PPTX, JPEG, GIF, MP3, MP4, M4A, OGG, FLV, AVI, WMV, RMVB, MOV, MPEG,AMR ,AWB, JSON,WAV,AAC
+        JPG, PNG, ZIP, RAR, TXT, PPT, DOC, DOCX, PDF, XLS, XLSX, PPTX, JPEG, GIF, MP3, MP4, M4A, OGG, FLV, AVI, WMV, RMVB, MOV, MPEG, AMR, AWB, JSON, WAV, AAC
     }
 
     public enum EnumForm1 {

@@ -1,5 +1,6 @@
 package com.mz.mapper.localhost;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mz.model.base.SysDeft;
 import com.mz.model.base.vo.SysDeftSelectVO;
 import com.mz.model.base.vo.SysDeftVO;
@@ -13,7 +14,7 @@ import java.util.List;
  * @author makejava
  * @since 2021-03-17 11:00:04
  */
-public interface SysDeftMapper {
+public interface SysDeftMapper extends BaseMapper<SysDeft> {
 
     /**
      * 通过ID查询单条数据
@@ -54,10 +55,11 @@ public interface SysDeftMapper {
      * @param tenantId 租户ID
      * @return 对象列表
      */
-    List<SysDeft> queryAllForTenant(@Param("tenantId") String tenantId, @Param("applicationType") Integer applicationType,@Param("sysName")String sysName);
+    List<SysDeft> queryAllForTenant(@Param("tenantId") String tenantId, @Param("applicationType") Integer applicationType, @Param("sysName") String sysName);
 
     /**
      * 通过租户ID查询有权限的系统列表
+     *
      * @return 对象列表
      */
     List<SysDeftVO> queryAllBySys(String sysName);

@@ -21,8 +21,6 @@ import com.mz.mapper.localhost.SysNodeMapper;
 import com.mz.model.base.*;
 import com.mz.model.base.model.SysNodeSelectModel;
 import com.mz.model.base.vo.SysNodeVo;
-import com.mz.service.base.BaseRoleService;
-import com.mz.service.base.BaseSoftwareGroupClassifyNodeService;
 import com.mz.service.base.BaseUserService;
 import com.mz.service.base.SysNodeService;
 import org.springframework.beans.BeanUtils;
@@ -32,7 +30,10 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -90,11 +91,11 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
      * @return 对象列表
      */
     @Override
-    public PageInfo<SysNode> queryAllByLimit(int offset, int limit, String sysCode, Integer applicationType, String nodeName, String nodeShowName,String paraNodeCode, Integer nodeType, Integer button, Integer useState, HttpServletRequest request) {
+    public PageInfo<SysNode> queryAllByLimit(int offset, int limit, String sysCode, Integer applicationType, String nodeName, String nodeShowName, String paraNodeCode, Integer nodeType, Integer button, Integer useState, HttpServletRequest request) {
         String[] sysCodeArr = null;
         BaseUser baseUser = baseUserService.getUser(request);
         if (baseUser.getUserLevel() > 1) {//除了超级管理员
-            List<SysDeft> sysDeftList = this.sysDeftMapper.queryAllForTenant(baseUser.getTenantId(), applicationType,null);
+            List<SysDeft> sysDeftList = this.sysDeftMapper.queryAllForTenant(baseUser.getTenantId(), applicationType, null);
             if (sysDeftList != null && sysDeftList.size() > 0) {
                 sysCodeArr = new String[sysDeftList.size()];
                 int i = 0;
@@ -107,7 +108,7 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
             }
         }
         PageHelper.startPage(offset, limit);
-        List<SysNode> list = sysNodeMapper.queryAllByLimit(sysCode, nodeName,  nodeShowName,paraNodeCode, nodeType, button, useState, sysCodeArr);
+        List<SysNode> list = sysNodeMapper.queryAllByLimit(sysCode, nodeName, nodeShowName, paraNodeCode, nodeType, button, useState, sysCodeArr);
         return new PageInfo<SysNode>(list);
     }
 
@@ -373,22 +374,23 @@ public class SysNodeServiceImpl extends ServiceImpl<SysNodeMapper, SysNode> impl
 
     /**
      * 处理层级名称
+     *
      * @param id
      * @return
      */
     public SysNode dealLevelName(String id) {
         SysNode sysNode = queryById(id);
-        if(sysNode.getNodeCode().length()>=2){
-            SysNode paraSysNode = sysNodeMapper.queryByCode(sysNode.getNodeCode().substring(0,2), sysNode.getSysCode());
+        if (sysNode.getNodeCode().length() >= 2) {
+            SysNode paraSysNode = sysNodeMapper.queryByCode(sysNode.getNodeCode().substring(0, 2), sysNode.getSysCode());
             sysNode.setNodeLevelName(paraSysNode.getNodeName());
         }
-        if(sysNode.getNodeCode().length()>=4){
-            SysNode paraSysNode = sysNodeMapper.queryByCode(sysNode.getNodeCode().substring(0,4), sysNode.getSysCode());
-            sysNode.setNodeLevelName(sysNode.getNodeLevelName()+"/"+paraSysNode.getNodeName());
+        if (sysNode.getNodeCode().length() >= 4) {
+            SysNode paraSysNode = sysNodeMapper.queryByCode(sysNode.getNodeCode().substring(0, 4), sysNode.getSysCode());
+            sysNode.setNodeLevelName(sysNode.getNodeLevelName() + "/" + paraSysNode.getNodeName());
         }
-        if(sysNode.getNodeCode().length()>=6){
-            SysNode paraSysNode = sysNodeMapper.queryByCode(sysNode.getNodeCode().substring(0,6), sysNode.getSysCode());
-            sysNode.setNodeLevelName(sysNode.getNodeLevelName()+"/"+paraSysNode.getNodeName());
+        if (sysNode.getNodeCode().length() >= 6) {
+            SysNode paraSysNode = sysNodeMapper.queryByCode(sysNode.getNodeCode().substring(0, 6), sysNode.getSysCode());
+            sysNode.setNodeLevelName(sysNode.getNodeLevelName() + "/" + paraSysNode.getNodeName());
         }
         sysNodeMapper.update(sysNode);
         return sysNode;

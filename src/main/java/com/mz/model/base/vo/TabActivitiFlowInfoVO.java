@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- *流程控制表(ActFlowInfo)实体类
+ * 流程控制表(ActFlowInfo)实体类
  */
 @SuppressWarnings("serial")
 @Setter
@@ -18,8 +18,8 @@ public class TabActivitiFlowInfoVO extends BaseDTO {
      */
     private String loginID;
     /**
-    * 主键
-    */
+     * 主键
+     */
     private Long id;
     /**
      * 流程名称

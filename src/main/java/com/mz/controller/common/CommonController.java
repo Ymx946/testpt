@@ -1,6 +1,7 @@
 package com.mz.controller.common;
 
-import com.mz.common.util.*;
+import com.mz.common.util.AttaVo;
+import com.mz.common.util.Result;
 import com.mz.common.util.file.FdfsFileUtil;
 import com.mz.common.util.file.OssUtil;
 import lombok.SneakyThrows;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**

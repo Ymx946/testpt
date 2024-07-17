@@ -16,61 +16,61 @@ import lombok.ToString;
 public class TabPublicSiteSubscribe {
     private static final long serialVersionUID = -84197294034624576L;
 
-    public static  String TEMPLATE_NAME_CALL ="预约叫号通知";
-    public static  String TEMPLATE_NAME_CHANGE ="服务变更通知";
-    public static  String TEMPLATE_NAME_DOCTOR_REMIND ="开始问诊提醒";
-    public static  String TEMPLATE_NAME_PLACE_APPOINT_SUCCESS ="预约成功通知";
-    public static  String TEMPLATE_NAME_PLACE_APPOINT_RETURN ="预约取消通知";
-    public static  String TEMPLATE_NAME_WORK_APPOINT_SUCCESS ="办事预约成功通知";
-    public static  String TEMPLATE_NAME_WORK_APPOINT_RETURN ="办事预约取消通知";
+    public static String TEMPLATE_NAME_CALL = "预约叫号通知";
+    public static String TEMPLATE_NAME_CHANGE = "服务变更通知";
+    public static String TEMPLATE_NAME_DOCTOR_REMIND = "开始问诊提醒";
+    public static String TEMPLATE_NAME_PLACE_APPOINT_SUCCESS = "预约成功通知";
+    public static String TEMPLATE_NAME_PLACE_APPOINT_RETURN = "预约取消通知";
+    public static String TEMPLATE_NAME_WORK_APPOINT_SUCCESS = "办事预约成功通知";
+    public static String TEMPLATE_NAME_WORK_APPOINT_RETURN = "办事预约取消通知";
 
-    public static  String TEMPLATE_STUDY_NOTICE ="活动通知";
+    public static String TEMPLATE_STUDY_NOTICE = "活动通知";
 
-    public static  String[] TEMPLATE_NAME_PLACE_APPOINT_ARR =new String[]{"预约成功通知","预约取消通知"};//场所预约订阅模板列表
-    public static  String[] TEMPLATE_NAME_REGISTER_ARR =new String[]{"预约叫号通知","服务变更通知"};// 挂号订阅模板列表
-    public static  String[] TEMPLATE_NAME_DOCTOR_ARR =new String[]{"开始问诊提醒"};//医生订阅模板列表
-    public static  String[] TEMPLATE_NAME_STUDY_ARR =new String[]{"活动通知"};//研学订阅模板列表
-    public static  String[] TEMPLATE_NAME_WORK_APPOINT_ARR =new String[]{"办事预约成功通知","办事预约取消通知"};//办事预约订阅模板列表
+    public static String[] TEMPLATE_NAME_PLACE_APPOINT_ARR = new String[]{"预约成功通知", "预约取消通知"};//场所预约订阅模板列表
+    public static String[] TEMPLATE_NAME_REGISTER_ARR = new String[]{"预约叫号通知", "服务变更通知"};// 挂号订阅模板列表
+    public static String[] TEMPLATE_NAME_DOCTOR_ARR = new String[]{"开始问诊提醒"};//医生订阅模板列表
+    public static String[] TEMPLATE_NAME_STUDY_ARR = new String[]{"活动通知"};//研学订阅模板列表
+    public static String[] TEMPLATE_NAME_WORK_APPOINT_ARR = new String[]{"办事预约成功通知", "办事预约取消通知"};//办事预约订阅模板列表
 
     /**
-    * 主键
-    */
+     * 主键
+     */
     private String id;
     /**
-    * 所属租户
-    */
+     * 所属租户
+     */
     private String tenantId;
     /**
-    * 站点ID
-    */
+     * 站点ID
+     */
     private String siteId;
     /**
-    * 站点代码
-    */
+     * 站点代码
+     */
     private String siteCode;
     /**
-    * 站点名称
-    */
+     * 站点名称
+     */
     private String siteName;
     /**
-    * 模板名称
-    */
+     * 模板名称
+     */
     private String templateName;
     /**
-    * 模板ID
-    */
+     * 模板ID
+     */
     private String templateId;
     /**
-    * 模板内容
-    */
+     * 模板内容
+     */
     private String templateContent;
     /**
-    * 参数名
-    */
+     * 参数名
+     */
     private String templatePara;
     /**
-    * 跳转页面地址
-    */
+     * 跳转页面地址
+     */
     private String pageName;
     /**
      * 模板类型 1-小程序模板2-公众号模板
@@ -93,24 +93,24 @@ public class TabPublicSiteSubscribe {
      */
     private Integer delState;
     /**
-    * 创建时间
-    */
+     * 创建时间
+     */
     private String creatTime;
     /**
-    * 创建人
-    */
+     * 创建人
+     */
     private String creatUser;
     /**
-    * 修改时间
-    */
+     * 修改时间
+     */
     private String modifyTime;
     /**
-    * 修改人
-    */
+     * 修改人
+     */
     private String modifyUser;
     /**
-    * 备注
-    */
+     * 备注
+     */
     private String remarks;
 
 }

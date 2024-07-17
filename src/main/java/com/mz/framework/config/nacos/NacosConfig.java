@@ -22,14 +22,12 @@ import java.util.Set;
 @Slf4j
 public class NacosConfig implements ApplicationRunner {
 
-    @Autowired
-    private NacosRegistration registration;
-
-    @Autowired
-    private NacosAutoServiceRegistration nacosAutoServiceRegistration;
-
     @Value("${server.port}")
     Integer port;
+    @Autowired
+    private NacosRegistration registration;
+    @Autowired
+    private NacosAutoServiceRegistration nacosAutoServiceRegistration;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {

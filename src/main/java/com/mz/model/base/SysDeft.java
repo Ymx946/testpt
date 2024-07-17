@@ -16,32 +16,32 @@ import lombok.ToString;
 public class SysDeft {
     private static final long serialVersionUID = -48317858247439920L;
     /**
-    * 主键
-    */
+     * 主键
+     */
     private String id;
     /**
-    * 系统代码
-    */
+     * 系统代码
+     */
     private String sysCode;
     /**
-    * 系统名称
-    */
+     * 系统名称
+     */
     private String sysName;
     /**
-    * 类型1-监管端2-农企端
-    */
+     * 类型1-监管端2-农企端
+     */
     private Integer sysType;
     /**
-    * 备注
-    */
+     * 备注
+     */
     private String remarks;
     /**
-    * 图片logo
-    */
+     * 图片logo
+     */
     private String sysLogo;
     /**
-    * 系统性质1系统设置2业务系统
-    */
+     * 系统性质1系统设置2业务系统
+     */
     private Integer sysManage;
     /**
      * 介绍

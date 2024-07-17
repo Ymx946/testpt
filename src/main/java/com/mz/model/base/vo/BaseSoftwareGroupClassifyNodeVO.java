@@ -16,68 +16,68 @@ import lombok.ToString;
 @ToString
 public class BaseSoftwareGroupClassifyNodeVO extends BaseDTO {
     /**
-    * 主键
-    */
+     * 主键
+     */
     private Long id;
     /**
-    * 所属租户
-    */
+     * 所属租户
+     */
     private Long tenantId;
     /**
-    * 分组ID
-    */
+     * 分组ID
+     */
     private Long groupId;
     /**
-    * 分类ID
-    */
+     * 分类ID
+     */
     private Long classifyId;
     /**
      * 关联应用ID
      */
     private Long classifySysId;
     /**
-    * 系统ID
-    */
+     * 系统ID
+     */
     private Long sysId;
     /**
-    * 系统代码
-    */
+     * 系统代码
+     */
     private String sysCode;
     /**
-    * 节点ID
-    */
+     * 节点ID
+     */
     private Long nodeId;
     /**
-    * 节点名称
-    */
+     * 节点名称
+     */
     private String nodeName;
     /**
-    * 逻辑删除
-    */
+     * 逻辑删除
+     */
     private Integer delState;
     /**
-    * 状态 1启用 -1 禁用
-    */
+     * 状态 1启用 -1 禁用
+     */
     private Integer state;
     /**
-    * 创建时间
-    */
+     * 创建时间
+     */
     private String createTime;
     /**
-    * 创建人
-    */
+     * 创建人
+     */
     private String createUser;
     /**
-    * 修改时间
-    */
+     * 修改时间
+     */
     private String modifyTime;
     /**
-    * 修改人
-    */
+     * 修改人
+     */
     private String modifyUser;
     /**
-    * 备注
-    */
+     * 备注
+     */
     private String remarks;
 
 }

@@ -1,12 +1,9 @@
 package com.mz.model.base;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.Date;
 
 
 /**

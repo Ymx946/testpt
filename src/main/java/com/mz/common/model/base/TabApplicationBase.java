@@ -11,43 +11,43 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class TabApplicationBase  {
+public class TabApplicationBase {
     private static final long serialVersionUID = 370499761818474649L;
     /**
-    * 主键
-    */
+     * 主键
+     */
     private Long id;
     /**
-    * 应用类型1-PC 2-H5
-    */
+     * 应用类型1-PC 2-H5
+     */
     private Integer applicationType;
     /**
-    * 应用名称
-    */
+     * 应用名称
+     */
     private String applicationName;
     /**
-    * 应用级别 1-乡镇级 2-区县级 3-市级 4-省级
-    */
+     * 应用级别 1-乡镇级 2-区县级 3-市级 4-省级
+     */
     private Integer applicationLevel;
     /**
-    * 申报主体
-    */
+     * 申报主体
+     */
     private String declarationSubject;
     /**
-    * 应用英文名称
-    */
+     * 应用英文名称
+     */
     private String applicationNameE;
     /**
-    * 应用图标
-    */
+     * 应用图标
+     */
     private String applicationIcon;
     /**
-    * 应用简介
-    */
+     * 应用简介
+     */
     private String applicationIntroduction;
     /**
-    * 应用正式地址
-    */
+     * 应用正式地址
+     */
     private String applicationLinkAddress;
     /**
      * 应用测试地址
@@ -58,44 +58,44 @@ public class TabApplicationBase  {
      */
     private String docUrl;
     /**
-    * 业主统一社会信用代码
-    */
+     * 业主统一社会信用代码
+     */
     private String ownerCode;
     /**
-    * 业务负责人
-    */
+     * 业务负责人
+     */
     private String ownerChargePerson;
     /**
-    * 业务负责人电话
-    */
+     * 业务负责人电话
+     */
     private String ownerChargePhone;
     /**
-    * 业务负责邮箱
-    */
+     * 业务负责邮箱
+     */
     private String ownerChargeEmail;
     /**
-    * 开发商名称
-    */
+     * 开发商名称
+     */
     private String developerName;
     /**
-    * 开发商区域代码
-    */
+     * 开发商区域代码
+     */
     private String developerAreaCode;
     /**
-    * 开发商区域名称
-    */
+     * 开发商区域名称
+     */
     private String developerAreaName;
     /**
-    * 运维负责姓名
-    */
+     * 运维负责姓名
+     */
     private String devOpsPerson;
     /**
-    * 运维负责电话
-    */
+     * 运维负责电话
+     */
     private String devOpsPhone;
     /**
-    * 运维负责邮箱
-    */
+     * 运维负责邮箱
+     */
     private String devOpsEmail;
     /**
      * 用户ID
@@ -130,32 +130,32 @@ public class TabApplicationBase  {
      */
     private Integer result;
     /**
-    * 状态 0 提交审核 1 审核中 2审核不通过 3已审核(上架) 4已撤销
-    */
+     * 状态 0 提交审核 1 审核中 2审核不通过 3已审核(上架) 4已撤销
+     */
     private Integer state;
     /**
-    * 逻辑删除
-    */
+     * 逻辑删除
+     */
     private Integer delState;
     /**
-    * 创建时间
-    */
+     * 创建时间
+     */
     private String createTime;
     /**
-    * 创建人
-    */
+     * 创建人
+     */
     private String createUser;
     /**
-    * 修改时间
-    */
+     * 修改时间
+     */
     private String modifyTime;
     /**
-    * 修改人
-    */
+     * 修改人
+     */
     private String modifyUser;
     /**
-    * 备注
-    */
+     * 备注
+     */
     private String remarks;
 
 }

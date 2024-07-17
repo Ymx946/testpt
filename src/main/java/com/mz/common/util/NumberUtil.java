@@ -106,10 +106,10 @@ public class NumberUtil {
             double safe_total = (total - (num - i) * min) / (num - i);
             double money = Math.random() * (safe_total - min) + min;
             BigDecimal money_bd = new BigDecimal(money);
-            money = money_bd.setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue();
+            money = money_bd.setScale(0, RoundingMode.HALF_UP).doubleValue();
             total = total - money;
             BigDecimal total_bd = new BigDecimal(total);
-            total = total_bd.setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue();
+            total = total_bd.setScale(0, RoundingMode.HALF_UP).doubleValue();
             System.out.println("第" + i + "个红包：" + money + ",余额为:" + total + "元");
         }
         System.out.println("第" + num + "个红包：" + total + ",余额为:0元");
@@ -238,7 +238,7 @@ public class NumberUtil {
         }
         BigDecimal b1 = new BigDecimal(Double.toString(v1));
         BigDecimal b2 = new BigDecimal(Double.toString(v2));
-        return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return b1.divide(b2, scale, RoundingMode.HALF_UP).doubleValue();
     }
 
     /**
@@ -254,7 +254,7 @@ public class NumberUtil {
         }
         BigDecimal b = new BigDecimal(Double.toString(v));
         BigDecimal one = new BigDecimal("1");
-        return b.divide(one, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return b.divide(one, scale, RoundingMode.HALF_UP).doubleValue();
     }
 
     public static String randomNumString(int length) {
@@ -302,58 +302,58 @@ public class NumberUtil {
     public static Long priceTransformY2F(String amount) {
         BigDecimal b = new BigDecimal(new BigDecimal(amount).multiply(new BigDecimal(100)).toString());
         BigDecimal one = new BigDecimal("1");
-        return b.divide(one, 0, BigDecimal.ROUND_HALF_UP).longValue();
+        return b.divide(one, 0, RoundingMode.HALF_UP).longValue();
     }
 
     // 价格转换，元转分，四舍五入取整
     public static Long priceTransformY2F(Double amount) {
         BigDecimal b = new BigDecimal(new BigDecimal(Double.toString(amount)).multiply(new BigDecimal(100)).toString());
         BigDecimal one = new BigDecimal("1");
-        return b.divide(one, 0, BigDecimal.ROUND_HALF_UP).longValue();
+        return b.divide(one, 0, RoundingMode.HALF_UP).longValue();
     }
 
     public static String priceTransformFen2Yuan(Long amount) {
-        return new BigDecimal(Long.toString(amount)).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP).toString();
+        return new BigDecimal(Long.toString(amount)).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP).toString();
     }
 
     public static String priceTransformhao2Fen(Long amount) {
-        return new BigDecimal(Long.toString(amount)).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP).toString();
+        return new BigDecimal(Long.toString(amount)).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP).toString();
     }
 
     public static String priceTransformt3(Long amount) {
-        return new BigDecimal(Long.toString(amount)).divide(new BigDecimal(1000), 2, BigDecimal.ROUND_HALF_UP).toString();
+        return new BigDecimal(Long.toString(amount)).divide(new BigDecimal(1000), 2, RoundingMode.HALF_UP).toString();
     }
 
     public static String priceTransformFen2Yuan(String amount) {
-        return new BigDecimal(amount).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP).toString();
+        return new BigDecimal(amount).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP).toString();
     }
 
     public static String priceTransformFen2Yuan(Integer amount) {
-        return new BigDecimal(Integer.toString(amount)).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP).toString();
+        return new BigDecimal(Integer.toString(amount)).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP).toString();
     }
 
     public static String priceTransformHao2Yuan(Long amount) {
-        return new BigDecimal(Long.toString(amount)).divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP).toString();
+        return new BigDecimal(Long.toString(amount)).divide(new BigDecimal(10000), 2, RoundingMode.HALF_UP).toString();
     }
 
     public static String priceTransformHao2Yuan(String amount) {
-        return new BigDecimal(amount).divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP).toString();
+        return new BigDecimal(amount).divide(new BigDecimal(10000), 2, RoundingMode.HALF_UP).toString();
     }
 
     public static String priceTransformHao2Yuan(Integer amount) {
-        return new BigDecimal(Integer.toString(amount)).divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP).toString();
+        return new BigDecimal(Integer.toString(amount)).divide(new BigDecimal(10000), 2, RoundingMode.HALF_UP).toString();
     }
 
     public static String priceTransformHao2Fen(Long amount) {
-        return new BigDecimal(Long.toString(amount)).divide(new BigDecimal(100), 0, BigDecimal.ROUND_HALF_UP).toString();
+        return new BigDecimal(Long.toString(amount)).divide(new BigDecimal(100), 0, RoundingMode.HALF_UP).toString();
     }
 
     public static String priceTransformHao2Fen(String amount) {
-        return new BigDecimal(amount).divide(new BigDecimal(100), 0, BigDecimal.ROUND_HALF_UP).toString();
+        return new BigDecimal(amount).divide(new BigDecimal(100), 0, RoundingMode.HALF_UP).toString();
     }
 
     public static String priceTransformHao2Fen(Integer amount) {
-        return new BigDecimal(Integer.toString(amount)).divide(new BigDecimal(100), 0, BigDecimal.ROUND_HALF_UP).toString();
+        return new BigDecimal(Integer.toString(amount)).divide(new BigDecimal(100), 0, RoundingMode.HALF_UP).toString();
     }
 
     // 计算String类型平均值保留一位小数
@@ -366,7 +366,7 @@ public class NumberUtil {
         }
         BigDecimal sum = new BigDecimal(str1).add(new BigDecimal(str2));
         BigDecimal two = new BigDecimal("2");
-        return sum.divide(two, 1, BigDecimal.ROUND_HALF_UP).toString();
+        return sum.divide(two, 1, RoundingMode.HALF_UP).toString();
     }
 
     // 按照运费档次计算运费
@@ -408,14 +408,14 @@ public class NumberUtil {
     public static Long priceTransformY2H(String amount) {
         BigDecimal b = new BigDecimal(new BigDecimal(amount).multiply(new BigDecimal(10000)).toString());
         BigDecimal one = new BigDecimal("1");
-        return b.divide(one, 0, BigDecimal.ROUND_HALF_UP).longValue();
+        return b.divide(one, 0, RoundingMode.HALF_UP).longValue();
     }
 
     // 价格转换，元转毫，四舍五入取整，角，分，厘，毫
     public static Long priceTransformY2H(Double amount) {
         BigDecimal b = new BigDecimal(new BigDecimal(Double.toString(amount)).multiply(new BigDecimal(10000)).toString());
         BigDecimal one = new BigDecimal("1");
-        return b.divide(one, 0, BigDecimal.ROUND_HALF_UP).longValue();
+        return b.divide(one, 0, RoundingMode.HALF_UP).longValue();
     }
 
     public static void main(String[] args) {

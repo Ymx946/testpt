@@ -69,14 +69,14 @@ public class SignUtil {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             // 对拼接后的字符串进行sha1加密.
-            byte[] digest = md.digest(content.toString().getBytes());
+            byte[] digest = md.digest(content.getBytes());
             ciphertext = byteToStr(digest);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
 
         // 将sha1加密后的字符串与signature进行对比.
-        return ciphertext != null ? ciphertext.equals(signature.toUpperCase()) : false;
+        return ciphertext != null && ciphertext.equals(signature.toUpperCase());
     }
 
     /**

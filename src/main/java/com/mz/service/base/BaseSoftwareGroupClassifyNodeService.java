@@ -16,11 +16,11 @@ import java.util.List;
 public interface BaseSoftwareGroupClassifyNodeService extends IService<BaseSoftwareGroupClassifyNode> {
     /**
      * 配置节点
-     *
      */
-    void insertByNode(Long classifySysId,String nodeIdS,String loginID);
+    void insertByNode(Long classifySysId, String nodeIdS, String loginID);
+
     /**
-     *列表
+     * 列表
      */
     List<BaseSoftwareGroupClassifyNode> queryAll(BaseSoftwareGroupClassifyNodeVO vo);
 }

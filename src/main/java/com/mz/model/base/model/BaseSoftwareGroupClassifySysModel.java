@@ -16,8 +16,8 @@ import lombok.ToString;
 @ToString
 public class BaseSoftwareGroupClassifySysModel extends BaseSoftwareGroupClassifySys {
     /**
-    * 开通状态
-    */
+     * 开通状态
+     */
     private Integer openState;
 
 }

@@ -95,8 +95,8 @@ public class CertUtils {
         certGen.setSignatureAlgorithm("SM3withSM2");
 
         certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(false));
-        certGen.addExtension(X509Extensions.KeyUsage, true,new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyAgreement| KeyUsage.dataEncipherment | KeyUsage.keyEncipherment));
-        certGen.addExtension(X509Extensions.ExtendedKeyUsage, true,  new ExtendedKeyUsage(KeyPurposeId.id_kp_serverAuth));
+        certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyAgreement | KeyUsage.dataEncipherment | KeyUsage.keyEncipherment));
+        certGen.addExtension(X509Extensions.ExtendedKeyUsage, true, new ExtendedKeyUsage(KeyPurposeId.id_kp_serverAuth));
         certGen.addExtension(X509Extensions.SubjectAlternativeName, false, new GeneralNames(new GeneralName(GeneralName.rfc822Name, "test@test.test")));
 
         X500NameBuilder issuerBuilder = new X500NameBuilder(BCStyle.INSTANCE);

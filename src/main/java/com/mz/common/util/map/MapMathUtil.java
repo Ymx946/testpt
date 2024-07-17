@@ -3,6 +3,7 @@ package com.mz.common.util.map;
 import com.mz.common.util.map.utils.Point;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class MapMathUtil {
 
@@ -188,7 +189,7 @@ public class MapMathUtil {
         }
         BigDecimal b1 = BigDecimal.valueOf(v1);
         BigDecimal b2 = BigDecimal.valueOf(v2);
-        return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return b1.divide(b2, scale, RoundingMode.HALF_UP).doubleValue();
     }
 
 //	@SuppressWarnings("unused")

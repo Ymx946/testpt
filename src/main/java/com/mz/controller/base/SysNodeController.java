@@ -12,7 +12,10 @@ import com.mz.service.base.SysNodeService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +66,7 @@ public class SysNodeController {
     @SneakyThrows
     @PostMapping("insert")
     public Result insert(String id, String sysCode, String nodeName, String nodeShowName, String paraNodeCode, String nodeUrl, String namePath, String nodeIcon, Integer nodeType, Integer button,
-                         String remarks, Integer orderNo, Integer terminalType, Integer linkType,String operatingBooklet, String token, HttpServletRequest request) {
+                         String remarks, Integer orderNo, Integer terminalType, Integer linkType, String operatingBooklet, String token, HttpServletRequest request) {
         if (baseUserService.checkLogin(token, request)) {
             if (StringUtils.isEmpty(nodeName)) {
                 return Result.failed("节点名称必填");
@@ -242,11 +245,11 @@ public class SysNodeController {
      */
     @SneakyThrows
     @PostMapping("queryAllByLimit")
-    public Result queryAllByLimit(Integer pageNo, Integer pageSize, String sysCode, Integer applicationType, String nodeName, String nodeShowName,String paraNodeCode, Integer nodeType, Integer button, Integer useState, String token, HttpServletRequest request) {
+    public Result queryAllByLimit(Integer pageNo, Integer pageSize, String sysCode, Integer applicationType, String nodeName, String nodeShowName, String paraNodeCode, Integer nodeType, Integer button, Integer useState, String token, HttpServletRequest request) {
         if (baseUserService.checkLogin(token, request)) {
             pageNo = pageNo != null ? pageNo : StringFormatUtil.PAGE_NO_DEFAULT;
             pageSize = pageSize != null ? pageSize : StringFormatUtil.PAGE_SIZE_DEFAULT;
-            return Result.success(sysNodeService.queryAllByLimit(pageNo, pageSize, sysCode, applicationType, nodeName,  nodeShowName,paraNodeCode, nodeType, button, useState, request));
+            return Result.success(sysNodeService.queryAllByLimit(pageNo, pageSize, sysCode, applicationType, nodeName, nodeShowName, paraNodeCode, nodeType, button, useState, request));
         } else {
             return Result.failedLogin();
         }

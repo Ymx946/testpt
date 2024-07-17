@@ -43,7 +43,7 @@ public class TabBaseFunctionSetImpl extends ServiceImpl<TabBaseFunctionSetMapper
             TabBaseFunctionSetVO setVO = new TabBaseFunctionSetVO();
             setVO.setFunctionCode(pojo.getFunctionCode());
             List<TabBaseFunctionSet> setList = queryAll(setVO);
-            if(CollectionUtil.isNotEmpty(setList)){
+            if (CollectionUtil.isNotEmpty(setList)) {
                 return Result.failed("功能代码重复");
             }
             IdWorker idWorker = new IdWorker(0L, 0L);
@@ -60,7 +60,7 @@ public class TabBaseFunctionSetImpl extends ServiceImpl<TabBaseFunctionSetMapper
             setVO.setFunctionCode(pojo.getFunctionCode());
             setVO.setId(pojo.getId());
             List<TabBaseFunctionSet> setList = queryAll(setVO);
-            if(CollectionUtil.isNotEmpty(setList)){
+            if (CollectionUtil.isNotEmpty(setList)) {
                 return Result.failed("功能代码重复");
             }
             pojo.setModifyUser(baseUser.getRealName());
@@ -86,6 +86,7 @@ public class TabBaseFunctionSetImpl extends ServiceImpl<TabBaseFunctionSetMapper
         List<TabBaseFunctionSet> roomList = lambdaQuery.orderByDesc(TabBaseFunctionSet::getCreateTime).list();
         return roomList;
     }
+
     @Override
     public PageInfo<TabBaseFunctionSet> queryAllByLimit(TabBaseFunctionSetVO vo) {
         PageHelper.startPage(vo.getPageNo(), vo.getPageSize());

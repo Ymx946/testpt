@@ -71,17 +71,17 @@ public class ReadImgUtil {
                     .map(Picture.class::cast)
                     .collect(Collectors.toList());
             int i = 0;
-            Map<String,Integer> map =new HashMap<>();
+            Map<String, Integer> map = new HashMap<>();
             for (Picture picture : pictureList) {
                 ClientAnchor clientAnchor = picture.getClientAnchor();
                 PictureData pdata = picture.getPictureData();
                 Integer newI = map.get(clientAnchor.getRow1() + "-" + clientAnchor.getCol1());
-                if (newI!=null) {
-                    i = newI.intValue()+1;
+                if (newI != null) {
+                    i = newI.intValue() + 1;
                 } else {
                     i = 0;
                 }
-                map.put(clientAnchor.getRow1() + "-" + clientAnchor.getCol1(),i);
+                map.put(clientAnchor.getRow1() + "-" + clientAnchor.getCol1(), i);
                 // 行号-列号
                 String key = clientAnchor.getRow1() + "-" + clientAnchor.getCol1() + "-" + i;
                 log.info("key数据:{}", key);

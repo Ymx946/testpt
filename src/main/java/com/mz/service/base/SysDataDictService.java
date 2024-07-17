@@ -1,6 +1,7 @@
 package com.mz.service.base;
 
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.mz.common.context.PageInfo;
 import com.mz.common.util.Result;
 import com.mz.model.base.SysDataDict;
@@ -16,7 +17,7 @@ import java.util.Map;
  * @author makejava
  * @since 2021-03-17 10:58:51
  */
-public interface SysDataDictService {
+public interface SysDataDictService extends IService<SysDataDict> {
 
     /**
      * 通过ID查询单条数据
@@ -91,8 +92,9 @@ public interface SysDataDictService {
      * @param limit  查询条数
      * @return 对象列表
      */
-    PageInfo<SysDataDict> queryAllByLimit(int offset, int limit, String areaCode, String dictTypeCode, String dictTypeName, String dictName,Integer useState,String startTime,String endTime);
-    PageInfo<SysDataDict> queryAllByLimits(int offset, int limit, String areaCode, String dictTypeCode, String dictTypeName, String dictName,Integer useState,String startTime,String endTime);
+    PageInfo<SysDataDict> queryAllByLimit(int offset, int limit, String areaCode, String dictTypeCode, String dictTypeName, String dictName, Integer useState, String startTime, String endTime);
+
+    PageInfo<SysDataDict> queryAllByLimits(int offset, int limit, String areaCode, String dictTypeCode, String dictTypeName, String dictName, Integer useState, String startTime, String endTime);
 
     /**
      * 新增数据
@@ -127,6 +129,7 @@ public interface SysDataDictService {
      * 根据跳转方式查询不同的数据字典
      */
     List<SysDataDict> queryAllByJumpWay(SysDataDict pojo, Integer jumpWay);
+
     List<SysDataDict> queryAllByName(SysDataDict vo);
 
 }

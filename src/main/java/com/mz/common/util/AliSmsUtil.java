@@ -333,7 +333,7 @@ public class AliSmsUtil {
 //            }
 
 //            //延迟查询发送结果
-            QuerySendDetailsResponse querySendDetailsResponse = querySendDetails("159581602277", "", DateUtil.dateFormat(new Date(), "yyyyMMdd"), 1l, 1l);
+            QuerySendDetailsResponse querySendDetailsResponse = querySendDetails("159581602277", "", DateUtil.dateFormat(new Date(), "yyyyMMdd"), 1L, 1L);
             System.out.println("查询返回结果----------------");
             System.out.println("Code=" + querySendDetailsResponse.getCode());
             System.out.println("Message=" + querySendDetailsResponse.getMessage());

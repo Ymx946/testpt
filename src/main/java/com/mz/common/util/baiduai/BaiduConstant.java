@@ -17,7 +17,7 @@ public class BaiduConstant {
     /**
      * iocr识别apiUrl
      */
-    public static final String  RECOGNISE_URL = "https://aip.baidubce.com/rest/2.0/solution/v1/iocr/recognise";
+    public static final String RECOGNISE_URL = "https://aip.baidubce.com/rest/2.0/solution/v1/iocr/recognise";
 
     public static final String REVERSE_GEOCODING_URL = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=OYjhspV6PoRryvf7H0EEVMb2WMT0rO4V&output=json&coordtype=wgs84ll&location=LOCATION";
     public static final String SENTIMENT_CLASSIFY_URL = "https://aip.baidubce.com/rpc/2.0/nlp/v1/sentiment_classify";
@@ -27,7 +27,7 @@ public class BaiduConstant {
     public static final String SIMILAR_ADD_URL = "https://aip.baidubce.com/rest/2.0/image-classify/v1/realtime_search/similar/add";
     public static final String SAME_ADD_URL = "https://aip.baidubce.com/rest/2.0/realtime_search/same_hq/add";
     public static final String SIMILAR_DELETE_URL = "https://aip.baidubce.com/rest/2.0/image-classify/v1/realtime_search/similar/delete";
-    public static final String SAME_DELETE_URL = "https://aip.baidubce.com/rest/2.0/realtime_search/same_hq/delete";;
+    public static final String SAME_DELETE_URL = "https://aip.baidubce.com/rest/2.0/realtime_search/same_hq/delete";
 
 
 }

@@ -1,7 +1,7 @@
 package com.mz.mapper.system;
 
-import com.mz.model.system.SystemDataServiceNode;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mz.model.system.SystemDataServiceNode;
 
 /**
  * 服务节点(SystemDataServiceNode)表数据库访问层

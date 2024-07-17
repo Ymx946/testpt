@@ -4,7 +4,6 @@ import com.aliyuncs.utils.StringUtils;
 import com.mz.common.ConstantsUtil;
 import com.mz.common.util.ResponseCode;
 import com.mz.common.util.Result;
-import com.mz.common.util.wxaes.HttpKit;
 import com.mz.framework.annotation.NeedLogin;
 import com.mz.model.base.TabActivitiFlowInfo;
 import com.mz.model.base.vo.TabActivitiFlowInfoVO;
@@ -171,7 +170,7 @@ public class TabActivitiFlowInfoController {
             TabActivitiFlowInfo pojo = new TabActivitiFlowInfo();
             pojo.setId(id);
             pojo.setDelState(ConstantsUtil.IS_DEL);
-            return Result.success( this.tabActivitiFlowInfoService.updateById(pojo));
+            return Result.success(this.tabActivitiFlowInfoService.updateById(pojo));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());

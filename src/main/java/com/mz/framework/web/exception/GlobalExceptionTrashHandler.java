@@ -4,7 +4,6 @@ import com.mz.common.context.CommonContext;
 import com.mz.common.exception.ObjectEmptyException;
 import com.mz.common.exception.ServiceException;
 import com.mz.common.util.ResponseCodeTrash;
-import com.mz.common.util.Result;
 import com.mz.common.util.ResultTrash;
 import com.mz.framework.annotation.TrashRestController;
 import org.slf4j.Logger;
@@ -44,8 +43,8 @@ public class GlobalExceptionTrashHandler {
      */
     @ExceptionHandler({HttpMessageNotReadableException.class})
     public ResultTrash messageExceptionHandler(HttpMessageNotReadableException e) {
-        log.warn("http请求参数转换异常: "+ e.getMessage());
-        return ResultTrash.failed("http请求参数转换异常: "+ e.getMessage());
+        log.warn("http请求参数转换异常: " + e.getMessage());
+        return ResultTrash.failed("http请求参数转换异常: " + e.getMessage());
     }
 
     @ExceptionHandler(value = Exception.class)
