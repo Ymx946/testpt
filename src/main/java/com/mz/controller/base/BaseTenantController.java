@@ -5,6 +5,7 @@ import com.mz.common.ConstantsCacheUtil;
 import com.mz.framework.util.redis.RedisUtil;
 import com.mz.model.base.BaseTenant;
 import com.mz.model.base.vo.BaseTenantVO;
+import com.mz.model.system.SystemDataUpdateRecord;
 import com.mz.service.base.BaseTenantService;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,9 @@ public class BaseTenantController {
         if (StringUtils.isEmpty(loginID)) {
             return Result.failed("loginID不能为空");
         }
+        if (ObjectUtil.isEmpty(pojo.getServiceNodeId())) {
+            return Result.failed("服务节点ID不能为空");
+        }
         if (StringUtils.isEmpty(pojo.getAreaCode())) {
             return Result.failed("区域不能为空");
         }
@@ -70,7 +74,7 @@ public class BaseTenantController {
             return Result.failed("授权主体数不能为空");
         }
         try {
-            return Result.success(this.baseTenantService.insert(pojo, loginID));
+            return this.baseTenantService.insert(pojo, loginID);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
@@ -129,6 +133,58 @@ public class BaseTenantController {
             pojo.setId(id);
             pojo.setUseState(2);
             return Result.success(this.baseTenantService.updateById(pojo));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
+        }
+    }
+
+    /**
+     * 下发
+     *
+     * @return 对象列表
+     */
+    @NeedLogin
+    @PostMapping("issued")
+    public Result issued(Long id) {
+        if (id == null) {
+            return Result.failed("id不能为空");
+        }
+        BaseTenant tenant = baseTenantService.getById(id);
+        if (ObjectUtil.isNotEmpty(tenant)) {
+            if (ObjectUtil.isNotEmpty(tenant.getIssuedState()) && tenant.getIssuedState().intValue() == 1) {
+                return Result.failed("该租户已下发");
+            }
+        }
+        try {
+            return Result.success(this.baseTenantService.issued(id));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
+        }
+    }
+
+    /**
+     * 重新下发
+     *
+     * @return 对象列表
+     */
+    @NeedLogin
+    @PostMapping("reissued")
+    public Result reissued(Long id) {
+        if (id == null) {
+            return Result.failed("id不能为空");
+        }
+        BaseTenant baseTenant = baseTenantService.getById(id);
+        if (ObjectUtil.isNotEmpty(baseTenant)) {
+            if (ObjectUtil.isNotEmpty(baseTenant.getIssuedState())) {
+                if (baseTenant.getIssuedState().intValue() == 0 || baseTenant.getIssuedState().intValue() == -1) {
+                    return Result.failed("该租户当前状态不可重新下发");
+                }
+            }
+        }
+        try {
+            return Result.success(this.baseTenantService.reissued(id));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());

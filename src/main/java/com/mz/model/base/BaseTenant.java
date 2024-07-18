@@ -54,7 +54,7 @@ public class BaseTenant  {
     */
     private String areaName;
     /**
-    * 密码类型1-固定密码 2-随机密码
+    * 密码类型1-固定密码 2-随机密码 3-手机号后6位
     */
     private Integer passwordType;
     /**
@@ -77,6 +77,10 @@ public class BaseTenant  {
     * 授权主体数
     */
     private Integer accreditMainNum;
+    /**
+     * 下发状态 0-未下发 1已下发 -1下发失败
+     */
+    private Integer issuedState;
     /**
     * 创建时间
     */

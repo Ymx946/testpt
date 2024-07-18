@@ -14,22 +14,30 @@ import java.util.List;
  * @author makejava
  * @since 2024-07-18 13:47:24
  */
-public interface BaseTenantService  extends IService<BaseTenant>{
+public interface BaseTenantService extends IService<BaseTenant> {
     /**
      * 保存
-     *
      */
     Result insert(BaseTenant pojo, String loginID);
+
     /**
      * 分页列表
-     *
      */
-     PageInfo<BaseTenant> queryAllByLimit(BaseTenantVO vo);
-     /**
+    PageInfo<BaseTenant> queryAllByLimit(BaseTenantVO vo);
+
+    /**
      * 查询所有
-     *
      */
-     List<BaseTenant> queryAll(BaseTenantVO vo);
-    
+    List<BaseTenant> queryAll(BaseTenantVO vo);
+
+    /**
+     * 租户下发
+     */
+    Integer issued(Long id);
+
+    /**
+     * 租户重新下发
+     */
+    Integer reissued(Long id);
 
 }

@@ -12562,10 +12562,10 @@ Code
 <o:Column Id="o556">
 <a:ObjectID>8F3295E3-63CA-4765-80AB-CD5B04C6AC31</a:ObjectID>
 <a:Name>授权主体数</a:Name>
-<a:Code>impower_main_num</a:Code>
+<a:Code>accredit_main_num</a:Code>
 <a:CreationDate>1721273908</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1721274995</a:ModificationDate>
+<a:ModificationDate>1721281147</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>授权主体数</a:Comment>
 <a:DataType>int</a:DataType>
