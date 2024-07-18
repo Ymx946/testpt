@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.RecursiveTask;
@@ -62,8 +63,8 @@ public class CheckTxtTask extends RecursiveTask<WxTxtCheckResult> {
             HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<Map<String, Object>>(param, headers);
 
             RestTemplate rest = new RestTemplate();
-            ResponseEntity<byte[]> entity = rest.exchange(url, HttpMethod.POST, requestEntity, byte[].class, new Object[0]);
-            String json = new String(entity.getBody(), "utf-8");
+            ResponseEntity<byte[]> entity = rest.exchange(url, HttpMethod.POST, requestEntity, byte[].class);
+            String json = new String(entity.getBody(), StandardCharsets.UTF_8);
             result = JSON.parseObject(json, WxTxtCheckResult.class);
         } catch (Exception e) {
             result.setErrcode("500");

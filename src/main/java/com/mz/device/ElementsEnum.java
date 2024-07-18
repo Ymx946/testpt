@@ -131,6 +131,13 @@ public enum ElementsEnum {
     COLOR_TEMPERATURE(162, 257, "色温", "K", 0, 30000, 1D),
     RADIOACTIVITY(163, 258, "辐照度", "MW/M2", 0, 30000, 0.01D);
 
+    private Integer id;
+    private Integer index;
+    private String name;
+    private String unit;
+    private Integer min;
+    private Integer max;
+    private Double prec;
     ElementsEnum(Integer id, Integer index, String name, String unit, Integer min, Integer String, Double prec) {
         this.id = id;
         this.index = index;
@@ -145,14 +152,6 @@ public enum ElementsEnum {
     public String toString() {
         return "ElementsEnum {" + "id=" + id + ", index='" + index + ", name='" + name + '\'' + '}';
     }
-
-    private Integer id;
-    private Integer index;
-    private String name;
-    private String unit;
-    private Integer min;
-    private Integer max;
-    private Double prec;
 
     public Integer getId() {
         return id;

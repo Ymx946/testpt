@@ -22,8 +22,8 @@ public class SysAreaVO extends SysArea {
      */
     private Integer selectState;
     /**
-    * 下级列表
-    */
-    private List<SysAreaVO>  sonList;
+     * 下级列表
+     */
+    private List<SysAreaVO> sonList;
 
 }

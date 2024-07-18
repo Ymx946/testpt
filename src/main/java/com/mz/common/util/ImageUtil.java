@@ -98,7 +98,6 @@ public class ImageUtil {
 //    }
 
 
-
     /**
      * 网络图片转换Base64的方法
      *
@@ -139,8 +138,6 @@ public class ImageUtil {
     }
 
 
-
-
     /***
      * 将base64封装成ImageEntity对象
      * @param base64CodeStr
@@ -171,7 +168,7 @@ public class ImageUtil {
      * imageUrl 图片网址
      * @return
      */
-    public static ImageEntity getImageByURL(String imageUrl){
+    public static ImageEntity getImageByURL(String imageUrl) {
         String base64CodeStr = netImageToBase64(imageUrl);
         ImageEntity image = getImage(base64CodeStr);
         return image;
@@ -183,8 +180,6 @@ public class ImageUtil {
         byte[] b = getImageFromNetByUrl(url);
         System.out.println(b);
     }
-
-
 
 
 }

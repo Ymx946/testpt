@@ -22,7 +22,7 @@ public class BasePicVo {
     /**
      * 文件大小（KB）
      */
-    private  Float[] sizeArr;
+    private Float[] sizeArr;
     /**
      * 高
      */

@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mz.common.ConstantsCacheUtil;
 import com.mz.common.ConstantsUtil;
 import com.mz.common.util.*;
@@ -31,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Service("baseUserService")
-public class BaseUserServiceImpl implements BaseUserService {
+public class BaseUserServiceImpl extends ServiceImpl<BaseUserMapper, BaseUser> implements BaseUserService {
     @Resource
     private BaseUserMapper baseUserMapper;
     @Resource

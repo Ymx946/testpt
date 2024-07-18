@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 @Slf4j
 public class PushUtil {
     //    数字燕崖APP
@@ -152,10 +153,10 @@ public class PushUtil {
         RestTemplate template = new RestTemplate();
         String url = "https://fc-mp-0c650d26-7456-4691-9325-1619b1e17b13.next.bspapp.com/test";
         try {
-            String result = template.postForObject(url,tabUniAppPush,String.class);
+            String result = template.postForObject(url, tabUniAppPush, String.class);
             //System.out.println("result:" + result);
-        }catch (Exception e) {
-            log.error("推送失败"+e.getMessage());
+        } catch (Exception e) {
+            log.error("推送失败" + e.getMessage());
         }
     }
 

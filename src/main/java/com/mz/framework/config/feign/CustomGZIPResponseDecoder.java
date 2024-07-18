@@ -20,24 +20,13 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
-
-import static java.util.zip.GZIPInputStream.GZIP_MAGIC;
 
 public class CustomGZIPResponseDecoder implements Decoder {
 

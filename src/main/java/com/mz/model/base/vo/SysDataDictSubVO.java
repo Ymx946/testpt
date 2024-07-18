@@ -19,8 +19,8 @@ import java.util.List;
 public class SysDataDictSubVO extends SysDataDict {
 
     /**
-    * 小类列表
-    */
-    private List<SysDataDict>  subList;
+     * 小类列表
+     */
+    private List<SysDataDict> subList;
 
 }

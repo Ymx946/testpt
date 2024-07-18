@@ -61,7 +61,7 @@ public class TabMobileBaseModuleImpl extends ServiceImpl<TabMobileBaseModuleMapp
             pojo.setModifyTime(DateUtil.now());
             updateById(pojo);
         }
-        if(ObjectUtil.isNotEmpty(styleJson)) {
+        if (ObjectUtil.isNotEmpty(styleJson)) {
             tabMobileBaseModuleStyleService.insert(pojo.getId(), styleJson);
         }
         return pojo;
@@ -84,7 +84,7 @@ public class TabMobileBaseModuleImpl extends ServiceImpl<TabMobileBaseModuleMapp
         }
         if (ObjectUtil.isNotEmpty(vo.getEndTime())) {
             String end = vo.getEndTime().substring(0, 10);
-            lambdaQuery.le(TabMobileBaseModule::getModifyTime,  end+ " 23:59:59");
+            lambdaQuery.le(TabMobileBaseModule::getModifyTime, end + " 23:59:59");
         }
         if (ObjectUtil.isNotEmpty(vo.getModuleName())) {
             lambdaQuery.like(TabMobileBaseModule::getModuleName, vo.getModuleName());

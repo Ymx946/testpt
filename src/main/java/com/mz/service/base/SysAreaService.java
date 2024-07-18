@@ -42,14 +42,15 @@ public interface SysAreaService extends IService<SysArea> {
      *
      * @return 实例对象
      */
-    Map<String ,SysArea> queryNameMap(String areaCode, Integer len);
+    Map<String, SysArea> queryNameMap(String areaCode, Integer len);
 
     /**
      * 获取code map
-     *直接数据库获取
+     * 直接数据库获取
+     *
      * @return 实例对象
      */
-    Map<String ,SysArea> queryCodeMap(String areaCode, Integer len);
+    Map<String, SysArea> queryCodeMap(String areaCode, Integer len);
 
     /**
      * 查缓存列表
@@ -173,13 +174,16 @@ public interface SysAreaService extends IService<SysArea> {
 
     /**
      * 新增
+     *
      * @param pojo
      * @param loginID
      * @return
      */
     Result insert(SysArea pojo, String loginID);
+
     /**
      * 查询所有
+     *
      * @param vo
      * @return
      */
@@ -187,6 +191,7 @@ public interface SysAreaService extends IService<SysArea> {
 
     /**
      * 分页列表
+     *
      * @param vo
      * @return
      */

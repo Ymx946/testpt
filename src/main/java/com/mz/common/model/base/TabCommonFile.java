@@ -200,7 +200,6 @@ public class TabCommonFile implements Serializable {
     public static int TYPE_BRAND_PUBLIC_PACKAGING = 1114;
 
 
-
     //          1201企业自主品牌-技术证明材料
     public static int TYPE_BRAND_AUTONOMOUSLY_TECHNICAL = 1201;
     //          1202企业自主品牌-商标注册证

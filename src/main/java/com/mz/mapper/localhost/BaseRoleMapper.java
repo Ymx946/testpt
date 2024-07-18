@@ -1,5 +1,6 @@
 package com.mz.mapper.localhost;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mz.model.base.BaseRole;
 import com.mz.model.base.vo.BaseRoleVO;
 import org.apache.ibatis.annotations.Param;
@@ -12,7 +13,7 @@ import java.util.List;
  * @author makejava
  * @since 2021-03-17 09:08:17
  */
-public interface BaseRoleMapper {
+public interface BaseRoleMapper extends BaseMapper<BaseRole> {
 
     /**
      * 通过ID查询单条数据

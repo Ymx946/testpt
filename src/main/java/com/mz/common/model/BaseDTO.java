@@ -16,12 +16,10 @@ import java.util.Objects;
 @Data
 @JsonIgnoreProperties(value = {"pageNo", "pageSize", "qkeyword", "orderBy"})
 public class BaseDTO implements Serializable {
-    private static Logger logger = LoggerFactory.getLogger(BaseDTO.class);
-
     public final static String[] INJECTION_KEY = new String[]{"--", "drop", "and", "where", "not", "use", "insert", "delete",
             "select", "count", "group", "union", "set", "truncate", "alter", "grant", "execute", "table", "database",
             "case", "when", "call", "declare", "source", "sql", "sleep", "substring", "version", "else", "from", "like"};
-
+    private static Logger logger = LoggerFactory.getLogger(BaseDTO.class);
     private Integer pageNo = 1;//默认页码
     private Integer pageSize = 10;//默认每页条数
 

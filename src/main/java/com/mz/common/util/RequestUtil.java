@@ -108,11 +108,11 @@ public class RequestUtil {
     /**
      * 向指定 URL 发送POST方法的请求
      *
-     * @param url 发送请求的 URL
+     * @param url      发送请求的 URL
      * @param paramMap 请求参数
      * @return 所代表远程资源的响应结果
      */
-    public static String sendGet(String url, Map<String, ?> paramMap,String userId) {
+    public static String sendGet(String url, Map<String, ?> paramMap, String userId) {
         PrintWriter out = null;
         BufferedReader in = null;
         String result = "";
@@ -120,14 +120,14 @@ public class RequestUtil {
         String param = "";
         Iterator<String> it = paramMap.keySet().iterator();
 
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             String key = it.next();
             param += key + "=" + paramMap.get(key) + "&";
         }
         try {
             String urlNameString = url + "?" + param;
-            if(StringUtils.isEmpty(param)){
-                urlNameString=url;
+            if (StringUtils.isEmpty(param)) {
+                urlNameString = url;
             }
             URL realUrl = new URL(urlNameString);
             // 打开和URL之间的连接
@@ -137,7 +137,7 @@ public class RequestUtil {
             connection.setRequestProperty("connection", "Keep-Alive");
             connection.setRequestProperty("user-agent",
                     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-            connection.setRequestProperty("userId",userId);
+            connection.setRequestProperty("userId", userId);
             // 建立实际的连接
             connection.connect();
             // 获取所有响应头字段
@@ -168,6 +168,7 @@ public class RequestUtil {
         }
         return result;
     }
+
     /**
      * 向指定 URL 发送POST方法的请求
      *
@@ -228,7 +229,7 @@ public class RequestUtil {
             connection.setRequestMethod("POST");
             connection.setUseCaches(false);
             connection.setInstanceFollowRedirects(true);
-            connection.setRequestProperty("Content-Type","application/json");
+            connection.setRequestProperty("Content-Type", "application/json");
             connection.connect();
             DataOutputStream out = new DataOutputStream(connection.getOutputStream());
             out.writeBytes(jsonString);
@@ -238,9 +239,9 @@ public class RequestUtil {
             //读取响应
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String lines;
-            StringBuffer sb = new StringBuffer("");
+            StringBuffer sb = new StringBuffer();
             while ((lines = reader.readLine()) != null) {
-                lines = new String(lines.getBytes(), "utf-8");
+                lines = new String(lines.getBytes(), StandardCharsets.UTF_8);
                 sb.append(lines);
             }
             reader.close();

@@ -1,27 +1,26 @@
 package com.mz.framework.config.hierarchical;
 
-import static feign.Util.checkState;
-import static feign.Util.emptyToNull;
-import static org.springframework.core.annotation.AnnotationUtils.synthesizeAnnotation;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.*;
-
+import feign.MethodMetadata;
+import feign.Util;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import feign.MethodMetadata;
-import feign.Util;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
+
+import static feign.Util.checkState;
+import static feign.Util.emptyToNull;
+import static org.springframework.core.annotation.AnnotationUtils.synthesizeAnnotation;
 
 /**
  * @description: 解决openFeign接口不能多层继承
  * @see # https://blog.csdn.net/Anbang713/article/details/105740207
  */
- public class HierarchicalContract extends SpringMvcContract {
+public class HierarchicalContract extends SpringMvcContract {
 
     private ResourceLoader resourceLoader;
 

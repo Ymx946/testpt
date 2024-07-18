@@ -1,23 +1,21 @@
 package com.mz.service.system.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.mz.common.util.StringUtils;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mz.common.ConstantsCacheUtil;
+import com.mz.common.ConstantsUtil;
+import com.mz.common.util.IdWorker;
 import com.mz.framework.util.redis.RedisUtil;
 import com.mz.mapper.system.SystemDataUpdateSendDataMapper;
 import com.mz.model.base.*;
 import com.mz.model.mobile.TabMobileBaseModule;
 import com.mz.model.system.SystemDataUpdateRecord;
 import com.mz.model.system.SystemDataUpdateSendData;
-import cn.hutool.core.date.DateUtil;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.mz.common.ConstantsCacheUtil;
-import com.mz.common.ConstantsUtil;
-import com.mz.common.util.IdWorker;
-import com.mz.model.system.vo.SystemDataUpdateRecordVO;
 import com.mz.model.system.vo.SystemDataUpdateSendDataVO;
 import com.mz.service.base.SysDataDictService;
 import com.mz.service.base.SysDeftService;
@@ -52,11 +50,11 @@ public class SystemDataUpdateSendDataImpl extends ServiceImpl<SystemDataUpdateSe
     private TabMobileBaseModuleService tabMobileBaseModuleService;
 
     @Override
-    public SystemDataUpdateSendData insert(SystemDataUpdateSendData pojo, String loginID){
+    public SystemDataUpdateSendData insert(SystemDataUpdateSendData pojo, String loginID) {
         String baseUserStr = myRedisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
         JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
         BaseUser baseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
-        if(pojo.getId()==null){
+        if (pojo.getId() == null) {
             IdWorker idWorker = new IdWorker(0L, 0L);
             pojo.setId(idWorker.nextId());
             pojo.setCreateUser(baseUser.getRealName());
@@ -66,7 +64,7 @@ public class SystemDataUpdateSendDataImpl extends ServiceImpl<SystemDataUpdateSe
             pojo.setDelState(ConstantsUtil.IS_DONT_DEL);
             pojo.setState(ConstantsUtil.STATE_NORMAL);
             save(pojo);
-        }else{
+        } else {
             pojo.setModifyUser(baseUser.getRealName());
             pojo.setModifyTime(DateUtil.now());
             updateById(pojo);
@@ -78,8 +76,8 @@ public class SystemDataUpdateSendDataImpl extends ServiceImpl<SystemDataUpdateSe
     public List<SystemDataUpdateSendData> queryAll(SystemDataUpdateSendDataVO vo) {
         LambdaQueryChainWrapper<SystemDataUpdateSendData> lambdaQuery = lambdaQuery();
         lambdaQuery.eq(SystemDataUpdateSendData::getDelState, ConstantsUtil.IS_DONT_DEL);
-        if(ObjectUtil.isNotEmpty(vo.getRecordId())){
-            lambdaQuery.eq(SystemDataUpdateSendData::getRecordId,vo.getRecordId());
+        if (ObjectUtil.isNotEmpty(vo.getRecordId())) {
+            lambdaQuery.eq(SystemDataUpdateSendData::getRecordId, vo.getRecordId());
         }
         List<SystemDataUpdateSendData> list = lambdaQuery.orderByDesc(SystemDataUpdateSendData::getCreateTime).list();
         return list;

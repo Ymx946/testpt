@@ -21,12 +21,11 @@ import java.util.*;
  */
 public class WxUtils {
 
-    private static Logger logger = LoggerFactory.getLogger(WxUtils.class);
-
     private static final String SYMBOLS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
     private static final Random RANDOM = new SecureRandom();
-
+    private static final String[] hexDigits = {"0", "1", "2", "3", "4", "5",
+            "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
+    private static final Logger logger = LoggerFactory.getLogger(WxUtils.class);
 
     /**
      * 数据转换为xml格式
@@ -88,7 +87,7 @@ public class WxUtils {
      *
      * @return
      */
-    public static String makeSign(BeanMap beanMap, String mchKey, String signType)throws Exception {
+    public static String makeSign(BeanMap beanMap, String mchKey, String signType) throws Exception {
         SortedMap<String, String> signMaps = Maps.newTreeMap();
 
         for (Object key : beanMap.keySet()) {
@@ -100,16 +99,15 @@ public class WxUtils {
             }
             signMaps.put(key + "", String.valueOf(value));
         }
-        if(signType.equals("MD5")) {
+        if (signType.equals("MD5")) {
             // 生成签名
             return generateSign(signMaps, mchKey);
-        }else if(signType.equals("SHA256")){
+        } else if (signType.equals("SHA256")) {
             return generateSignSHA256(signMaps, mchKey);
-        }else{
+        } else {
             return null;
         }
     }
-
 
     /**
      * 生成签名
@@ -118,7 +116,7 @@ public class WxUtils {
      * @return
      * @throws Exception
      */
-    public static String generateSign(SortedMap<String, String> signMaps,String mchKey) {
+    public static String generateSign(SortedMap<String, String> signMaps, String mchKey) {
         StringBuffer sb = new StringBuffer();
 
         // 字典序
@@ -139,7 +137,7 @@ public class WxUtils {
         return sign;
     }
 
-    public static String generateSignSHA256(SortedMap<String, String> signMaps,String mchKey)throws Exception{
+    public static String generateSignSHA256(SortedMap<String, String> signMaps, String mchKey) throws Exception {
         StringBuffer sb = new StringBuffer();
 
         // 字典序
@@ -160,7 +158,7 @@ public class WxUtils {
         return sign;
     }
 
-    private static String byteArrayToHexString(byte b[]) {
+    private static String byteArrayToHexString(byte[] b) {
         StringBuffer resultSb = new StringBuffer();
         for (int i = 0; i < b.length; i++)
             resultSb.append(byteToHexString(b[i]));
@@ -180,7 +178,7 @@ public class WxUtils {
     public static String MD5Encode(String origin, String charsetname) {
         String resultString = null;
         try {
-            resultString = new String(origin);
+            resultString = origin;
             MessageDigest md = MessageDigest.getInstance("MD5");
             if (charsetname == null || "".equals(charsetname))
                 resultString = byteArrayToHexString(md.digest(resultString
@@ -192,11 +190,6 @@ public class WxUtils {
         }
         return resultString;
     }
-
-    private static final String hexDigits[] = { "0", "1", "2", "3", "4", "5",
-            "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
-
-
 
     private static HashMap<String, String> sortAsc(Map<String, String> map) {
         HashMap<String, String> tempMap = new LinkedHashMap<String, String>();
@@ -220,7 +213,7 @@ public class WxUtils {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-1"); //如果是SHA加密只需要将"SHA-1"改成"SHA"即可
             digest.update(str.getBytes());
-            byte messageDigest[] = digest.digest();
+            byte[] messageDigest = digest.digest();
             // Create Hex String
             StringBuffer hexStr = new StringBuffer();
             // 字节数组转换为 十六进制 数
@@ -241,8 +234,9 @@ public class WxUtils {
 
     /**
      * 生成 HMACSHA256
+     *
      * @param data 待处理数据
-     * @param key 密钥
+     * @param key  密钥
      * @return 加密结果
      * @throws Exception
      */

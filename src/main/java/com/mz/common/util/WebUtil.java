@@ -268,7 +268,8 @@ public class WebUtil {
     }
 
     /**
-     *  获取不需要工程名的路径
+     * 获取不需要工程名的路径
+     *
      * @param request
      * @return
      */

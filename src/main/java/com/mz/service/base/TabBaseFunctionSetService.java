@@ -14,14 +14,14 @@ import java.util.List;
  * @author makejava
  * @since 2022-12-12 11:32:34
  */
-public interface TabBaseFunctionSetService extends IService<TabBaseFunctionSet>{
+public interface TabBaseFunctionSetService extends IService<TabBaseFunctionSet> {
     /**
      * 保存
      */
     Result insert(TabBaseFunctionSet pojo, String loginID);
 
     /**
-     *查询所有
+     * 查询所有
      */
     List<TabBaseFunctionSet> queryAll(TabBaseFunctionSetVO vo);
 

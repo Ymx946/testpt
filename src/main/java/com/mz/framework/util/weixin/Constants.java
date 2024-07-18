@@ -250,8 +250,8 @@ public class Constants {
      * 枚举值1，使用下单商户号和商户侧单号；
      * 枚举值2，使用微信支付单号。
      */
-    public static final  Integer ORDER_NUMBER_TYPE_MCHID = 1;
-    public static final  Integer ORDER_NUMBER_TYPE_TRANSACTIONID = 2;
+    public static final Integer ORDER_NUMBER_TYPE_MCHID = 1;
+    public static final Integer ORDER_NUMBER_TYPE_TRANSACTIONID = 2;
 
     /**
      * 发货模式，发货模式
@@ -259,8 +259,8 @@ public class Constants {
      * 1、UNIFIED_DELIVERY（统一发货）
      * 2、SPLIT_DELIVERY（分拆发货） 示例值: UNIFIED_DELIVERY
      */
-    public static final  Integer DELIVERY_MODE_UNIFIED_DELIVERY = 1;
-    public static final  Integer DELIVERY_MODE_SPLIT_DELIVERY = 2;
+    public static final Integer DELIVERY_MODE_UNIFIED_DELIVERY = 1;
+    public static final Integer DELIVERY_MODE_SPLIT_DELIVERY = 2;
 
     /**
      * 物流模式，发货方式
@@ -270,18 +270,18 @@ public class Constants {
      * 3、虚拟商品，虚拟商品，例如话费充值，点卡等，无实体配送形式
      * 4、用户自提
      */
-    public static final  Integer LOGISTICS_TYPE_COMPANY = 1;
-    public static final  Integer LOGISTICS_TYPE_CITY = 2;
-    public static final  Integer LOGISTICS_TYPE_VIRTUAL = 3;
-    public static final  Integer LOGISTICS_TYPE_USER = 4;
+    public static final Integer LOGISTICS_TYPE_COMPANY = 1;
+    public static final Integer LOGISTICS_TYPE_CITY = 2;
+    public static final Integer LOGISTICS_TYPE_VIRTUAL = 3;
+    public static final Integer LOGISTICS_TYPE_USER = 4;
 
     /**
      * 订单状态枚举：(1) 待发货；(2) 已发货；(3) 确认收货；(4) 交易完成；(5) 已退款。
      */
-    public static final  Integer ORDER_STATE_DELIVER_WAITING = 1;
-    public static final  Integer ORDER_STATE_DELIVER_ALREADY = 2;
-    public static final  Integer ORDER_STATE_WAITING_RECEIVE = 3;
-    public static final  Integer ORDER_STATE_FINISH = 4;
-    public static final  Integer ORDER_STATE_REFUND_REFUNDED = 5;
+    public static final Integer ORDER_STATE_DELIVER_WAITING = 1;
+    public static final Integer ORDER_STATE_DELIVER_ALREADY = 2;
+    public static final Integer ORDER_STATE_WAITING_RECEIVE = 3;
+    public static final Integer ORDER_STATE_FINISH = 4;
+    public static final Integer ORDER_STATE_REFUND_REFUNDED = 5;
 
 }

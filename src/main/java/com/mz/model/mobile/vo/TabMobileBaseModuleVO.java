@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- *移动组件表(TabMobileBaseModule)实体类
+ * 移动组件表(TabMobileBaseModule)实体类
  */
 @SuppressWarnings("serial")
 @Setter
@@ -27,32 +27,32 @@ public class TabMobileBaseModuleVO extends BaseDTO {
      */
     private String loginID;
     /**
-    * 主键
-    */
+     * 主键
+     */
     private Long id;
     /**
-    * 组件模块名称
-    */
+     * 组件模块名称
+     */
     private String moduleName;
     /**
-    * 分类1-基础组件2-业务组件
-    */
+     * 分类1-基础组件2-业务组件
+     */
     private Integer moduleType;
     /**
-    * 是否横向滑动1是2否
-    */
+     * 是否横向滑动1是2否
+     */
     private Integer transverseState;
     /**
      * 数据1-指定数量(列表)2-无限数据(分页)3-自定义
      */
     private Integer moduleData;
     /**
-    * 图标
-    */
+     * 图标
+     */
     private String moduleIcon;
     /**
-    * 缩略图
-    */
+     * 缩略图
+     */
     private String modulePic;
     /**
      * 标题控制(1-是 2-否)
@@ -75,32 +75,32 @@ public class TabMobileBaseModuleVO extends BaseDTO {
      */
     private String backColor;
     /**
-    * 逻辑删除
-    */
+     * 逻辑删除
+     */
     private Integer delState;
     /**
-    * 状态 1已启用 -1禁用
-    */
+     * 状态 1已启用 -1禁用
+     */
     private Integer state;
     /**
-    * 创建时间
-    */
+     * 创建时间
+     */
     private String createTime;
     /**
-    * 创建人
-    */
+     * 创建人
+     */
     private String createUser;
     /**
-    * 修改时间
-    */
+     * 修改时间
+     */
     private String modifyTime;
     /**
-    * 修改人
-    */
+     * 修改人
+     */
     private String modifyUser;
     /**
-    * 备注
-    */
+     * 备注
+     */
     private String remarks;
 
 }

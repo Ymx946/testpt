@@ -28,16 +28,16 @@ public class UUIDGenerator {
      */
 
     public static String generate() {
-        return new StringBuilder(32).append(format(getIP())).append(format(getJVM())).append(format(getHiTime())).append(format(getLoTime())).append(format(getCount())).toString();
+        return format(getIP()) + format(getJVM()) + format(getHiTime()) + format(getLoTime()) + format(getCount());
 
     }
 
     public static String generate20() {
-        return new StringBuilder(20).append(format(getJVM())).append(format(getHiTime())).append(format(getLoTime())).toString();
+        return format(getJVM()) + format(getHiTime()) + format(getLoTime());
     }
 
     public static String generate16() {
-        return new StringBuilder(16).append(format(getJVM())).append(format(getLoTime())).toString();
+        return format(getJVM()) + format(getLoTime());
     }
 
     private final static String format(int intval) {

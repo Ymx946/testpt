@@ -9,7 +9,7 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- *区域组件表(TabMobileManageModule)实体类
+ * 区域组件表(TabMobileManageModule)实体类
  */
 @Setter
 @Getter

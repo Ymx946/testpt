@@ -1,5 +1,6 @@
 package com.mz.service.base.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.mz.common.context.PageInfo;
 import com.mz.common.util.IdWorker;
@@ -25,7 +26,7 @@ import java.util.List;
  * @since 2021-03-17 09:08:17
  */
 @Service("baseRoleService")
-public class BaseRoleServiceImpl implements BaseRoleService {
+public class BaseRoleServiceImpl extends ServiceImpl<BaseRoleMapper, BaseRole> implements BaseRoleService {
     @Resource
     private BaseRoleMapper baseRoleMapper;
     @Resource

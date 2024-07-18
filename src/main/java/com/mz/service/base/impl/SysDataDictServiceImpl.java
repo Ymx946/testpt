@@ -33,7 +33,7 @@ import java.util.Map;
  * @since 2021-03-17 10:58:51
  */
 @Service("sysDataDictService")
-public class SysDataDictServiceImpl extends ServiceImpl<SysDataDictMapper,SysDataDict> implements SysDataDictService {
+public class SysDataDictServiceImpl extends ServiceImpl<SysDataDictMapper, SysDataDict> implements SysDataDictService {
     @Resource
     private SysDataDictMapper sysDataDictMapper;
     @Resource
@@ -168,16 +168,16 @@ public class SysDataDictServiceImpl extends ServiceImpl<SysDataDictMapper,SysDat
      * @return 对象列表
      */
     @Override
-    public PageInfo<SysDataDict> queryAllByLimit(int offset, int limit, String areaCode, String dictTypeCode, String dictTypeName, String dictName,Integer useState,String startTime,String endTime) {
+    public PageInfo<SysDataDict> queryAllByLimit(int offset, int limit, String areaCode, String dictTypeCode, String dictTypeName, String dictName, Integer useState, String startTime, String endTime) {
         PageHelper.startPage(offset, limit);
-        List<SysDataDict> list = sysDataDictMapper.queryAllByLimits(offset, limit, areaCode, dictTypeCode, dictTypeName, dictName,useState,startTime,endTime);
+        List<SysDataDict> list = sysDataDictMapper.queryAllByLimits(offset, limit, areaCode, dictTypeCode, dictTypeName, dictName, useState, startTime, endTime);
         return new PageInfo<SysDataDict>(list);
     }
 
     @Override
-    public PageInfo<SysDataDict> queryAllByLimits(int offset, int limit, String areaCode, String dictTypeCode, String dictTypeName, String dictName,Integer useState,String startTime,String endTime) {
+    public PageInfo<SysDataDict> queryAllByLimits(int offset, int limit, String areaCode, String dictTypeCode, String dictTypeName, String dictName, Integer useState, String startTime, String endTime) {
         PageHelper.startPage(offset, limit);
-        List<SysDataDict> list = sysDataDictMapper.queryAllByLimit(offset, limit, areaCode, dictTypeCode, dictTypeName, dictName,useState,startTime,endTime);
+        List<SysDataDict> list = sysDataDictMapper.queryAllByLimit(offset, limit, areaCode, dictTypeCode, dictTypeName, dictName, useState, startTime, endTime);
         return new PageInfo<SysDataDict>(list);
     }
 
@@ -237,6 +237,7 @@ public class SysDataDictServiceImpl extends ServiceImpl<SysDataDictMapper,SysDat
             return Result.success(sysDataDict);
         }
     }
+
     @Override
     public List<SysDataDict> queryAllByName(SysDataDict vo) {
         LambdaQueryChainWrapper<SysDataDict> lambdaQuery = lambdaQuery();
@@ -253,6 +254,7 @@ public class SysDataDictServiceImpl extends ServiceImpl<SysDataDictMapper,SysDat
         List<SysDataDict> roomList = lambdaQuery.orderByDesc(SysDataDict::getDictCode).list();
         return roomList;
     }
+
     /**
      * 修改数据
      *

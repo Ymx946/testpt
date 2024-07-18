@@ -17,16 +17,17 @@ import java.util.List;
 public interface BaseSoftwareGroupClassifySysService extends IService<BaseSoftwareGroupClassifySys> {
     /**
      * 保存
-     *
      */
-    BaseSoftwareGroupClassifySys insert(BaseSoftwareGroupClassifySys pojo,String loginID);
+    BaseSoftwareGroupClassifySys insert(BaseSoftwareGroupClassifySys pojo, String loginID);
+
     /**
      * 列表
      */
     PageInfo<BaseSoftwareGroupClassifySys> queryAllByLimit(BaseSoftwareGroupClassifySysVO vo);
+
     /**
      * 列表
      */
-    List<BaseSoftwareGroupClassifySys> queryAll(BaseSoftwareGroupClassifySysVO vo) ;
+    List<BaseSoftwareGroupClassifySys> queryAll(BaseSoftwareGroupClassifySysVO vo);
 
 }

@@ -4,12 +4,12 @@ import java.security.MessageDigest;
 
 public class MD5Util {
 
+    private static final String[] hexDigits = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
+
     public static void main(String[] args) {
         String pwd = "f48e10f01dc437e4e00092024f8e0bd1";
         System.out.println(convertMD5(pwd));
     }
-
-    private static final String[] hexDigits = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
 
     private static String byteArrayToHexString(byte[] b) {
         StringBuffer resultSb = new StringBuffer();
@@ -43,14 +43,15 @@ public class MD5Util {
     }
 
     /**
-     * 	可逆的加密解密算法,执行一次加密,两次解密
+     * 可逆的加密解密算法,执行一次加密,两次解密
+     *
      * @param str
      * @return
      */
-    public static String convertMD5(String str){
+    public static String convertMD5(String str) {
 
         char[] a = str.toCharArray();
-        for (int i = 0; i < a.length; i++){
+        for (int i = 0; i < a.length; i++) {
             a[i] = (char) (a[i] ^ 't');
         }
         String s = new String(a);

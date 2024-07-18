@@ -132,6 +132,6 @@ public class KeyUtils {
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
         Map map = genKey();
-        System.out.printf("-----");
+        System.out.print("-----");
     }
 }

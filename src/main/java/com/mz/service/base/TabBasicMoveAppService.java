@@ -14,9 +14,9 @@ import com.mz.model.base.vo.TabBasicMoveAppVO;
 public interface TabBasicMoveAppService extends IService<TabBasicMoveApp> {
     /**
      * 保存
-     *
      */
-    TabBasicMoveApp insert(TabBasicMoveApp pojo,String loginID);
+    TabBasicMoveApp insert(TabBasicMoveApp pojo, String loginID);
+
     /**
      * 列表
      */

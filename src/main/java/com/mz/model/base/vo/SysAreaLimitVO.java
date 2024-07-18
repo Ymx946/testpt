@@ -20,16 +20,16 @@ public class SysAreaLimitVO extends BaseDTO {
      */
     private String findStr;
     /**
-    * 主键
-    */
+     * 主键
+     */
     private String id;
     /**
-    * 区域代码
-    */
+     * 区域代码
+     */
     private String areaCode;
     /**
-    * 区域名称
-    */
+     * 区域名称
+     */
     private String areaName;
     /**
      * 城市分类代码

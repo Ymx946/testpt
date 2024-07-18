@@ -39,7 +39,7 @@ public class CommonServiceImpl implements CommonService {
             refreshToken = PasswordUtil.md5(Constants.SERVER_ID_TEST + "refreshToken" + curDate);
         }
 
-        Long  refreshTokenExpiresIn = 2 * tokenExpiresIn;
+        Long refreshTokenExpiresIn = 2 * tokenExpiresIn;
         redisUtil.setEx(ConstantsCacheUtil.OPENUSER_REFRESH_TOKEN, refreshToken, refreshTokenExpiresIn, TimeUnit.SECONDS);
 
         Map<String, Object> retMap = new HashMap<>();

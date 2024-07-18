@@ -26,20 +26,20 @@ public class SystemDataUpdateRecordVO extends BaseDTO {
      */
     private String createTimeE;
     /**
-    * 主键
-    */
+     * 主键
+     */
     private Long id;
     /**
-    * 节点id
-    */
+     * 节点id
+     */
     private Long nodeId;
     /**
-    * 节点名称
-    */
+     * 节点名称
+     */
     private String nodeName;
     /**
-    * 版本号
-    */
+     * 版本号
+     */
     private String versionNo;
     /**
      * 系统代码
@@ -50,12 +50,12 @@ public class SystemDataUpdateRecordVO extends BaseDTO {
      */
     private String systemName;
     /**
-    * 更新时间
-    */
+     * 更新时间
+     */
     private String updateTime;
     /**
-    * 更新内容
-    */
+     * 更新内容
+     */
     private String updateContent;
     /**
      * 迭代起始日期
@@ -66,32 +66,32 @@ public class SystemDataUpdateRecordVO extends BaseDTO {
      */
     private String iterateEndTime;
     /**
-    * 逻辑删除
-    */
+     * 逻辑删除
+     */
     private Integer delState;
     /**
-    * 状态 0-未下发 1已下发 -1下发失败
-    */
+     * 状态 0-未下发 1已下发 -1下发失败
+     */
     private Integer state;
     /**
-    * 创建时间
-    */
+     * 创建时间
+     */
     private String createTime;
     /**
-    * 创建人
-    */
+     * 创建人
+     */
     private String createUser;
     /**
-    * 修改时间
-    */
+     * 修改时间
+     */
     private String modifyTime;
     /**
-    * 修改人
-    */
+     * 修改人
+     */
     private String modifyUser;
     /**
-    * 备注
-    */
+     * 备注
+     */
     private String remarks;
 
 }

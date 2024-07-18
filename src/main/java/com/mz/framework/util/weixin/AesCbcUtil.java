@@ -11,6 +11,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.InvalidParameterSpecException;
 import java.util.Arrays;
@@ -103,7 +104,7 @@ public class AesCbcUtil {
             cipher.init(Cipher.DECRYPT_MODE, spec, parameters);// 初始化
             byte[] resultByte = cipher.doFinal(dataByte);
             if (null != resultByte && resultByte.length > 0) {
-                String result = new String(resultByte, "UTF-8");
+                String result = new String(resultByte, StandardCharsets.UTF_8);
                 return JSONObject.parseObject(result);
             }
         } catch (Exception e) {

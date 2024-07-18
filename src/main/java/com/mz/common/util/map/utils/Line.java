@@ -1,6 +1,7 @@
 package com.mz.common.util.map.utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Line implements Cloneable {
     private static final int DEF_DIV_SCALE = 10;
@@ -108,13 +109,13 @@ public class Line implements Cloneable {
         }
         BigDecimal b1 = new BigDecimal(Double.toString(v1));
         BigDecimal b2 = new BigDecimal(Double.toString(v2));
-        return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return b1.divide(b2, scale, RoundingMode.HALF_UP).doubleValue();
     }
 
     public static void main(String[] args) {
         BigDecimal b1 = new BigDecimal("119.8790802239798");
         BigDecimal b2 = new BigDecimal("28.4865");
-        double v = b1.divide(b2, DEF_DIV_SCALE, BigDecimal.ROUND_HALF_UP).doubleValue();
+        double v = b1.divide(b2, DEF_DIV_SCALE, RoundingMode.HALF_UP).doubleValue();
 
         System.out.println("BigDecimal----dev----" + v);
         double v2 = 119.8790802239798 / 28.4865;

@@ -50,8 +50,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler({HttpMessageNotReadableException.class})
     public Result messageExceptionHandler(HttpMessageNotReadableException e) {
-        log.warn("http请求参数转换异常: "+ e.getMessage());
-        return Result.failed("http请求参数转换异常: "+ e.getMessage());
+        log.warn("http请求参数转换异常: " + e.getMessage());
+        return Result.failed("http请求参数转换异常: " + e.getMessage());
     }
 
     @ExceptionHandler(value = Exception.class)
@@ -125,6 +125,7 @@ public class GlobalExceptionHandler {
         log.error("上传文件异常", exception);
         return Result.failed("上传文件异常");
     }
+
     private void handleErrorInfo(HttpServletRequest request, String message) {
         String url = this.getUrl(request);
         log.error("GlobalExceptionHandler#handleErrorInfo ... WEB 全局异常处理器 message=[{}] -> {}", message, url);

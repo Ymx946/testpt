@@ -95,7 +95,7 @@ public class TabMobileBaseModuleStyleImpl extends ServiceImpl<TabMobileBaseModul
         LambdaQueryChainWrapper<TabMobileBaseModuleStyle> lambdaQuery = lambdaQuery();
         lambdaQuery.eq(TabMobileBaseModuleStyle::getDelState, ConstantsUtil.IS_DONT_DEL);
         lambdaQuery.eq(TabMobileBaseModuleStyle::getState, ConstantsUtil.STATE_NORMAL);
-        if(ObjectUtil.isNotEmpty(vo.getModuleId())){
+        if (ObjectUtil.isNotEmpty(vo.getModuleId())) {
             lambdaQuery.eq(TabMobileBaseModuleStyle::getModuleId, vo.getModuleId());
         }
         List<TabMobileBaseModuleStyle> roomList = lambdaQuery.orderByAsc(TabMobileBaseModuleStyle::getModifyTime).list();

@@ -28,11 +28,11 @@ public class StringFormatUtil {
      * 特殊字符：负
      */
     private static final String CN_NEGATIVE = "负";
+    private static final String CN_POINT = "点";
     /**
      * 特殊字符：点
      */
     public static String SPECIAL_STRING = "Φ";//特殊分隔符
-    private static final String CN_POINT = "点";
     public static Integer PAGE_NO_DEFAULT = 1;//默认页码
     public static Integer PAGE_SIZE_DEFAULT = 10;//默认每页条数
 
@@ -94,6 +94,7 @@ public class StringFormatUtil {
 //        return idCardNumber.replaceAll("(?<=\\w{2})\\w(?=\\w{2})", "*");
         return idCardNumber.replaceAll("(?<=\\w{1})\\w(?=\\w{1})", "*");
     }
+
     public static String bankCardHandle(String idCardNumber) {
         if (StringUtils.isEmpty(idCardNumber) || (idCardNumber.length() < 8)) {
             return idCardNumber;
@@ -227,6 +228,7 @@ public class StringFormatUtil {
             return "*";
         }
     }
+
     /**
      * 隐藏公司名
      */
@@ -234,7 +236,7 @@ public class StringFormatUtil {
         if (!StringUtils.isEmpty(fullName)) {
             String name = fullName.substring(0, 2);
             String company = fullName.substring(fullName.length() - 2);
-            return name + createAsterisk(fullName.length() - 4)+company;
+            return name + createAsterisk(fullName.length() - 4) + company;
         } else {
             return null;
         }
@@ -393,8 +395,8 @@ public class StringFormatUtil {
         } else if (idNo.length() == 18) {
             sexStr = idNo.substring(16, 17);
         }
-        int sexNo=1;
-        if(sexStr.matches("[0-9]+")){
+        int sexNo = 1;
+        if (sexStr.matches("[0-9]+")) {
             sexNo = Integer.parseInt(sexStr);
         }
         return sexNo % 2 == 0 ? 2 : 1;
@@ -424,9 +426,9 @@ public class StringFormatUtil {
      */
     public static int getAge(Date birthDate) {
         if (birthDate != null) {
-            if(birthDate.before(DateUtil.parseDate(DateUtil.now()))){
+            if (birthDate.before(DateUtil.parseDate(DateUtil.now()))) {
                 return DateUtil.age(birthDate, DateUtil.parseDate(DateUtil.now()));
-            }else{
+            } else {
                 return 0;
             }
         } else {
@@ -462,6 +464,7 @@ public class StringFormatUtil {
         return false;
 
     }
+
     /***
      * 判断字符串是否是yyyy-MM-dd格式
      * @param mes 字符串
@@ -477,11 +480,12 @@ public class StringFormatUtil {
 
     /**
      * double转string  去除double数值过大时的科学计数方式
-     * @param num  要转换的double数值
-     * @param length   保留几位小数点
+     *
+     * @param num    要转换的double数值
+     * @param length 保留几位小数点
      * @return:
      */
-    public static String doubleTransitionString(double num,int length){
+    public static String doubleTransitionString(double num, int length) {
         NumberFormat nf = NumberFormat.getInstance();
         nf.setGroupingUsed(false);      //关闭科学计数法
         nf.setMaximumFractionDigits(length);   //定义保留几位小数

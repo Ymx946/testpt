@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.mz.common.context.PageInfo;
 import com.mz.model.base.TabActivitiFlowInfo;
 import com.mz.model.base.vo.TabActivitiFlowInfoVO;
+
 import java.util.List;
 
 
@@ -16,13 +17,14 @@ import java.util.List;
 public interface TabActivitiFlowInfoService extends IService<TabActivitiFlowInfo> {
     /**
      * 保存
-     *
      */
     TabActivitiFlowInfo insert(TabActivitiFlowInfo pojo, String loginID);
+
     /**
      * 分页列表展示
      */
     PageInfo<TabActivitiFlowInfo> queryAllByLimit(TabActivitiFlowInfoVO vo);
+
     /***
      * 列表
      */

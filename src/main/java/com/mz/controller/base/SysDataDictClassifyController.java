@@ -2,19 +2,19 @@ package com.mz.controller.base;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.aliyuncs.utils.StringUtils;
+import com.mz.common.ConstantsUtil;
+import com.mz.common.util.ResponseCode;
+import com.mz.common.util.Result;
 import com.mz.framework.annotation.NeedLogin;
 import com.mz.model.base.SysDataDict;
 import com.mz.model.base.SysDataDictClassify;
 import com.mz.model.base.vo.SysDataDictClassifyVO;
 import com.mz.service.base.SysDataDictClassifyService;
 import com.mz.service.base.SysDataDictService;
-import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.mz.common.util.Result;
-import com.aliyuncs.utils.StringUtils;
-import com.mz.common.util.ResponseCode;
-import com.mz.common.ConstantsUtil;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,9 +36,9 @@ public class SysDataDictClassifyController {
     @Autowired
     private SysDataDictService sysDataDictService;
 
-     /**
+    /**
      * @return 对象列表
-     * */
+     */
     @NeedLogin
     @PostMapping("insert")
     public Result insert(SysDataDictClassify pojo, @RequestHeader(value = "loginID") String loginID) {
@@ -52,13 +52,13 @@ public class SysDataDictClassifyController {
             return Result.failed("类型名称不能为空");
         }
         try {
-            return this.sysDataDictClassifyService.insert(pojo,loginID);
+            return this.sysDataDictClassifyService.insert(pojo, loginID);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
         }
     }
-  
+
     /**
      * 根据主键查询
      *
@@ -66,7 +66,7 @@ public class SysDataDictClassifyController {
      */
     @NeedLogin
     @GetMapping("queryById")
-    public Result queryById(Long id ) {
+    public Result queryById(Long id) {
         if (null == id) {
             return Result.failed("ID必填");
         }
@@ -77,6 +77,7 @@ public class SysDataDictClassifyController {
             return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
         }
     }
+
     /**
      * 列表
      *
@@ -95,18 +96,19 @@ public class SysDataDictClassifyController {
 
     /**
      * 删除
+     *
      * @return 对象列表
-     * */
+     */
     @NeedLogin
     @PostMapping("delPojo")
     public Result delPojo(Long id) {
-        if (id==null) {
+        if (id == null) {
             return Result.failed("id不能为空");
         }
         try {
             SysDataDictClassify sysDataDictClassify = sysDataDictClassifyService.getById(id);
-            if(ObjectUtil.isNotEmpty(sysDataDictClassify)){
-                if(ObjectUtil.isNotEmpty(sysDataDictClassify.getDictTypeCode())&&ObjectUtil.isNotEmpty(sysDataDictClassify.getDictTypeName())){
+            if (ObjectUtil.isNotEmpty(sysDataDictClassify)) {
+                if (ObjectUtil.isNotEmpty(sysDataDictClassify.getDictTypeCode()) && ObjectUtil.isNotEmpty(sysDataDictClassify.getDictTypeName())) {
                     SysDataDict find = new SysDataDict();
                     find.setDictTypeCode(sysDataDictClassify.getDictTypeCode());
                     find.setDictTypeName(sysDataDictClassify.getDictTypeName());

@@ -42,6 +42,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,14 +72,14 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
     private TabMobileBaseModuleService tabMobileBaseModuleService;
 
     @Override
-    public SystemDataUpdateRecord insert(SystemDataUpdateRecord pojo, String loginID,String jsonStr){
+    public SystemDataUpdateRecord insert(SystemDataUpdateRecord pojo, String loginID, String jsonStr) {
         String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
         JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
         BaseUser baseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
         pojo.setModifyUser(baseUser.getRealName());
         pojo.setModifyTime(DateUtil.now());
         SystemDataServiceNode serviceNode = systemDataServiceNodeService.getById(pojo.getNodeId());
-        if(ObjectUtil.isNotEmpty(serviceNode)){
+        if (ObjectUtil.isNotEmpty(serviceNode)) {
             pojo.setNodeName(serviceNode.getNodeName());
         }
         if (ObjectUtil.isNotEmpty(pojo.getSystemCode())) {
@@ -87,7 +88,7 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                 pojo.setSystemName(sysDataDict.getDictName());
             }
         }
-        if(pojo.getId()==null){
+        if (pojo.getId() == null) {
             IdWorker idWorker = new IdWorker(0L, 0L);
             pojo.setId(idWorker.nextId());
             pojo.setCreateUser(baseUser.getRealName());
@@ -95,10 +96,10 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
             pojo.setDelState(ConstantsUtil.IS_DONT_DEL);
             pojo.setState(0);
             save(pojo);
-        }else{
+        } else {
             updateById(pojo);
         }
-        if(ObjectUtil.isNotEmpty(jsonStr)){
+        if (ObjectUtil.isNotEmpty(jsonStr)) {
             systemDataUpdateSendDataService.batchInsert(pojo, jsonStr);
         }
         return pojo;
@@ -115,26 +116,26 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
     public List<SystemDataUpdateRecord> queryAll(SystemDataUpdateRecordVO vo) {
         LambdaQueryChainWrapper<SystemDataUpdateRecord> lambdaQuery = lambdaQuery();
         lambdaQuery.eq(SystemDataUpdateRecord::getDelState, ConstantsUtil.IS_DONT_DEL);
-        if(vo.getNodeId()!=null){
-            lambdaQuery.eq(SystemDataUpdateRecord::getNodeId,vo.getNodeId());
+        if (vo.getNodeId() != null) {
+            lambdaQuery.eq(SystemDataUpdateRecord::getNodeId, vo.getNodeId());
         }
-        if(!StringUtils.isEmpty(vo.getCreateTimeS())){
-            lambdaQuery.ge(SystemDataUpdateRecord::getCreateTime,vo.getCreateTimeS());
+        if (!StringUtils.isEmpty(vo.getCreateTimeS())) {
+            lambdaQuery.ge(SystemDataUpdateRecord::getCreateTime, vo.getCreateTimeS());
         }
-        if(!StringUtils.isEmpty(vo.getCreateTimeE())){
-            lambdaQuery.le(SystemDataUpdateRecord::getCreateTime,vo.getCreateTimeE()+" 23:59:59");
+        if (!StringUtils.isEmpty(vo.getCreateTimeE())) {
+            lambdaQuery.le(SystemDataUpdateRecord::getCreateTime, vo.getCreateTimeE() + " 23:59:59");
         }
-        if(ObjectUtil.isNotEmpty(vo.getSystemCode())){
-            lambdaQuery.eq(SystemDataUpdateRecord::getSystemCode,vo.getSystemCode());
+        if (ObjectUtil.isNotEmpty(vo.getSystemCode())) {
+            lambdaQuery.eq(SystemDataUpdateRecord::getSystemCode, vo.getSystemCode());
         }
-        if(!StringUtils.isEmpty(vo.getVersionNo())){
-            lambdaQuery.like(SystemDataUpdateRecord::getVersionNo,vo.getVersionNo());
+        if (!StringUtils.isEmpty(vo.getVersionNo())) {
+            lambdaQuery.like(SystemDataUpdateRecord::getVersionNo, vo.getVersionNo());
         }
-        if(ObjectUtil.isNotEmpty(vo.getState())){
-            lambdaQuery.eq(SystemDataUpdateRecord::getState,vo.getState());
+        if (ObjectUtil.isNotEmpty(vo.getState())) {
+            lambdaQuery.eq(SystemDataUpdateRecord::getState, vo.getState());
         }
-        if(!StringUtils.isEmpty(vo.getUpdateContent())){
-            lambdaQuery.like(SystemDataUpdateRecord::getUpdateContent,vo.getUpdateContent());
+        if (!StringUtils.isEmpty(vo.getUpdateContent())) {
+            lambdaQuery.like(SystemDataUpdateRecord::getUpdateContent, vo.getUpdateContent());
         }
         List<SystemDataUpdateRecord> list = lambdaQuery.orderByDesc(SystemDataUpdateRecord::getCreateTime).list();
         return list;
@@ -144,13 +145,13 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
     public SystemDataUpdateRecordModel queryById(Long id) {
         SystemDataUpdateRecordModel model = null;
         SystemDataUpdateRecord record = getById(id);
-        if (ObjectUtil.isNotEmpty(record)){
+        if (ObjectUtil.isNotEmpty(record)) {
             model = new SystemDataUpdateRecordModel();
-            BeanUtils.copyProperties(record,model);
+            BeanUtils.copyProperties(record, model);
             SystemDataUpdateSendDataVO vo = new SystemDataUpdateSendDataVO();
             vo.setRecordId(id);
             List<SystemDataUpdateSendData> dataList = systemDataUpdateSendDataService.queryAll(vo);
-            if(CollectionUtil.isNotEmpty(dataList)){
+            if (CollectionUtil.isNotEmpty(dataList)) {
                 model.setSystemDataUpdateSendDataList(dataList);
             }
         }
@@ -171,7 +172,7 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
         Integer nodeType = vo.getNodeType();
         Integer moduleType = vo.getModuleType();
         if (vo.getType().intValue() == 1) {//1-数据字典
-            PageInfo<SysDataDict> pageInfo = sysDataDictService.queryAllByLimits(pageNo, pageSize, areaCode, null, null, name, state,startTime,endTime);
+            PageInfo<SysDataDict> pageInfo = sysDataDictService.queryAllByLimits(pageNo, pageSize, areaCode, null, null, name, state, startTime, endTime);
             return Result.success(pageInfo);
         } else if (vo.getType().intValue() == 2) {//2-PC应用市场
             PageInfo<SysDeft> pageInfo = sysDeftService.queryAllByLimit(pageNo, pageSize, name, sysType, belongType, startTime, endTime);
@@ -204,9 +205,9 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
             find.setPageNo(pageNo);
             find.setPageSize(pageSize);
             find.setModuleType(moduleType);
-            if(ObjectUtil.isNotEmpty(state)){
+            if (ObjectUtil.isNotEmpty(state)) {
                 Integer moduleState = state;
-                if(state.intValue() == 2){
+                if (state.intValue() == 2) {
                     moduleState = -1;
                     find.setState(moduleState);
                 }
@@ -225,57 +226,58 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
     public Integer issued(Long id) {
         SystemDataUpdateRecord dataUpdateRecord = getById(id);
         Integer reissuedState = 0;
-        if(ObjectUtil.isNotEmpty(dataUpdateRecord)){
-            if(ObjectUtil.isNotEmpty(dataUpdateRecord.getNodeId())){
+        if (ObjectUtil.isNotEmpty(dataUpdateRecord)) {
+            if (ObjectUtil.isNotEmpty(dataUpdateRecord.getNodeId())) {
                 SystemDataServiceNode systemDataServiceNode = systemDataServiceNodeService.getById(dataUpdateRecord.getNodeId());
-                if(ObjectUtil.isNotEmpty(systemDataServiceNode)){
-                    if(ObjectUtil.isNotEmpty(systemDataServiceNode.getNodeUrl())){
-                        String url = systemDataServiceNode.getNodeUrl();
-                        String versionUrl = url+"/tabBaseVersions/receipt";
-                        String dataDictUrl = url+"/sysDataDict/receipt";
-                        String deftUrl = url+"/sysDeft/receipt";
-                        String moveAppUrl = url+"/tabBasicMoveApp/receipt";
-                        String nodeUrl = url+"/sysNode/receipt";
-                        String moduleUrl = url+"/tabMobileBaseModule/receipt";
+                if (ObjectUtil.isNotEmpty(systemDataServiceNode)) {
+                    if (ObjectUtil.isNotEmpty(systemDataServiceNode.getNodeUrl())) {
+//                        String url = systemDataServiceNode.getNodeUrl();
+                        String url = "http://127.0.0.1:8086/future-rural";
+                        String versionUrl = url + "/tabBaseVersions/receipt";
+                        String dataDictUrl = url + "/sysDataDict/receipt";
+                        String deftUrl = url + "/sysDeft/receipt";
+                        String moveAppUrl = url + "/tabBasicMoveApp/receipt";
+                        String nodeUrl = url + "/sysNode/receipt";
+                        String moduleUrl = url + "/tabMobileBaseModule/receipt";
                         List<SysDataDict> dataDictList = new ArrayList<>();
                         List<SysDeft> sysDeftList = new ArrayList<>();
                         List<TabBasicMoveApp> moveAppList = new ArrayList<>();
                         List<SysNode> sysNodeList = new ArrayList<>();
                         List<TabMobileBaseModuleModel> moduleList = new ArrayList<>();
                         SystemDataUpdateRecordModel model = queryById(id);
-                        if(ObjectUtil.isNotEmpty(model)){
+                        if (ObjectUtil.isNotEmpty(model)) {
                             List<SystemDataUpdateSendData> systemDataUpdateSendDataList = model.getSystemDataUpdateSendDataList();
-                            if(CollectionUtil.isNotEmpty(systemDataUpdateSendDataList)){
+                            if (CollectionUtil.isNotEmpty(systemDataUpdateSendDataList)) {
                                 for (SystemDataUpdateSendData systemDataUpdateSendData : systemDataUpdateSendDataList) {
-                                    if(ObjectUtil.isNotEmpty(systemDataUpdateSendData.getSendDataTypeCode()) && ObjectUtil.isNotEmpty(systemDataUpdateSendData.getSendDataId())){
-                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("1")){
+                                    if (ObjectUtil.isNotEmpty(systemDataUpdateSendData.getSendDataTypeCode()) && ObjectUtil.isNotEmpty(systemDataUpdateSendData.getSendDataId())) {
+                                        if (systemDataUpdateSendData.getSendDataTypeCode().equals("1")) {
                                             SysDataDict sysDataDict = sysDataDictService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
-                                            if (ObjectUtil.isNotEmpty(sysDataDict)){
+                                            if (ObjectUtil.isNotEmpty(sysDataDict)) {
                                                 dataDictList.add(sysDataDict);
                                             }
                                         }
-                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("2")){
+                                        if (systemDataUpdateSendData.getSendDataTypeCode().equals("2")) {
                                             SysDeft sysDeft = sysDeftService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
-                                            if (ObjectUtil.isNotEmpty(sysDeft)){
+                                            if (ObjectUtil.isNotEmpty(sysDeft)) {
                                                 sysDeftList.add(sysDeft);
                                             }
                                         }
-                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("3")){
+                                        if (systemDataUpdateSendData.getSendDataTypeCode().equals("3")) {
                                             TabBasicMoveApp moveApp = tabBasicMoveAppService.getById(systemDataUpdateSendData.getSendDataId());
-                                            if (ObjectUtil.isNotEmpty(moveApp)){
+                                            if (ObjectUtil.isNotEmpty(moveApp)) {
                                                 moveAppList.add(moveApp);
                                             }
                                         }
-                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("4")){
+                                        if (systemDataUpdateSendData.getSendDataTypeCode().equals("4")) {
                                             SysNode sysNode = sysNodeService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
-                                            if (ObjectUtil.isNotEmpty(sysNode)){
+                                            if (ObjectUtil.isNotEmpty(sysNode)) {
                                                 sysNode.setOperatingBooklet(null);
                                                 sysNodeList.add(sysNode);
                                             }
                                         }
-                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("5")){
+                                        if (systemDataUpdateSendData.getSendDataTypeCode().equals("5")) {
                                             TabMobileBaseModuleModel tabMobileBaseModuleModel = tabMobileBaseModuleService.queryById(systemDataUpdateSendData.getSendDataId());
-                                            if (ObjectUtil.isNotEmpty(tabMobileBaseModuleModel)){
+                                            if (ObjectUtil.isNotEmpty(tabMobileBaseModuleModel)) {
                                                 moduleList.add(tabMobileBaseModuleModel);
                                             }
                                         }
@@ -283,27 +285,27 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                                 }
                             }
                         }
-                        if(CollectionUtil.isNotEmpty(dataDictList)){
+                        if (CollectionUtil.isNotEmpty(dataDictList)) {
                             Gson gson = new Gson();
                             String result = gson.toJson(dataDictList);
                             HttpKit.post(dataDictUrl, result);
                         }
-                        if(CollectionUtil.isNotEmpty(sysDeftList)){
+                        if (CollectionUtil.isNotEmpty(sysDeftList)) {
                             Gson gson = new Gson();
                             String result1 = gson.toJson(sysDeftList);
                             HttpKit.post(deftUrl, result1);
                         }
-                        if(CollectionUtil.isNotEmpty(moveAppList)){
+                        if (CollectionUtil.isNotEmpty(moveAppList)) {
                             Gson gson = new Gson();
                             String result2 = gson.toJson(moveAppList);
                             HttpKit.post(moveAppUrl, result2);
                         }
-                        if(CollectionUtil.isNotEmpty(sysNodeList)){
+                        if (CollectionUtil.isNotEmpty(sysNodeList)) {
                             Gson gson = new Gson();
                             String result3 = gson.toJson(sysNodeList);
                             HttpKit.post(nodeUrl, result3);
                         }
-                        if(CollectionUtil.isNotEmpty(moduleList)){
+                        if (CollectionUtil.isNotEmpty(moduleList)) {
                             Gson gson = new Gson();
                             String result4 = gson.toJson(moduleList);
                             HttpKit.post(moduleUrl, result4);
@@ -320,20 +322,20 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                         versions.setCreateUser(dataUpdateRecord.getCreateUser());
                         versions.setModifyTime(DateUtil.now());
                         versions.setModifyUser(dataUpdateRecord.getModifyUser());
-                        if (ObjectUtil.isNotEmpty(dataUpdateRecord.getRemarks())){
+                        if (ObjectUtil.isNotEmpty(dataUpdateRecord.getRemarks())) {
                             versions.setRemarks(dataUpdateRecord.getRemarks());
                         }
                         Gson gson = new Gson();
                         String obj1 = gson.toJson(versions);
                         String result = HttpKit.post(versionUrl, obj1);
-                        if(result.contains("10000")){
+                        if (result.contains("10000")) {
                             JSONObject jsonObjectAuth = JSONObject.parseObject(result);
                             String returnCode = jsonObjectAuth.getString("code");
                             if (returnCode.equals("10000")) {//请求成功
                                 dataUpdateRecord.setState(1);
                                 reissuedState = 1;
                             }
-                        }else {
+                        } else {
                             dataUpdateRecord.setState(-1);
                             reissuedState = -1;
                         }
@@ -350,56 +352,56 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
     public Integer reissued(Long id) { //1-重新下发成功 -1 重新下发失败
         SystemDataUpdateRecord dataUpdateRecord = getById(id);
         Integer reissuedState = 0;
-        if(ObjectUtil.isNotEmpty(dataUpdateRecord)){
-            if(ObjectUtil.isNotEmpty(dataUpdateRecord.getNodeId())){
+        if (ObjectUtil.isNotEmpty(dataUpdateRecord)) {
+            if (ObjectUtil.isNotEmpty(dataUpdateRecord.getNodeId())) {
                 SystemDataServiceNode systemDataServiceNode = systemDataServiceNodeService.getById(dataUpdateRecord.getNodeId());
-                if(ObjectUtil.isNotEmpty(systemDataServiceNode)){
-                    if(ObjectUtil.isNotEmpty(systemDataServiceNode.getNodeUrl())){
+                if (ObjectUtil.isNotEmpty(systemDataServiceNode)) {
+                    if (ObjectUtil.isNotEmpty(systemDataServiceNode.getNodeUrl())) {
                         String url = systemDataServiceNode.getNodeUrl();
-                        String dataDictUrl = url+"/sysDataDict/receipt";
-                        String deftUrl = url+"/sysDeft/receipt";
-                        String moveAppUrl = url+"/tabBasicMoveApp/receipt";
-                        String nodeUrl = url+"/sysNode/receipt";
-                        String moduleUrl = url+"/tabMobileBaseModule/receipt";
+                        String dataDictUrl = url + "/sysDataDict/receipt";
+                        String deftUrl = url + "/sysDeft/receipt";
+                        String moveAppUrl = url + "/tabBasicMoveApp/receipt";
+                        String nodeUrl = url + "/sysNode/receipt";
+                        String moduleUrl = url + "/tabMobileBaseModule/receipt";
                         List<SysDataDict> dataDictList = new ArrayList<>();
                         List<SysDeft> sysDeftList = new ArrayList<>();
                         List<TabBasicMoveApp> moveAppList = new ArrayList<>();
                         List<SysNode> sysNodeList = new ArrayList<>();
                         List<TabMobileBaseModuleModel> moduleList = new ArrayList<>();
                         SystemDataUpdateRecordModel model = queryById(id);
-                        if(ObjectUtil.isNotEmpty(model)){
+                        if (ObjectUtil.isNotEmpty(model)) {
                             List<SystemDataUpdateSendData> systemDataUpdateSendDataList = model.getSystemDataUpdateSendDataList();
-                            if(CollectionUtil.isNotEmpty(systemDataUpdateSendDataList)){
+                            if (CollectionUtil.isNotEmpty(systemDataUpdateSendDataList)) {
                                 for (SystemDataUpdateSendData systemDataUpdateSendData : systemDataUpdateSendDataList) {
-                                    if(ObjectUtil.isNotEmpty(systemDataUpdateSendData.getSendDataTypeCode()) && ObjectUtil.isNotEmpty(systemDataUpdateSendData.getSendDataId())){
-                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("1")){
+                                    if (ObjectUtil.isNotEmpty(systemDataUpdateSendData.getSendDataTypeCode()) && ObjectUtil.isNotEmpty(systemDataUpdateSendData.getSendDataId())) {
+                                        if (systemDataUpdateSendData.getSendDataTypeCode().equals("1")) {
                                             SysDataDict sysDataDict = sysDataDictService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
-                                            if (ObjectUtil.isNotEmpty(sysDataDict)){
+                                            if (ObjectUtil.isNotEmpty(sysDataDict)) {
                                                 dataDictList.add(sysDataDict);
                                             }
                                         }
-                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("2")){
+                                        if (systemDataUpdateSendData.getSendDataTypeCode().equals("2")) {
                                             SysDeft sysDeft = sysDeftService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
-                                            if (ObjectUtil.isNotEmpty(sysDeft)){
+                                            if (ObjectUtil.isNotEmpty(sysDeft)) {
                                                 sysDeftList.add(sysDeft);
                                             }
                                         }
-                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("3")){
+                                        if (systemDataUpdateSendData.getSendDataTypeCode().equals("3")) {
                                             TabBasicMoveApp moveApp = tabBasicMoveAppService.getById(systemDataUpdateSendData.getSendDataId());
-                                            if (ObjectUtil.isNotEmpty(moveApp)){
+                                            if (ObjectUtil.isNotEmpty(moveApp)) {
                                                 moveAppList.add(moveApp);
                                             }
                                         }
-                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("4")){
+                                        if (systemDataUpdateSendData.getSendDataTypeCode().equals("4")) {
                                             SysNode sysNode = sysNodeService.queryById(String.valueOf(systemDataUpdateSendData.getSendDataId()));
-                                            if (ObjectUtil.isNotEmpty(sysNode)){
+                                            if (ObjectUtil.isNotEmpty(sysNode)) {
                                                 sysNode.setOperatingBooklet(null);
                                                 sysNodeList.add(sysNode);
                                             }
                                         }
-                                        if(systemDataUpdateSendData.getSendDataTypeCode().equals("5")){
+                                        if (systemDataUpdateSendData.getSendDataTypeCode().equals("5")) {
                                             TabMobileBaseModuleModel tabMobileBaseModuleModel = tabMobileBaseModuleService.queryById(systemDataUpdateSendData.getSendDataId());
-                                            if (ObjectUtil.isNotEmpty(tabMobileBaseModuleModel)){
+                                            if (ObjectUtil.isNotEmpty(tabMobileBaseModuleModel)) {
                                                 moduleList.add(tabMobileBaseModuleModel);
                                             }
                                         }
@@ -407,7 +409,7 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                                 }
                             }
                         }
-                        if(CollectionUtil.isNotEmpty(dataDictList)) {
+                        if (CollectionUtil.isNotEmpty(dataDictList)) {
                             Gson gson = new Gson();
                             String result = gson.toJson(dataDictList);
                             String post = HttpKit.post(dataDictUrl, result);
@@ -421,22 +423,22 @@ public class SystemDataUpdateRecordImpl extends ServiceImpl<SystemDataUpdateReco
                                 reissuedState = -1;
                             }
                         }
-                        if(CollectionUtil.isNotEmpty(sysDeftList)){
+                        if (CollectionUtil.isNotEmpty(sysDeftList)) {
                             Gson gson = new Gson();
                             String result1 = gson.toJson(sysDeftList);
                             HttpKit.post(deftUrl, result1);
                         }
-                        if(CollectionUtil.isNotEmpty(moveAppList)){
+                        if (CollectionUtil.isNotEmpty(moveAppList)) {
                             Gson gson = new Gson();
                             String result2 = gson.toJson(moveAppList);
                             HttpKit.post(moveAppUrl, result2);
                         }
-                        if(CollectionUtil.isNotEmpty(sysNodeList)){
+                        if (CollectionUtil.isNotEmpty(sysNodeList)) {
                             Gson gson = new Gson();
                             String result3 = gson.toJson(sysNodeList);
                             HttpKit.post(nodeUrl, result3);
                         }
-                        if(CollectionUtil.isNotEmpty(moduleList)){
+                        if (CollectionUtil.isNotEmpty(moduleList)) {
                             Gson gson = new Gson();
                             String result4 = gson.toJson(moduleList);
                             HttpKit.post(moduleUrl, result4);

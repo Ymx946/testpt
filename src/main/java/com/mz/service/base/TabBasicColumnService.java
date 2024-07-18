@@ -14,29 +14,33 @@ import java.util.List;
  * @author makejava
  * @since 2022-12-28 09:52:42
  */
-public interface TabBasicColumnService extends IService<TabBasicColumn>{
+public interface TabBasicColumnService extends IService<TabBasicColumn> {
     /**
      * 保存
-     *
      */
     Result insert(TabBasicColumn pojo, String loginID);
 
     /**
      * 查询全部
+     *
      * @param vo
      * @return
      */
     List<TabBasicColumn> queryAll(TabBasicColumnVO vo);
+
     /**
      * 根据栏目类型查询子栏目
+     *
      * @param vo
      * @return
      */
     List<TabBasicColumn> querySonByType(TabBasicColumnVO vo);
+
     /**
      * 按代码查询
      */
     TabBasicColumn queryByCode(TabBasicColumnVO vo);
+
     /**
      * 列表
      */

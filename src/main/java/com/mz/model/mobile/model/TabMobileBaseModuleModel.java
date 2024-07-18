@@ -10,7 +10,7 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- *移动组件表(TabMobileBaseModule)实体类
+ * 移动组件表(TabMobileBaseModule)实体类
  */
 @Setter
 @Getter

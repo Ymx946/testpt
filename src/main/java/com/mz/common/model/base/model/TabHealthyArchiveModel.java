@@ -9,7 +9,7 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- *健康档案表(TabHealthyArchive)实体类
+ * 健康档案表(TabHealthyArchive)实体类
  */
 @SuppressWarnings("serial")
 @Setter

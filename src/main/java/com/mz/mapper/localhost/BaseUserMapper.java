@@ -1,7 +1,7 @@
 package com.mz.mapper.localhost;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mz.model.base.BaseUser;
-import com.mz.model.base.vo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  * @author makejava
  * @since 2021-03-17 09:08:18
  */
-public interface BaseUserMapper {
+public interface BaseUserMapper extends BaseMapper<BaseUser> {
 
     /**
      * 通过ID查询单条数据

@@ -1,6 +1,7 @@
 package com.mz.service.base;
 
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.mz.common.context.PageInfo;
 import com.mz.common.util.Result;
 import com.mz.model.base.SysDeft;
@@ -15,7 +16,7 @@ import java.util.List;
  * @author makejava
  * @since 2021-03-17 11:00:04
  */
-public interface SysDeftService {
+public interface SysDeftService extends IService<SysDeft> {
 
     /**
      * 通过ID查询单条数据
@@ -24,6 +25,7 @@ public interface SysDeftService {
      * @return 实例对象
      */
     SysDeft queryById(String id);
+
     /**
      * 通过代码查询单条数据
      *
@@ -36,10 +38,10 @@ public interface SysDeftService {
      * 查询多条数据
      *
      * @param offset 查询起始位置
-     * @param limit 查询条数
+     * @param limit  查询条数
      * @return 对象列表
      */
-    PageInfo<SysDeft> queryAllByLimit(int offset, int limit, String sysName, Integer sysType,Integer belongType,String startTime,  String endTime);
+    PageInfo<SysDeft> queryAllByLimit(int offset, int limit, String sysName, Integer sysType, Integer belongType, String startTime, String endTime);
 
     /**
      * 查询多条数据
@@ -48,21 +50,23 @@ public interface SysDeftService {
      * @return 对象列表
      */
     List<SysDeft> queryAll(SysDeft sysDeft);
+
     /**
      * 通过租户ID查询有权限的系统列表
      *
      * @return 对象列表
      */
-     Result queryAllForTenant(String sysName);
+    Result queryAllForTenant(String sysName);
 
     /**
      * 查询租户有权限的应用（包含分类选中状态）
      *
-     * @param tenantId 租户ID
+     * @param tenantId   租户ID
      * @param classifyId 分类ID
      * @return 对象列表
      */
     List<SysDeftSelectVO> queryAllWithClassify(String tenantId, String classifyId);
+
     /**
      * 新增数据
      *

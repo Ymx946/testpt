@@ -19,8 +19,8 @@ public class ExportUpdateRecordModel {
      */
     private String createTime;
     /**
-    * 版本号
-    */
+     * 版本号
+     */
     private String versionNo;
     /**
      * 系统名称
@@ -31,8 +31,8 @@ public class ExportUpdateRecordModel {
      */
     private String updateTime;
     /**
-    * 更新内容
-    */
+     * 更新内容
+     */
     private String updateContent;
 
 }
