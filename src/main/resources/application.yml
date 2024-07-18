@@ -77,7 +77,7 @@ spring:
     name: future-datacenter
 
   profiles:
-        active: '@profileActive@'
+    active: '@profileActive@'
 #    active: dev
 
   devtools:
