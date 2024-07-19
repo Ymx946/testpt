@@ -10,11 +10,7 @@ import com.mz.common.util.wxaes.HttpKit;
 import com.mz.mapper.localhost.BaseTenantMapper;
 import com.mz.model.base.*;
 import com.mz.model.base.vo.BaseTenantVO;
-import com.mz.model.mobile.model.TabMobileBaseModuleModel;
 import com.mz.model.system.SystemDataServiceNode;
-import com.mz.model.system.SystemDataUpdateRecord;
-import com.mz.model.system.SystemDataUpdateSendData;
-import com.mz.model.system.model.SystemDataUpdateRecordModel;
 import com.mz.service.base.BaseTenantService;
 import com.mz.service.base.SysAreaService;
 import cn.hutool.core.date.DateUtil;
@@ -25,7 +21,6 @@ import com.mz.common.ConstantsUtil;
 import com.mz.common.util.IdWorker;
 import com.mz.common.context.PageInfo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.mz.framework.util.redis.RedisUtil;
@@ -136,8 +131,7 @@ public class BaseTenantImpl extends ServiceImpl<BaseTenantMapper, BaseTenant> im
             SystemDataServiceNode systemDataServiceNode = systemDataServiceNodeService.getById(tenant.getServiceNodeId());
 
             if (systemDataServiceNode != null && ObjectUtil.isNotEmpty(systemDataServiceNode.getNodeUrl())) {
-//                String url = systemDataServiceNode.getNodeUrl();
-                String url = "http://127.0.0.1:8086/future-rural";
+                String url = systemDataServiceNode.getNodeUrl();
                 String tenantUrl = url + "/baseTenant/receipt";
 
                 Gson gson = new Gson();
@@ -179,8 +173,7 @@ public class BaseTenantImpl extends ServiceImpl<BaseTenantMapper, BaseTenant> im
             SystemDataServiceNode systemDataServiceNode = systemDataServiceNodeService.getById(tenant.getServiceNodeId());
 
             if (systemDataServiceNode != null && ObjectUtil.isNotEmpty(systemDataServiceNode.getNodeUrl())) {
-//                String url = systemDataServiceNode.getNodeUrl();
-                String url = "http://127.0.0.1:8086/future-rural";
+                String url = systemDataServiceNode.getNodeUrl();
                 String tenantUrl = url + "/baseTenant/receipt";
 
                 Gson gson = new Gson();
