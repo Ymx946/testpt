@@ -25,7 +25,7 @@ import com.mz.common.ConstantsUtil;
  * @since 2024-07-18 13:48:04
  */
 @RestController
-@RequestMapping("baseTenant")
+@RequestMapping(value = {"datacenter/baseTenant", "baseTenant"})
 @Slf4j
 public class BaseTenantController {
     /**

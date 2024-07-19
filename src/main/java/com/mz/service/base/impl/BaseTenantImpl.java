@@ -136,7 +136,8 @@ public class BaseTenantImpl extends ServiceImpl<BaseTenantMapper, BaseTenant> im
             SystemDataServiceNode systemDataServiceNode = systemDataServiceNodeService.getById(tenant.getServiceNodeId());
 
             if (systemDataServiceNode != null && ObjectUtil.isNotEmpty(systemDataServiceNode.getNodeUrl())) {
-                String url = systemDataServiceNode.getNodeUrl();
+//                String url = systemDataServiceNode.getNodeUrl();
+                String url = "http://127.0.0.1:8086/future-rural";
                 String tenantUrl = url + "/baseTenant/receipt";
 
                 Gson gson = new Gson();
@@ -178,7 +179,8 @@ public class BaseTenantImpl extends ServiceImpl<BaseTenantMapper, BaseTenant> im
             SystemDataServiceNode systemDataServiceNode = systemDataServiceNodeService.getById(tenant.getServiceNodeId());
 
             if (systemDataServiceNode != null && ObjectUtil.isNotEmpty(systemDataServiceNode.getNodeUrl())) {
-                String url = systemDataServiceNode.getNodeUrl();
+//                String url = systemDataServiceNode.getNodeUrl();
+                String url = "http://127.0.0.1:8086/future-rural";
                 String tenantUrl = url + "/baseTenant/receipt";
 
                 Gson gson = new Gson();
