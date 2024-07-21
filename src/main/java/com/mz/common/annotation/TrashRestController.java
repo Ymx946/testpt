@@ -15,6 +15,7 @@ import java.lang.annotation.*;
 @Controller
 @ResponseBody
 public @interface TrashRestController {
+
     @AliasFor(annotation = Controller.class)
     String value() default "";
 

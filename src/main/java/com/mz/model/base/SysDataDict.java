@@ -1,5 +1,6 @@
 package com.mz.model.base;
 
+import com.mz.common.annotation.FieldMeta;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -225,30 +226,37 @@ public class SysDataDict {
     /**
      * 类型代码
      */
+    @FieldMeta(name = "类型代码")
     private String dictTypeCode;
     /**
      * 类型名称
      */
+    @FieldMeta(name = "类型名称")
     private String dictTypeName;
     /**
      * 字典代码
      */
+    @FieldMeta(name = "字典代码")
     private String dictCode;
     /**
      * 字典名称
      */
+    @FieldMeta(name = "字典名称")
     private String dictName;
     /**
      * 区域代码
      */
+    @FieldMeta(name = "区域代码")
     private String areaCode;
     /**
      * 备注
      */
+    @FieldMeta(name = "备注")
     private String remarks;
     /**
-     * 可用状态(1可用2不可用)
+     * 可用状态 (1可用2不可用)
      */
+    @FieldMeta(name = "可用状态", readConverterExp = "1=可用,2=不可用")
     private Integer useState;
     /**
      * 创建时间

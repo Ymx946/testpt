@@ -138,6 +138,7 @@ public enum ElementsEnum {
     private Integer min;
     private Integer max;
     private Double prec;
+
     ElementsEnum(Integer id, Integer index, String name, String unit, Integer min, Integer String, Double prec) {
         this.id = id;
         this.index = index;

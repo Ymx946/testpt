@@ -153,5 +153,8 @@ public class ConstantsCacheUtil {
     public static final String pwd_EXPIRED_YES = "Y";
     public static final String pwd_EXPIRED_NO = "N";
 
-
+    /**
+     * 缓存key
+     */
+    public static final String QUERY_SYSCODE_NODECODE = "QUERY:SYSCODE:NODECODE";
 }

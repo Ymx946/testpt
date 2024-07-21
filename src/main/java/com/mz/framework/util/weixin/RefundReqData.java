@@ -9,19 +9,18 @@ import java.util.Map;
 
 @XStreamAlias("xml")
 public class RefundReqData {
+    private final String refund_account = "REFUND_SOURCE_RECHARGE_FUNDS";
     // 每个字段具体的意思请查看API文档
     private String appid = "";
     private String mch_id = "";
-
-    /**
-     * 微信支付分配的子商户号
-     */
-    private String sub_mch_id = "";
     // /**
     //  * 微信支付分配的机构商户号
     //  */
     // private String sp_mchid = "";
-
+    /**
+     * 微信支付分配的子商户号
+     */
+    private String sub_mch_id = "";
     // private String device_info = "";
     private String nonce_str = "";
     private String sign = "";
@@ -30,8 +29,6 @@ public class RefundReqData {
     private String out_refund_no = "";
     private int total_fee = 0;
     private int refund_fee = 0;
-
-    private final String refund_account = "REFUND_SOURCE_RECHARGE_FUNDS";
 
     /**
      * 请求退款服务 (直连模式)

@@ -1,8 +1,11 @@
 package com.mz.model.system;
 
+import com.mz.common.annotation.FieldMeta;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.io.Serializable;
 
 /**
  * 版本更新记录下发数据表(SystemDataUpdateSendData)实体类
@@ -11,7 +14,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class SystemDataUpdateSendData {
+public class SystemDataUpdateSendData implements Serializable {
     private static final long serialVersionUID = -15819035110003051L;
     /**
      * 主键
@@ -24,10 +27,12 @@ public class SystemDataUpdateSendData {
     /**
      * 下发数据类型代码
      */
+    @FieldMeta(name = "下发数据类型代码")
     private String sendDataTypeCode;
     /**
      * 下发数据类型名称
      */
+    @FieldMeta(name = "下发数据类型名称")
     private String sendDataTypeName;
     /**
      * 下发数据业务ID
@@ -36,6 +41,7 @@ public class SystemDataUpdateSendData {
     /**
      * 下发数据名称
      */
+    @FieldMeta(name = "下发数据名称")
     private String sendDataName;
     /**
      * 逻辑删除
@@ -64,6 +70,7 @@ public class SystemDataUpdateSendData {
     /**
      * 备注
      */
+    @FieldMeta(name = "备注")
     private String remarks;
 
 }

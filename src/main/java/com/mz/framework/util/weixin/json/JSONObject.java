@@ -43,6 +43,7 @@ public class JSONObject {
         else
             this.map = new HashMap();
     }
+
     /**
      * Construct a JSONObject from a subset of another JSONObject. An array of strings is used to identify the keys that should be copied. Missing keys are ignored.
      *

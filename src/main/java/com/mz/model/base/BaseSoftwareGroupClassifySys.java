@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * 应用分类关联应用(BaseSoftwareGroupClassifySys)实体类
  *
@@ -14,7 +16,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class BaseSoftwareGroupClassifySys {
+public class BaseSoftwareGroupClassifySys implements Serializable {
     private static final long serialVersionUID = 180286840950130682L;
     /**
      * 主键
@@ -72,6 +74,10 @@ public class BaseSoftwareGroupClassifySys {
      * 排序
      */
     private Integer sysOrder;
+    /**
+     * 默认开通状态 1默认开通 2手动开通
+     */
+    private Integer defaultOpenState;
     /**
      * 逻辑删除
      */

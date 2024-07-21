@@ -1,8 +1,11 @@
 package com.mz.model.base;
 
+import com.mz.common.annotation.FieldMeta;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.io.Serializable;
 
 /**
  * 应用分类关联应用节点(BaseSoftwareGroupClassifyNode)实体类
@@ -14,7 +17,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class BaseSoftwareGroupClassifyNode {
+public class BaseSoftwareGroupClassifyNode implements Serializable {
     private static final long serialVersionUID = -40467561428689453L;
     /**
      * 主键
@@ -51,6 +54,7 @@ public class BaseSoftwareGroupClassifyNode {
     /**
      * 节点名称
      */
+    @FieldMeta(name = "节点名称")
     private String nodeName;
     /**
      * 逻辑删除
@@ -59,6 +63,7 @@ public class BaseSoftwareGroupClassifyNode {
     /**
      * 状态 1启用 -1 禁用
      */
+    @FieldMeta(name = "状态", readConverterExp = "1=启用,-1=禁用")
     private Integer state;
     /**
      * 创建时间
@@ -79,6 +84,7 @@ public class BaseSoftwareGroupClassifyNode {
     /**
      * 备注
      */
+    @FieldMeta(name = "备注")
     private String remarks;
 
 }
