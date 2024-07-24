@@ -47,7 +47,7 @@ public class SysDataDictController {
      */
     @SneakyThrows
     @PostMapping("insert")
-    public Result insert(String id, String dictTypeCode, String dictTypeName, String dictCode, String dictName, String areaCode, String remarks, String token, HttpServletRequest request) {
+    public Result insert(String id, String dictTypeCode, String dictTypeName, String dictCode, String dictName, String areaCode, String remarks, Integer sort, String dictPic, String token, HttpServletRequest request) {
         if (baseUserService.checkLogin(token, request)) {
             if (ObjectUtil.isEmpty(dictTypeCode)) {
                 return Result.failed("类型代码不能为空");
@@ -68,6 +68,8 @@ public class SysDataDictController {
             sysDataDict.setDictName(dictName);
             sysDataDict.setAreaCode(areaCode);
             sysDataDict.setRemarks(remarks);
+            sysDataDict.setSort(sort);
+            sysDataDict.setDictPic(dictPic);
             return sysDataDictService.insert(sysDataDict, request);
         } else {
             return Result.failedLogin();

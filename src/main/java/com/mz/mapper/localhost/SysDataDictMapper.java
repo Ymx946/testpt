@@ -110,6 +110,11 @@ public interface SysDataDictMapper extends BaseMapper<SysDataDict> {
     int update(SysDataDict sysDataDict);
 
     /**
+     * 修改置空
+     */
+    int updateModify(SysDataDict sysDataDict);
+
+    /**
      * 通过主键删除数据
      *
      * @param id 主键

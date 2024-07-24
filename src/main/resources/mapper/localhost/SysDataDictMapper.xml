@@ -11,6 +11,8 @@
         <result property="dictName" column="dict_name" jdbcType="VARCHAR"/>
         <result property="areaCode" column="area_code" jdbcType="VARCHAR"/>
         <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="dictPic" column="dict_pic" jdbcType="VARCHAR"/>
         <result property="useState" column="use_state" jdbcType="INTEGER"/>
         <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
         <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
@@ -20,8 +22,20 @@
 
     <!--查询单个-->
     <select id="queryById" resultMap="BaseResultMap">
-        select
-          id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state, create_time, create_user, modify_time, modify_user
+        select id,
+               dict_type_code,
+               dict_type_name,
+               dict_code,
+               dict_name,
+               area_code,
+               remarks,
+               sort,
+               dict_pic,
+               use_state,
+               create_time,
+               create_user,
+               modify_time,
+               modify_user
         from sys_data_dict
         where id = #{id}
     </select>
@@ -29,7 +43,8 @@
     <!--查询单个-->
     <select id="queryByCodeWithArea" resultMap="BaseResultMap">
         select
-        id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state, create_time, create_user, modify_time, modify_user
+        id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, sort, dict_pic, use_state,
+        create_time, create_user, modify_time, modify_user
         from sys_data_dict
         where dict_type_code = #{dictTypeCode}
         and dict_code = #{dictCode}
@@ -40,26 +55,51 @@
     </select>
     <!--查询单个-->
     <select id="queryByCode" resultMap="BaseResultMap">
-        select
-          id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state, create_time, create_user, modify_time, modify_user
+        select id,
+               dict_type_code,
+               dict_type_name,
+               dict_code,
+               dict_name,
+               area_code,
+               remarks,
+               sort,
+               dict_pic,
+               use_state,
+               create_time,
+               create_user,
+               modify_time,
+               modify_user
         from sys_data_dict
         where dict_type_code = #{dictTypeCode}
-        and dict_code = #{dictCode}
+          and dict_code = #{dictCode}
     </select>
 
     <!--查询单个-->
     <select id="queryByName" resultMap="BaseResultMap">
-        select
-          id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state, create_time, create_user, modify_time, modify_user
+        select id,
+               dict_type_code,
+               dict_type_name,
+               dict_code,
+               dict_name,
+               area_code,
+               remarks,
+               sort,
+               dict_pic,
+               use_state,
+               create_time,
+               create_user,
+               modify_time,
+               modify_user
         from sys_data_dict
         where dict_type_code = #{dictTypeCode}
-        and dict_name = #{dictName}
+          and dict_name = #{dictName}
     </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="BaseResultMap">
         select
-          id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state, create_time, create_user, modify_time, modify_user
+        id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, sort, dict_pic, use_state,
+        create_time, create_user, modify_time, modify_user
         from sys_data_dict
         <where>
             <if test="dictTypeCode != null and dictTypeCode != ''">
@@ -89,7 +129,8 @@
 
     <select id="queryAllByLimits" resultMap="BaseResultMap">
         select
-        id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state, create_time, create_user, modify_time, modify_user
+        id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, sort, dict_pic, use_state,
+        create_time, create_user, modify_time, modify_user
         from sys_data_dict
         <where>
             <if test="dictTypeCode != null and dictTypeCode != ''">
@@ -120,7 +161,8 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="BaseResultMap">
         select
-          id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state, create_time, create_user, modify_time, modify_user
+        id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, sort, dict_pic, use_state,
+        create_time, create_user, modify_time, modify_user
         from sys_data_dict
         <where>
             <if test="id != null and id != ''">
@@ -148,12 +190,13 @@
                 and use_state = #{useState}
             </if>
         </where>
-        order by CONVERT(dict_code,SIGNED) asc
+        order by sort asc,CONVERT(dict_code,SIGNED) asc
     </select>
     <!--通过根据大类查询小类查询-->
     <select id="querySubByMajor" resultMap="BaseResultMap">
         select
-          id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state, create_time, create_user, modify_time, modify_user
+        id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, sort, dict_pic, use_state,
+        create_time, create_user, modify_time, modify_user
         from sys_data_dict
         <where>
             use_state = 1
@@ -168,8 +211,10 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into sys_data_dict(id,dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, use_state, create_time, create_user, modify_time, modify_user)
-        values (#{id},#{dictTypeCode}, #{dictTypeName}, #{dictCode}, #{dictName}, #{areaCode}, #{remarks}, #{useState}, #{createTime}, #{createUser}, #{modifyTime}, #{modifyUser})
+        insert into sys_data_dict(id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, sort,
+                                  dict_pic, use_state, create_time, create_user, modify_time, modify_user)
+        values (#{id}, #{dictTypeCode}, #{dictTypeName}, #{dictCode}, #{dictName}, #{areaCode}, #{remarks}, #{sort},
+                #{dictPic}, #{useState}, #{createTime}, #{createUser}, #{modifyTime}, #{modifyUser})
     </insert>
 
     <!--通过主键修改数据-->
@@ -194,6 +239,52 @@
             <if test="remarks != null and remarks != ''">
                 remarks = #{remarks},
             </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="dictPic != null and dictPic != ''">
+                dict_pic = #{dictPic},
+            </if>
+            <if test="useState != null">
+                use_state = #{useState},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="createUser != null and createUser != ''">
+                create_user = #{createUser},
+            </if>
+            <if test="modifyTime != null and modifyTime != ''">
+                modify_time = #{modifyTime},
+            </if>
+            <if test="modifyUser != null and modifyUser != ''">
+                modify_user = #{modifyUser},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateModify">
+        update sys_data_dict
+        <set>
+            <if test="dictTypeCode != null and dictTypeCode != ''">
+                dict_type_code = #{dictTypeCode},
+            </if>
+            <if test="dictTypeName != null and dictTypeName != ''">
+                dict_type_name = #{dictTypeName},
+            </if>
+            <if test="dictCode != null and dictCode != ''">
+                dict_code = #{dictCode},
+            </if>
+            <if test="dictName != null and dictName != ''">
+                dict_name = #{dictName},
+            </if>
+            area_code = #{areaCode},
+            remarks = #{remarks},
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            dict_pic = #{dictPic},
             <if test="useState != null">
                 use_state = #{useState},
             </if>
@@ -215,7 +306,9 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from sys_data_dict where id = #{id}
+        delete
+        from sys_data_dict
+        where id = #{id}
     </delete>
 
 </mapper>

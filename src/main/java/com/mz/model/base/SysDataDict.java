@@ -247,6 +247,14 @@ public class SysDataDict {
      */
     private String remarks;
     /**
+     * 排序
+     */
+    private Integer sort;
+    /**
+     * 字典图片
+     */
+    private String dictPic;
+    /**
      * 可用状态(1可用2不可用)
      */
     private Integer useState;

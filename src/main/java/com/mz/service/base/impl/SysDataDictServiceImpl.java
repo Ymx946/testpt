@@ -209,7 +209,7 @@ public class SysDataDictServiceImpl extends ServiceImpl<SysDataDictMapper, SysDa
             if (CollectionUtil.isNotEmpty(list)) {
                 return Result.failed("该类型数据字典名称重复");
             }
-            this.sysDataDictMapper.update(sysDataDict);
+            this.sysDataDictMapper.updateModify(sysDataDict);
             return Result.success(sysDataDictMapper.queryById(sysDataDict.getId()));
 
         } else {
