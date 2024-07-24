@@ -254,6 +254,14 @@ public class SysDataDict {
     @FieldMeta(name = "备注")
     private String remarks;
     /**
+     * 排序
+     */
+    private Integer sort;
+    /**
+     * 字典图片
+     */
+    private String dictPic;
+    /**
      * 可用状态 (1可用2不可用)
      */
     @FieldMeta(name = "可用状态", readConverterExp = "1=可用,2=不可用")

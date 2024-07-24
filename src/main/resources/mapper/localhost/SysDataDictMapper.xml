@@ -22,20 +22,9 @@
 
     <!--查询单个-->
     <select id="queryById" resultMap="BaseResultMap">
-        select id,
-               dict_type_code,
-               dict_type_name,
-               dict_code,
-               dict_name,
-               area_code,
-               remarks,
-               sort,
-               dict_pic,
-               use_state,
-               create_time,
-               create_user,
-               modify_time,
-               modify_user
+        select
+        id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, sort, dict_pic, use_state,
+        create_time, create_user, modify_time, modify_user
         from sys_data_dict
         where id = #{id}
     </select>
@@ -55,20 +44,9 @@
     </select>
     <!--查询单个-->
     <select id="queryByCode" resultMap="BaseResultMap">
-        select id,
-               dict_type_code,
-               dict_type_name,
-               dict_code,
-               dict_name,
-               area_code,
-               remarks,
-               sort,
-               dict_pic,
-               use_state,
-               create_time,
-               create_user,
-               modify_time,
-               modify_user
+        select
+        id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, sort, dict_pic, use_state,
+        create_time, create_user, modify_time, modify_user
         from sys_data_dict
         where dict_type_code = #{dictTypeCode}
           and dict_code = #{dictCode}
@@ -76,20 +54,9 @@
 
     <!--查询单个-->
     <select id="queryByName" resultMap="BaseResultMap">
-        select id,
-               dict_type_code,
-               dict_type_name,
-               dict_code,
-               dict_name,
-               area_code,
-               remarks,
-               sort,
-               dict_pic,
-               use_state,
-               create_time,
-               create_user,
-               modify_time,
-               modify_user
+        select
+        id, dict_type_code, dict_type_name, dict_code, dict_name, area_code, remarks, sort, dict_pic, use_state,
+        create_time, create_user, modify_time, modify_user
         from sys_data_dict
         where dict_type_code = #{dictTypeCode}
           and dict_name = #{dictName}
