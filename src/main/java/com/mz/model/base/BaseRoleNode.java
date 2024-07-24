@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * 角色节点表(BaseRoleNode)实体类
  *
@@ -13,7 +15,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class BaseRoleNode {
+public class BaseRoleNode implements Serializable {
     private static final long serialVersionUID = -54957374584693313L;
     /**
      * 主键

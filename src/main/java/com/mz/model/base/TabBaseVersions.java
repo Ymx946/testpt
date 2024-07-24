@@ -1,8 +1,11 @@
 package com.mz.model.base;
 
+import com.mz.common.annotation.FieldMeta;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.io.Serializable;
 
 /**
  * 版本管理表(TabBaseVersions)实体类
@@ -11,7 +14,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class TabBaseVersions {
+public class TabBaseVersions implements Serializable {
     private static final long serialVersionUID = 463166192261376554L;
     /**
      * 主键
@@ -20,18 +23,22 @@ public class TabBaseVersions {
     /**
      * 版本号
      */
+    @FieldMeta(name = "版本号")
     private String versionNumber;
     /**
      * 更新内容
      */
+    @FieldMeta(name = "更新内容")
     private String updateContent;
     /**
      * 系统代码
      */
+    @FieldMeta(name = "系统代码")
     private String systemCode;
     /**
      * 系统名称
      */
+    @FieldMeta(name = "系统名称")
     private String systemName;
     /**
      * 状态
@@ -60,6 +67,7 @@ public class TabBaseVersions {
     /**
      * 备注
      */
+    @FieldMeta(name = "备注")
     private String remarks;
 
 }

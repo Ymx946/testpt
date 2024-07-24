@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,40 @@ import java.util.Map;
  */
 @Slf4j
 public class MessageUtil {
+    /**
+     * 获取请求参数
+     *
+     * @param request 请求
+     * @return 请求参数Map集合
+     * @throws Exception
+     * @author sunju @creationDate. 2014-2-19 上午10:49:02
+     * 来源
+     */
+    public static Map<String, String> getHeaderParams(HttpServletRequest request) {
+        Map<String, String> reqParams = new HashMap<>();
+        /**
+         * 装载请求参数（通用）
+         */
+        putHeaderParams(reqParams, request);
+        return reqParams;
+    }
+
+    /**
+     * 装载请求参数
+     *
+     * @param headerParams
+     * @param request      请求
+     * @throws Exception
+     * @author sunju @creationDate. 2014-5-5 下午03:01:14
+     */
+    private static void putHeaderParams(Map<String, String> headerParams, HttpServletRequest request) {
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            headerParams.put(headerName, request.getHeader(headerName));
+        }
+    }
+
     /**
      * 获取请求参数
      *

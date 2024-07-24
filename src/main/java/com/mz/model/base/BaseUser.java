@@ -1,9 +1,12 @@
 package com.mz.model.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mz.common.annotation.FieldMeta;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.io.Serializable;
 
 
 /**
@@ -16,7 +19,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @JsonIgnoreProperties(value = {"rawPwd"})
-public class BaseUser {
+public class BaseUser implements Serializable {
     private static final long serialVersionUID = 285554897944761788L;
     //    用户类型(1-监管端2-农企端 3-演示(免登) 4-大屏演示(免登))
     public static int USER_TYPE_SUPERVISE = 1;
@@ -41,6 +44,7 @@ public class BaseUser {
     /**
      * 管理区域名称
      */
+    @FieldMeta(name = "管理区域名称")
     private String manageAreaName;
     /**
      * 区域代码
@@ -49,10 +53,12 @@ public class BaseUser {
     /**
      * 登录用户名
      */
+    @FieldMeta(name = "登录用户名")
     private String loginName;
     /**
      * 手机号
      */
+    @FieldMeta(name = "手机号")
     private String phoneNo;
     /**
      * 密码（明文密码）
@@ -77,30 +83,37 @@ public class BaseUser {
     /**
      * 姓名
      */
+    @FieldMeta(name = "姓名")
     private String realName;
     /**
      * 用户等级1-超级管理员 2-租户管理员 3-主体管理员 4-干部用户 5-普通用户 6-网格员
      */
+    @FieldMeta(name = "用户等级", readConverterExp = "1=超级管理员,2=租户管理员,3=主体管理员,4=干部用户,5=普通用户,6=网格员")
     private Integer userLevel;
     /**
      * 用户类型(1-监管端2-农企端 3-演示用户)
      */
+    @FieldMeta(name = "用户类型", readConverterExp = "1=监管端,2=农企端,3=演示用户")
     private Integer userType;
     /**
      * 可用状态(1可用2不可用)
      */
+    @FieldMeta(name = "可用状态", readConverterExp = "1=可用,2=不可用")
     private Integer useState;
     /**
      * 登录状态
      */
+    @FieldMeta(name = "登录状态")
     private Integer loginState;
     /**
      * 最新登录时间
      */
+    @FieldMeta(name = "最新登录时间")
     private String loginTime;
     /**
      * 最新登录时间（APP）
      */
+    @FieldMeta(name = "最新登录时间(APP)")
     private String appLoginTime;
     /**
      * 创建时间

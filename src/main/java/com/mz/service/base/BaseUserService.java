@@ -1,6 +1,7 @@
 package com.mz.service.base;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mz.common.model.BaseMainBody;
 import com.mz.common.util.Result;
 import com.mz.model.base.BaseUser;
 
@@ -59,5 +60,4 @@ public interface BaseUserService extends IService<BaseUser> {
     Result userLogin(String loginName, String password, String systemCode, String sysCodes, Integer appLogin, HttpServletRequest request);
 
     BaseUser getUser(HttpServletRequest request);
-
 }
