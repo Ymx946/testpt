@@ -16,14 +16,7 @@ spring:
           jdbc-url: ${spring.datasource.dynamic.datasource.master.url}
           username: root
           password: 1234
-        slave:
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          type: com.zaxxer.hikari.HikariDataSource
-          #测试数据库(外网)
-          url: jdbc:mysql://rm-bp1y95l974v0ak0i1uo.mysql.rds.aliyuncs.com:3306/mzdatacs?allowMultiQueries=true&autoReconnect=true&useUnicode=true&rewriteBatchedStatements=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-          jdbc-url: ${spring.datasource.dynamic.datasource.slave.url}
-          username: mzkf
-          password: mz2022!@#
+
 
   redis:
     host: localhost

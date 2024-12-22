@@ -29,9 +29,9 @@
         <start-class>com.mz.FutureRuralApplication</start-class>
 
         <spring-boot.version>2.6.13</spring-boot.version>
-        <spring-cloud.version>2021.0.5</spring-cloud.version>
-        <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
-        <spring-cloud-starter-openfeign.version>2.2.6.RELEASE</spring-cloud-starter-openfeign.version>
+<!--        <spring-cloud.version>2021.0.5</spring-cloud.version>-->
+<!--        <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>-->
+<!--        <spring-cloud-starter-openfeign.version>2.2.6.RELEASE</spring-cloud-starter-openfeign.version>-->
         <spring-data-commons.version>2.6.3</spring-data-commons.version>
 
         <mysql.version>8.0.22</mysql.version>
@@ -116,7 +116,7 @@
         <imageio.version>3.9.4</imageio.version>
         <jboss-websocket-api_1.1_spec.version>2.0.0.Final</jboss-websocket-api_1.1_spec.version>
         <activiti.version>7.1.0.M6</activiti.version>
-        <activiti.cloud.version>7.0.0.Beta1</activiti.cloud.version>
+<!--        <activiti.cloud.version>7.0.0.Beta1</activiti.cloud.version>-->
         <feign-form-spring.version>3.8.0</feign-form-spring.version>
         <feign-form>3.8.0</feign-form>
         <feign-httpclient.version>11.10</feign-httpclient.version>
@@ -223,36 +223,23 @@
         </dependency>
 
         <!--Spring Cloud 相关依赖-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-dependencies</artifactId>
-            <version>${spring-cloud.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-        <!--Spring Cloud Alibaba 相关依赖-->
 <!--        <dependency>-->
-<!--            <groupId>com.alibaba.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-alibaba-dependencies</artifactId>-->
-<!--            <version>${spring-cloud-alibaba.version}</version>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-dependencies</artifactId>-->
+<!--            <version>${spring-cloud.version}</version>-->
 <!--            <type>pom</type>-->
 <!--            <scope>import</scope>-->
 <!--        </dependency>-->
 <!--        <dependency>-->
-<!--            <groupId>com.alibaba.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>-->
-<!--            <version>${spring-cloud-alibaba.version}</version>-->
+<!--            <groupId>org.springframework.data</groupId>-->
+<!--            <artifactId>spring-data-commons</artifactId>-->
+<!--            <version>${spring-data-commons.version}</version>-->
 <!--        </dependency>-->
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons</artifactId>
-            <version>${spring-data-commons.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>${spring-cloud-starter-openfeign.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-openfeign</artifactId>-->
+<!--            <version>${spring-cloud-starter-openfeign.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
