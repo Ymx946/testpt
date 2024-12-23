@@ -218,6 +218,7 @@ public class SysDataDict {
     public static String RESCUE_VISIT_FAMILY_TYPE_CODE = "RESCUE_VISIT_FAMILY_TYPE";// 救助探访分配-家庭类型
     public static String PERMISSION_CONFIG_SYSTEM_TYPE_CODE = "PERMISSION_CONFIG_SYSTEM_TYPE";// 权限配置系统类型
     public static String UPDATE_SEND_DATA_TYPE_CODE = "UPDATE_SEND_DATA_TYPE";// 版本更新下发数据类型
+    public static String VOLTAGE_LEVEL_CODE = "VOLTAGE_LEVEL"; // 数据字典类型代码-电压等级
 
     /**
      * 主键

@@ -2,19 +2,19 @@ package com.mz.controller.base;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.aliyuncs.utils.StringUtils;
 import com.mz.common.util.ResponseCode;
 import com.mz.common.util.Result;
 import com.mz.common.util.StringFormatUtil;
 import com.mz.framework.annotation.NeedLogin;
+import com.mz.model.base.BaseSiteInformation;
 import com.mz.model.base.SysDataDict;
+import com.mz.model.base.vo.BaseSiteInformationVO;
 import com.mz.service.base.BaseUserService;
 import com.mz.service.base.SysDataDictService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -42,37 +42,57 @@ public class SysDataDictController {
     private SysDataDictService sysDataDictService;
 
 
-    /**
-     * 新增数据
-     */
-    @SneakyThrows
+//    /**
+//     * 新增数据
+//     */
+//    @SneakyThrows
+//    @PostMapping("insert")
+//    public Result insert(String id, String dictTypeCode, String dictTypeName, String dictCode, String dictName, String areaCode, String remarks, Integer sort, String dictPic, String token, HttpServletRequest request) {
+//        if (baseUserService.checkLogin(token, request)) {
+//            if (ObjectUtil.isEmpty(dictTypeCode)) {
+//                return Result.failed("类型代码不能为空");
+//            }
+//            if (ObjectUtil.isEmpty(dictTypeName)) {
+//                return Result.failed("类型名称不能为空");
+//            }
+//            SysDataDict sysDataDict = new SysDataDict();
+//            if (!StringUtils.isEmpty(id)) {
+//                sysDataDict.setId(id);
+//            } else {
+//                sysDataDict.setUseState(1);
+//                sysDataDict.setId(null);
+//            }
+//            sysDataDict.setDictTypeCode(dictTypeCode);
+//            sysDataDict.setDictTypeName(dictTypeName);
+//            sysDataDict.setDictCode(dictCode);
+//            sysDataDict.setDictName(dictName);
+//            sysDataDict.setAreaCode(areaCode);
+//            sysDataDict.setRemarks(remarks);
+//            sysDataDict.setSort(sort);
+//            sysDataDict.setDictPic(dictPic);
+//            return sysDataDictService.insert(sysDataDict, request);
+//        } else {
+//            return Result.failedLogin();
+//        }
+//    }
+
+    @NeedLogin
     @PostMapping("insert")
-    public Result insert(String id, String dictTypeCode, String dictTypeName, String dictCode, String dictName, String areaCode, String remarks, Integer sort, String dictPic, String token, HttpServletRequest request) {
-        if (baseUserService.checkLogin(token, request)) {
-            if (ObjectUtil.isEmpty(dictTypeCode)) {
-                return Result.failed("类型代码不能为空");
-            }
-            if (ObjectUtil.isEmpty(dictTypeName)) {
-                return Result.failed("类型名称不能为空");
-            }
-            SysDataDict sysDataDict = new SysDataDict();
-            if (!StringUtils.isEmpty(id)) {
-                sysDataDict.setId(id);
-            } else {
-                sysDataDict.setUseState(1);
-                sysDataDict.setId(null);
-            }
-            sysDataDict.setDictTypeCode(dictTypeCode);
-            sysDataDict.setDictTypeName(dictTypeName);
-            sysDataDict.setDictCode(dictCode);
-            sysDataDict.setDictName(dictName);
-            sysDataDict.setAreaCode(areaCode);
-            sysDataDict.setRemarks(remarks);
-            sysDataDict.setSort(sort);
-            sysDataDict.setDictPic(dictPic);
-            return sysDataDictService.insert(sysDataDict, request);
-        } else {
-            return Result.failedLogin();
+    public Result insert(SysDataDict pojo, @RequestHeader(value = "loginID") String loginID,HttpServletRequest request) {
+        if (com.aliyuncs.utils.StringUtils.isEmpty(loginID)) {
+            return Result.failed("loginID不能为空");
+        }
+        if (ObjectUtil.isEmpty(pojo.getDictTypeCode())) {
+            return Result.failed("类型代码不能为空");
+        }
+        if (ObjectUtil.isEmpty(pojo.getDictTypeName())) {
+            return Result.failed("类型名称不能为空");
+        }
+        try {
+            return this.sysDataDictService.insert(pojo,request);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
         }
     }
 
@@ -183,13 +203,31 @@ public class SysDataDictController {
      * @param dictTypeName 类型名称（完全匹配，需要任意匹配需要另传参数）
      * @return 对象列表
      */
-    @SneakyThrows
-    @PostMapping("queryAll")
-    public Result queryAll(String areaCode, String dictTypeCode, String dictTypeName, String dictName, String token, HttpServletRequest request) {
-        if (baseUserService.checkLogin(token, request)) {
+//    @SneakyThrows
+//    @PostMapping("queryAll")
+//    public Result queryAll(String areaCode, String dictTypeCode, String dictTypeName, String dictName, String token, HttpServletRequest request) {
+//        if (baseUserService.checkLogin(token, request)) {
+//            return Result.success();
+//        } else {
+//            return Result.failedLogin();
+//        }
+//    }
+
+    /**
+     * 根据类型查询多条数据
+     *
+     * @param dictTypeCode 类型代码
+     * @param dictTypeName 类型名称（完全匹配，需要任意匹配需要另传参数）
+     * @return 对象列表
+     */
+    @NeedLogin
+    @GetMapping("queryAll")
+    public Result queryAll(String areaCode, String dictTypeCode, String dictTypeName, String dictName) {
+        try {
             return Result.success(sysDataDictService.queryAll(areaCode, dictTypeCode, dictTypeName, dictName));
-        } else {
-            return Result.failedLogin();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
         }
     }
 

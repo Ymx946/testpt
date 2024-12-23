@@ -233,6 +233,7 @@ public class SysDataDictServiceImpl extends ServiceImpl<SysDataDictMapper, SysDa
             sysDataDict.setId(String.valueOf(newId));
             sysDataDict.setCreateUser(baseUser.getRealName());
             sysDataDict.setCreateTime(DateUtil.now());
+            sysDataDict.setUseState(1);
             this.sysDataDictMapper.insert(sysDataDict);
             return Result.success(sysDataDict);
         }
