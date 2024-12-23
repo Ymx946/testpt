@@ -181,9 +181,9 @@ spring:
         cachePrepStmts: true
         useServerPrepStmts: true
 
-logging:
-  level:
-    org.springframework.data.mongodb.core: INFO
+#logging:
+#  level:
+#    org.springframework.data.mongodb.core: INFO
 
 mybatis-plus:
   type-aliases-package: com.mz.mapper

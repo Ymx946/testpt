@@ -20,7 +20,7 @@ public class DataCenterApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(DataCenterApplication.class, args);
-        log.info("====================芒种数据中心启动成功==================");
+        log.info("====================蓄电池数智运维平台启动成功==================");
     }
 
     @Override

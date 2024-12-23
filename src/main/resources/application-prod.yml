@@ -28,15 +28,15 @@ spring:
     database: 0 #一体化正式
     timeout: 100000
 
-  data:
-    mongodb:
-      host: 47.99.156.3 #指定MongoDB服务地址
-      port: 27017 #指定端口，默认就为27017
-      database: wlxckf #指定使用的数据库
-      authentication-database: admin # 登录认证的逻辑库名
-      username: mzdata #用户名
-      password: mz2021!@# #密码
-      auto-index-creation: true
+#  data:
+#    mongodb:
+#      host: 47.99.156.3 #指定MongoDB服务地址
+#      port: 27017 #指定端口，默认就为27017
+#      database: wlxckf #指定使用的数据库
+#      authentication-database: admin # 登录认证的逻辑库名
+#      username: mzdata #用户名
+#      password: mz2021!@# #密码
+#      auto-index-creation: true
 
   cloud:
     nacos:
