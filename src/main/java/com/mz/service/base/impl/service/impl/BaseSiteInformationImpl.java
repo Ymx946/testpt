@@ -115,10 +115,10 @@ public class BaseSiteInformationImpl extends ServiceImpl<BaseSiteInformationMapp
         if (vo.getState() != null) {
             lambdaQuery.eq(BaseSiteInformation::getState, vo.getState());
         }
-        if (!StringUtils.isEmpty(vo.getAreaCode())) {
+        if (ObjectUtil.isNotEmpty(vo.getAreaCode())) {
             lambdaQuery.likeRight(BaseSiteInformation::getAreaCode, vo.getAreaCode());
         }
-        if (!StringUtils.isEmpty(vo.getFindStr())) {
+        if (ObjectUtil.isNotEmpty(vo.getFindStr())) {
             lambdaQuery.like(BaseSiteInformation::getSiteName, vo.getSiteName());
         }
         List<BaseSiteInformation> list = lambdaQuery.orderByDesc(BaseSiteInformation::getCreateTime).list();

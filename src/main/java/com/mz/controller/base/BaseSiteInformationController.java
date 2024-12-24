@@ -106,6 +106,7 @@ public class BaseSiteInformationController {
             return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
         }
     }
+
     /**
      * 变更状态
      * @return 对象列表
