@@ -1,5 +1,6 @@
 package com.mz.service.base.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.github.pagehelper.PageHelper;
@@ -17,6 +18,7 @@ import com.mz.common.ConstantsCacheUtil;
 import com.mz.common.ConstantsUtil;
 import com.mz.common.util.IdWorker;
 import com.mz.common.context.PageInfo;
+
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +45,7 @@ public class BaseSiteInformationImpl extends ServiceImpl<BaseSiteInformationMapp
     private SysDataDictService sysDataDictService;
 
     @Override
-    public BaseSiteInformation insert(BaseSiteInformation pojo, String loginID){
+    public BaseSiteInformation insert(BaseSiteInformation pojo, String loginID) {
         String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
         JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
         BaseUser baseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
@@ -63,16 +65,16 @@ public class BaseSiteInformationImpl extends ServiceImpl<BaseSiteInformationMapp
             }
         }
 
-        if(ObjectUtil.isNotEmpty(pojo.getUnitId())){
+        if (ObjectUtil.isNotEmpty(pojo.getUnitId())) {
             BaseUnitInformation information = baseUnitInformationService.getById(pojo.getUnitId());
-           if(ObjectUtil.isNotEmpty(information) && ObjectUtil.isNotEmpty(information.getUnitName())){
-               pojo.setUnitName(information.getUnitName());
-           }
+            if (ObjectUtil.isNotEmpty(information) && ObjectUtil.isNotEmpty(information.getUnitName())) {
+                pojo.setUnitName(information.getUnitName());
+            }
         }
 
-        if(ObjectUtil.isNotEmpty(pojo.getOpsId())){
+        if (ObjectUtil.isNotEmpty(pojo.getOpsId())) {
             BaseUnitInformation information = baseUnitInformationService.getById(pojo.getOpsId());
-            if(ObjectUtil.isNotEmpty(information) && ObjectUtil.isNotEmpty(information.getUnitName())){
+            if (ObjectUtil.isNotEmpty(information) && ObjectUtil.isNotEmpty(information.getUnitName())) {
                 pojo.setOpsName(information.getUnitName());
             }
         }
@@ -84,7 +86,7 @@ public class BaseSiteInformationImpl extends ServiceImpl<BaseSiteInformationMapp
             }
         }
 
-        if(pojo.getId()==null){
+        if (pojo.getId() == null) {
             IdWorker idWorker = new IdWorker(0L, 0L);
             pojo.setId(idWorker.nextId());
             pojo.setCreateUser(baseUser.getRealName());
@@ -94,21 +96,23 @@ public class BaseSiteInformationImpl extends ServiceImpl<BaseSiteInformationMapp
             pojo.setDelState(ConstantsUtil.IS_DONT_DEL);
             pojo.setState(ConstantsUtil.STATE_NORMAL);
             save(pojo);
-        }else{
+        } else {
             pojo.setModifyUser(baseUser.getRealName());
             pojo.setModifyTime(DateUtil.now());
             updateById(pojo);
         }
         return pojo;
     }
-  @Override
+
+    @Override
     public PageInfo<BaseSiteInformation> queryAllByLimit(BaseSiteInformationVO vo) {
         PageHelper.startPage(vo.getPageNo(), vo.getPageSize());
         List<BaseSiteInformation> list = queryAll(vo);
         PageInfo<BaseSiteInformation> pageInfo = new PageInfo<BaseSiteInformation>(list);
         return pageInfo;
     }
-  @Override
+
+    @Override
     public List<BaseSiteInformation> queryAll(BaseSiteInformationVO vo) {
         LambdaQueryChainWrapper<BaseSiteInformation> lambdaQuery = lambdaQuery();
         lambdaQuery.eq(BaseSiteInformation::getDelState, ConstantsUtil.IS_DONT_DEL);
@@ -118,8 +122,22 @@ public class BaseSiteInformationImpl extends ServiceImpl<BaseSiteInformationMapp
         if (ObjectUtil.isNotEmpty(vo.getAreaCode())) {
             lambdaQuery.likeRight(BaseSiteInformation::getAreaCode, vo.getAreaCode());
         }
+        if (ObjectUtil.isNotEmpty(vo.getUnitId())) {
+            lambdaQuery.eq(BaseSiteInformation::getUnitId, vo.getUnitId());
+        }
         if (ObjectUtil.isNotEmpty(vo.getFindStr())) {
             lambdaQuery.like(BaseSiteInformation::getSiteName, vo.getSiteName());
+        }
+        List<BaseSiteInformation> list = lambdaQuery.orderByDesc(BaseSiteInformation::getCreateTime).list();
+        return list;
+    }
+
+    @Override
+    public List<BaseSiteInformation> queryAllByUnitId(List<Long> unitIdList) {
+        LambdaQueryChainWrapper<BaseSiteInformation> lambdaQuery = lambdaQuery();
+        lambdaQuery.eq(BaseSiteInformation::getDelState, ConstantsUtil.IS_DONT_DEL);
+        if (CollectionUtil.isNotEmpty(unitIdList)) {
+            lambdaQuery.in(BaseSiteInformation::getUnitId,unitIdList);
         }
         List<BaseSiteInformation> list = lambdaQuery.orderByDesc(BaseSiteInformation::getCreateTime).list();
         return list;

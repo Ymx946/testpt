@@ -114,7 +114,7 @@ public class BaseSiteHost {
      */
     private String chargeCurrent;
     /**
-     * 升压上线
+     * 升压上限
      */
     private String boostLimit;
     /**

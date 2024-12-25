@@ -29,6 +29,6 @@ public interface BaseSiteHostService  extends IService<BaseSiteHost>{
      *
      */
      List<BaseSiteHost> queryAll(BaseSiteHostVO vo);
-    
+    List<BaseSiteHost> queryAllBySiteId(List<Long> siteIdList);
 
 }

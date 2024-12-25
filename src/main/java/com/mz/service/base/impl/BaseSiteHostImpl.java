@@ -1,5 +1,6 @@
 package com.mz.service.base.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.github.pagehelper.PageHelper;
@@ -97,6 +98,17 @@ public class BaseSiteHostImpl extends ServiceImpl<BaseSiteHostMapper, BaseSiteHo
         }
         if (ObjectUtil.isNotEmpty(vo.getDeviceTypeCode())) {
             lambdaQuery.eq(BaseSiteHost::getDeviceTypeCode, vo.getDeviceTypeCode());
+        }
+        List<BaseSiteHost> list = lambdaQuery.orderByDesc(BaseSiteHost::getCreateTime).list();
+        return list;
+    }
+
+    @Override
+    public List<BaseSiteHost> queryAllBySiteId(List<Long> siteIdList) {
+        LambdaQueryChainWrapper<BaseSiteHost> lambdaQuery = lambdaQuery();
+        lambdaQuery.eq(BaseSiteHost::getDelState, ConstantsUtil.IS_DONT_DEL);
+        if (CollectionUtil.isNotEmpty(siteIdList)) {
+            lambdaQuery.in(BaseSiteHost::getSiteId,siteIdList);
         }
         List<BaseSiteHost> list = lambdaQuery.orderByDesc(BaseSiteHost::getCreateTime).list();
         return list;

@@ -29,6 +29,8 @@ public interface BaseSiteInformationService  extends IService<BaseSiteInformatio
      *
      */
      List<BaseSiteInformation> queryAll(BaseSiteInformationVO vo);
+
+    List<BaseSiteInformation> queryAllByUnitId(List<Long> unitIdList);
     
 
 }

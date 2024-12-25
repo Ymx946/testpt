@@ -85,16 +85,44 @@ public class BaseUnitInformationController {
     }
 
     /**
-     * 单位选择列表
+     * 单位选择列表(3层)
      */
     @NeedLogin
-    @GetMapping("queryTreeList")
-    public Result queryTreeList(BaseUnitInformationVO vo, @RequestHeader(value = "loginID") String loginID) {
+    @GetMapping("queryTreeThree")
+    public Result queryTreeThree(BaseUnitInformationVO vo, @RequestHeader(value = "loginID") String loginID) {
         if (StringUtils.isEmpty(loginID)) {
             return Result.failed("loginID不能为空");
         }
         try {
-            return Result.success(this.baseUnitInformationService.queryTreeList(vo));
+            return Result.success(this.baseUnitInformationService.queryTreeThree(vo));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
+        }
+    }
+
+    @NeedLogin
+    @GetMapping("queryTreeFive")
+    public Result queryTreeFive(BaseUnitInformationVO vo, @RequestHeader(value = "loginID") String loginID) {
+        if (StringUtils.isEmpty(loginID)) {
+            return Result.failed("loginID不能为空");
+        }
+        try {
+            return Result.success(this.baseUnitInformationService.queryTreeFive(vo));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
+        }
+    }
+
+    @NeedLogin
+    @GetMapping("queryTreeSix")
+    public Result queryTreeSix(BaseUnitInformationVO vo, @RequestHeader(value = "loginID") String loginID) {
+        if (StringUtils.isEmpty(loginID)) {
+            return Result.failed("loginID不能为空");
+        }
+        try {
+            return Result.success(this.baseUnitInformationService.queryTreeSix(vo));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());

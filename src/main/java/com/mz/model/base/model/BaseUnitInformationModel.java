@@ -18,6 +18,6 @@ public class BaseUnitInformationModel extends BaseUnitInformation {
     /**
      * 下层单位集合
      */
-    private List<BaseUnitInformation> childrenList;
+    private List<BaseUnitInformationModel> childrenList;
 
 }

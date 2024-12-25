@@ -8,6 +8,7 @@ import com.mz.model.base.model.BaseUnitInformationModel;
 import com.mz.model.base.vo.BaseUnitInformationVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 单位信息表(BaseUnitInformation)表服务接口
@@ -15,27 +16,35 @@ import java.util.List;
  * @author makejava
  * @since 2024-12-23 10:17:28
  */
-public interface BaseUnitInformationService  extends IService<BaseUnitInformation>{
+public interface BaseUnitInformationService extends IService<BaseUnitInformation> {
     /**
      * 保存
-     *
      */
     Result insert(BaseUnitInformation pojo, String loginID);
+
     /**
      * 分页列表
-     *
      */
-     PageInfo<BaseUnitInformation> queryAllByLimit(BaseUnitInformationVO vo);
-     /**
+    PageInfo<BaseUnitInformation> queryAllByLimit(BaseUnitInformationVO vo);
+
+    /**
      * 查询所有
-     *
      */
-     List<BaseUnitInformation> queryAll(BaseUnitInformationVO vo);
+    List<BaseUnitInformation> queryAll(BaseUnitInformationVO vo);
 
     /**
      * 单位选择列表
      */
-    List<BaseUnitInformationModel> queryTreeList(BaseUnitInformationVO vo);
-    
+    List<BaseUnitInformationModel> queryTreeThree(BaseUnitInformationVO vo);
+
+    /**
+     * 单位选择列表(五层)
+     */
+    Map<String, Object> queryTreeFive(BaseUnitInformationVO vo);
+    /**
+     * 单位选择列表(六层)
+     */
+    Map<String, Object> queryTreeSix(BaseUnitInformationVO vo);
+
 
 }

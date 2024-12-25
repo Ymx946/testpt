@@ -242,6 +242,87 @@ public class OssUtil {
             return attaVo;
         }
     }
+    public AttaVo uploadToLocalFile(MultipartFile file, Boolean needWH) throws Exception {
+        AttaVo attaVo = new AttaVo();
+        boolean flag = false; // Check if the uploaded file format is correct
+        String fileName = file.getOriginalFilename();
+        attaVo.setOldName(fileName);
+        String imgurl = "";
+        String prefix = fileName.substring(fileName.lastIndexOf("."));
+        Path tempfile = null;
+
+        if (!file.isEmpty()) {
+            tempfile = Files.createTempFile(fileName + "_" + new Date().getTime(), prefix);
+            file.transferTo(tempfile);
+            InputStream in;
+            File tempYstp = tempfile.toFile();
+
+            if (Boolean.TRUE.equals(needWH)) {
+                BufferedImage bufferedImage = ImageIO.read(tempYstp); // Get image stream from temporary file
+                if (bufferedImage == null) {
+                    FileInputStream filestr = new FileInputStream(tempYstp);
+                    byte[] bytes = new byte[30];
+                    filestr.read(bytes, 0, bytes.length);
+                    int width = ((int) bytes[27] & 0xff) << 8 | ((int) bytes[26] & 0xff);
+                    int height = ((int) bytes[29] & 0xff) << 8 | ((int) bytes[28] & 0xff);
+                    attaVo.setWidth(width);
+                    attaVo.setHeight(height);
+                } else {
+                    attaVo.setWidth(bufferedImage.getWidth());
+                    attaVo.setHeight(bufferedImage.getHeight());
+                }
+            }
+
+            in = new FileInputStream(tempYstp);
+            String ext = fileName.substring(fileName.lastIndexOf(".") + 1); // Get the file extension
+
+            try {
+                // Check if the file format is supported
+                OssUpLoadFile.EnumForm enumForm = OssUpLoadFile.EnumForm.valueOf(ext.toUpperCase());
+                if (ObjectUtil.isNotEmpty(enumForm)) {
+                    flag = true;
+                }
+            } catch (IllegalArgumentException e) {
+                flag = false;
+            }
+
+            // Handle audio file duration for specific formats
+            if (ext.equalsIgnoreCase("MP3") ||
+                    ext.equalsIgnoreCase("MP4") ||
+                    ext.equalsIgnoreCase("AVI") ||
+                    ext.equalsIgnoreCase("MKV") ||
+                    ext.equalsIgnoreCase("FLV") ||
+                    ext.equalsIgnoreCase("WMV")) {
+                Float mp3Duration = AudioUtil.getMp3Duration(tempYstp.getAbsolutePath());
+                attaVo.setTimeLong(mp3Duration.longValue());
+                attaVo.setTimeLongStr(DateUtil.secondToTime(mp3Duration.intValue()));
+            }
+
+            if (!flag) {
+                log.info("Unsupported file format");
+            } else {
+                // Upload file to local directory
+                String localPath = "D:\\localPic\\" + getSoleFileName(fileName);
+                Files.copy(tempfile, Paths.get(localPath), StandardCopyOption.REPLACE_EXISTING);
+                imgurl = localPath; // Set the local path as the URL
+            }
+
+            in.close(); // Close the stream
+            if (tempYstp.exists()) {
+                tempYstp.delete();
+            }
+            if (tempYstp != null && tempYstp.exists()) {
+                tempYstp.delete();
+            }
+        }
+
+        if (!flag) {
+            return null;
+        } else {
+            attaVo.setUrl(imgurl);
+            return attaVo;
+        }
+    }
 
     public AttaVo uploadFileForFill(MultipartFile file, String tenantId, String setId, Integer type, String linkId, Boolean needWH, HttpServletRequest request) throws Exception {
         if (StringUtils.isEmpty(tenantId)) {
