@@ -1,4 +1,4 @@
-package com.mz.service.base.impl.service.impl;
+package com.mz.service.base.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
