@@ -359,12 +359,12 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
         // Build fifth layer
         Map<Long, Map<String, Object>> hostMap = new HashMap<>();
         Set<Long> addedHostIds = new HashSet<>(); // Track added site IDs
-        for (BaseSiteBatteryPack baseSiteBatteryPack : packs) {
-            Map<String, Object> siteData = new HashMap<>();
-            siteData.put("id", baseSiteBatteryPack.getId());
-            siteData.put("name", baseSiteBatteryPack.getHostName());
-            siteData.put("children", new ArrayList<Map<String, Object>>());
-            hostMap.put(baseSiteBatteryPack.getId(), siteData);
+        for (BaseSiteHost baseSiteHost : hosts) {
+            Map<String, Object> hostData = new HashMap<>();
+            hostData.put("id", baseSiteHost.getId());
+            hostData.put("name", baseSiteHost.getHostName());
+            hostData.put("children", new ArrayList<Map<String, Object>>());
+            hostMap.put(baseSiteHost.getId(), hostData);
         }
 
         for (BaseSiteHost host : hosts) {
