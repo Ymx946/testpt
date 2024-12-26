@@ -5,25 +5,30 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
 import com.mz.common.ConstantsCacheUtil;
 import com.mz.common.ConstantsUtil;
+import com.mz.common.context.PageInfo;
 import com.mz.common.model.BaseMainBody;
 import com.mz.common.util.*;
 import com.mz.framework.util.redis.RedisUtil;
 import com.mz.mapper.localhost.BaseUserMapper;
-import com.mz.model.base.BaseUser;
+import com.mz.model.base.*;
+import com.mz.model.base.vo.BaseSiteBatteryPackVO;
+import com.mz.model.base.vo.BaseUserNewVO;
 import com.mz.model.base.vo.UserLoginVO;
+import com.mz.service.base.BaseUnitInformationService;
 import com.mz.service.base.BaseUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -39,6 +44,8 @@ public class BaseUserServiceImpl extends ServiceImpl<BaseUserMapper, BaseUser> i
     private BaseUserMapper baseUserMapper;
     @Resource
     private RedisUtil redisUtil;
+    @Autowired
+    private BaseUnitInformationService baseUnitInformationService;
 
     /**
      * 通过ID查询单条数据
@@ -223,6 +230,80 @@ public class BaseUserServiceImpl extends ServiceImpl<BaseUserMapper, BaseUser> i
     }
 
     /**
+     * 新增数据
+     *
+     * @param baseUser 实例对象
+     * @return 实例对象
+     */
+    @Override
+    public Result insert(BaseUser baseUser, HttpServletRequest request) {
+        BaseUser sessionbaseUser = getUser(request);
+        BaseUser returnBaseUser = null;
+        if(ObjectUtil.isNotEmpty(baseUser.getUnitId())){
+            BaseUnitInformation unitInformation = baseUnitInformationService.getById(baseUser.getUnitId());
+            if(ObjectUtil.isNotEmpty(unitInformation) && ObjectUtil.isNotEmpty(unitInformation.getUnitName())){
+                baseUser.setUnitName(unitInformation.getUnitName());
+            }
+        }
+        if (ObjectUtil.isNotEmpty(baseUser.getId())) {
+            returnBaseUser = new BaseUser();
+            BaseUser findBaseUser = new BaseUser();
+            findBaseUser.setLoginName(baseUser.getLoginName());
+            findBaseUser.setId(baseUser.getId());//<!--这里查询不等于传入的ID，作为修改时验证名称重复问题，其他情况查询不存在传入ID的情况-->
+            List<BaseUser> nameUserList = baseUserMapper.queryAll(findBaseUser);
+            if (nameUserList != null && nameUserList.size() > 0) {
+                return Result.failed("用户手机（登录名）重复");
+            } else {
+                baseUserMapper.update(baseUser);
+                returnBaseUser = baseUserMapper.queryById(baseUser.getId());
+            }
+        } else {
+            returnBaseUser = new BaseUser();
+            BaseUser findBaseUser = new BaseUser();
+            findBaseUser.setLoginName(baseUser.getLoginName());
+            List<BaseUser> nameUserList = baseUserMapper.queryAll(findBaseUser);
+            if (CollectionUtil.isNotEmpty(nameUserList)) {
+                returnBaseUser = nameUserList.stream().findFirst().get();
+            } else {
+                IdWorker idWorker = new IdWorker(0L, 0L);
+                long newId = idWorker.nextId();
+                baseUser.setTenantId(null);
+                baseUser.setCreatUser(sessionbaseUser.getRealName());
+                baseUser.setId(String.valueOf(newId));
+                baseUser.setLoginTime(null);
+                baseUser.setCreatTime(DateUtil.getNowStringTime());
+                baseUser.setUseState(1);
+                baseUser.setLoginState(2);
+                baseUser = setUserPassword(baseUser, baseUser.getPassword());
+                this.baseUserMapper.insert(baseUser);
+                returnBaseUser = baseUser;
+            }
+        }
+        return Result.success(returnBaseUser.getId());
+    }
+
+    public BaseUser setUserPassword(BaseUser baseUser, String password) {
+        String passwordDefault = ConstantsUtil.PASSWORD_DEFAULT;// 默认初始密码
+        if (ObjectUtil.isEmpty(password)) {
+            // 记录用户随机吗，作为导出查询密码使用
+            Map<String, String> defaultPwdMap = PasswordUtil.getDefaultPwdByTenant(passwordDefault);
+            baseUser.setPwdSalt(defaultPwdMap.get("setPwdSalt"));
+            baseUser.setPassword(defaultPwdMap.get("newpwd"));// 设置默认密码
+            baseUser.setRawPwdMd5(defaultPwdMap.get("rawPwdMd5"));
+            baseUser.setRawPwd(defaultPwdMap.get("rawPwd"));
+            baseUser.setPwdModifyTime(DateUtil.getNowStringTime());
+        } else {
+            Map<String, String> defaultPwdMap = PasswordUtil.getDefaultPwd(password);
+            baseUser.setPwdSalt(defaultPwdMap.get("setPwdSalt"));
+            baseUser.setPassword(defaultPwdMap.get("newpwd"));// 设置默认密码
+            baseUser.setRawPwdMd5(defaultPwdMap.get("rawPwdMd5"));
+            baseUser.setRawPwd(defaultPwdMap.get("rawPwd"));
+            baseUser.setPwdModifyTime(DateUtil.getNowStringTime());
+        }
+        return baseUser;
+    }
+
+    /**
      * 用户登录
      *
      * @param loginName 登录名
@@ -316,10 +397,10 @@ public class BaseUserServiceImpl extends ServiceImpl<BaseUserMapper, BaseUser> i
             userLoginVO.setAreaCode(baseUser.getAreaCode());
             userLoginVO.setTenantId(baseUser.getTenantId());
             userLoginVO.setRealName(baseUser.getRealName());
-            if (userLoginVO.getUserLevel().intValue() >= 3 && userLoginVO.getMainBodyId() == null) {// 主体管理员及以下用户登录时，找不到可用主体，不允许登录
-                return Result.instance(0, "用户暂无权限");
-            }
-            baseUser.setAreaCode(userLoginVO.getAreaCode());// 存入Redis的用户信息代码以主体代码为准
+//            if (userLoginVO.getUserLevel().intValue() >= 3 && userLoginVO.getMainBodyId() == null) {// 主体管理员及以下用户登录时，找不到可用主体，不允许登录
+//                return Result.instance(0, "用户暂无权限");
+//            }
+//            baseUser.setAreaCode(userLoginVO.getAreaCode());// 存入Redis的用户信息代码以主体代码为准
             if (appLogin != null && appLogin == 1) {// app登录(默认一直有效)
                 redisUtil.setEx(ConstantsCacheUtil.LOGIN_TOKEN_APP + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + baseUser.getId(), token, 365, TimeUnit.DAYS);
                 redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_INFO_APP + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + baseUser.getId(), JSON.toJSONString(baseUser), 365, TimeUnit.DAYS);
@@ -339,6 +420,55 @@ public class BaseUserServiceImpl extends ServiceImpl<BaseUserMapper, BaseUser> i
             ResponseCode userLoginNotexits = ResponseCode.USER_LOGIN_NOTEXITS;
             return Result.instance(99998, userLoginNotexits.getMsg());
         }
+    }
+
+    /**
+     * 重置
+     *
+     * @return 实例对象
+     */
+    @Override
+    public Result reSetPwd(String id, String password, HttpServletRequest request) {
+        BaseUser sessionbaseUser = getUser(request);
+        BaseUser sessionOldBaseUser = baseUserMapper.queryById(sessionbaseUser.getId());
+        // 明码密码前三位+盐+明码密码3位以后---转MD5--最终密码
+        String oldPwdMD5 = PasswordUtil.md5(password.substring(0, 3) + sessionOldBaseUser.getPwdSalt() + password.substring(3));
+        if (oldPwdMD5.equals(sessionOldBaseUser.getPassword())) {
+            BaseUser oldBaseUser = baseUserMapper.queryById(id);
+            if (oldBaseUser != null) {
+                oldBaseUser = setUserPassword(oldBaseUser, null);
+                baseUserMapper.update(oldBaseUser);
+                return Result.success();
+            } else {
+                return Result.failed("未找到相应用户信息");
+            }
+        } else {
+            return Result.failed("密码错误");
+        }
+    }
+
+    @Override
+    public PageInfo<BaseUser> queryAllByLimit(BaseUserNewVO vo) {
+        PageHelper.startPage(vo.getPageNo(), vo.getPageSize());
+        List<BaseUser> list = queryAllNew(vo);
+        PageInfo<BaseUser> pageInfo = new PageInfo<BaseUser>(list);
+        return pageInfo;
+    }
+
+    public List<BaseUser> queryAllNew(BaseUserNewVO vo) {
+        LambdaQueryChainWrapper<BaseUser> lambdaQuery = lambdaQuery();
+        lambdaQuery.eq(BaseUser::getUseState, ConstantsUtil.IS_DONT_DEL);
+        if (ObjectUtil.isNotEmpty(vo.getUnitId())) {
+            lambdaQuery.eq(BaseUser::getUnitId, vo.getUnitId());
+        }
+        if (ObjectUtil.isNotEmpty(vo.getFindStr())) {
+            lambdaQuery.and((wrapper) -> {
+                wrapper.like(BaseUser::getLoginName, vo.getFindStr()).or().like(BaseUser::getRealName,
+                        vo.getFindStr()).or().like(BaseUser::getPhoneNo, vo.getFindStr());
+            });
+        }
+        List<BaseUser> list = lambdaQuery.orderByDesc(BaseUser::getCreatTime).list();
+        return list;
     }
 
 }

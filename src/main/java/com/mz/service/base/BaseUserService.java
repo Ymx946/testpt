@@ -1,9 +1,14 @@
 package com.mz.service.base;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mz.common.context.PageInfo;
 import com.mz.common.model.BaseMainBody;
 import com.mz.common.util.Result;
+import com.mz.model.base.BaseSiteHost;
 import com.mz.model.base.BaseUser;
+import com.mz.model.base.vo.BaseSiteHostVO;
+import com.mz.model.base.vo.BaseUserNewVO;
+import com.mz.model.base.vo.BaseUserVO;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -60,4 +65,25 @@ public interface BaseUserService extends IService<BaseUser> {
     Result userLogin(String loginName, String password, String systemCode, String sysCodes, Integer appLogin, HttpServletRequest request);
 
     BaseUser getUser(HttpServletRequest request);
+
+    /**
+     * 新增数据
+     *
+     * @param baseUser 实例对象
+     * @return 实例对象
+     */
+    Result insert(BaseUser baseUser, HttpServletRequest request);
+
+    /**
+     * 重置(重置为默认密码 gzsz@2024)
+     *
+     * @return 实例对象
+     */
+    Result reSetPwd(String id, String password, HttpServletRequest request);
+
+    /**
+     * 分页列表
+     *
+     */
+    PageInfo<BaseUser> queryAllByLimit(BaseUserNewVO vo);
 }

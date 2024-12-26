@@ -567,7 +567,7 @@ public class ConstantsUtil {
     /**
      * 默认密码
      */
-    public static String PASSWORD_DEFAULT = "mz1234567";
+    public static String PASSWORD_DEFAULT = "gzsz@2024";
     /**
      * 行程类型1去程2返程
      */

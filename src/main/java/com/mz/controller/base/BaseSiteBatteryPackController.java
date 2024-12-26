@@ -29,7 +29,7 @@ public class BaseSiteBatteryPackController {
     private BaseSiteBatteryPackService baseSiteBatteryPackService;
 
      /**
-     * @return 对象列表
+     * 新增/编辑
      * */
     @NeedLogin
     @PostMapping("insert")

@@ -2,16 +2,18 @@ package com.mz.controller.base;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.mz.common.ConstantsUtil;
+import com.mz.common.util.ResponseCode;
 import com.mz.common.util.Result;
+import com.mz.common.util.StringFormatUtil;
 import com.mz.framework.annotation.NeedLogin;
+import com.mz.model.base.BaseUser;
+import com.mz.model.base.vo.BaseSiteBatteryPackVO;
+import com.mz.model.base.vo.BaseUserNewVO;
 import com.mz.service.base.BaseUserService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -128,5 +130,69 @@ public class BaseUserController {
         return Result.failed();
     }
 
+    /**
+     * 新增数据
+     */
+    @SneakyThrows
+    @PostMapping("insert")
+    public Result insert(BaseUser baseUser, String token, HttpServletRequest request) {
+        if (ObjectUtil.isEmpty(baseUser.getLoginName())) {
+            return Result.failed("账号必填");
+        }
+        if (ObjectUtil.isEmpty(baseUser.getRealName())) {
+            return Result.failed("姓名必填");
+        }
+        if (ObjectUtil.isEmpty(baseUser.getPhoneNo())) {
+            return Result.failed("手机号必填");
+        }
+        if (ObjectUtil.isEmpty(baseUser.getUnitId())) {
+            return Result.failed("所属单位必填");
+        }
+//        if (ObjectUtil.isEmpty(baseUser.getUserPhoto())) {
+//            return Result.failed("照片必填");
+//        }
+        if (baseUserService.checkLogin(token, request)) {
+            baseUser.setUseState(1);
+            return baseUserService.insert(baseUser,  request);
+        } else {
+            return Result.failedLogin();
+        }
+    }
+
+    /**
+     * 重置密码
+     */
+    @SneakyThrows
+    @PostMapping("reSetPwd")
+    public Result reSetPwd(String id, String password, String token, HttpServletRequest request) {
+        if (baseUserService.checkLogin(token, request)) {
+            if (StringUtils.isEmpty(id)) {
+                return Result.failed("id必填");
+            }
+            if (StringUtils.isEmpty(password)) {
+                return Result.failed("密码必填");
+            }
+            return baseUserService.reSetPwd(id, password, request);
+        } else {
+            return Result.failedLogin();
+        }
+    }
+
+    /**
+     * 分页列表
+     */
+    @NeedLogin
+    @GetMapping("queryAllByLimit")
+    public Result queryAllByLimit(BaseUserNewVO vo, @RequestHeader(value = "loginID") String loginID) {
+        if (com.aliyuncs.utils.StringUtils.isEmpty(loginID)) {
+            return Result.failed("loginID不能为空");
+        }
+        try {
+            return Result.success(this.baseUserService.queryAllByLimit(vo));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return new Result(ResponseCode.SERVER_ERROR.getCode(), ResponseCode.SERVER_ERROR.getMsg());
+        }
+    }
 
 }

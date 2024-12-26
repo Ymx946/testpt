@@ -1,7 +1,8 @@
-package com.mz.model.base;
+package com.mz.model.base.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mz.common.annotation.FieldMeta;
+import com.mz.common.model.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,17 +19,11 @@ import java.io.Serializable;
 @Setter
 @Getter
 @ToString
-@JsonIgnoreProperties(value = {"rawPwd"})
-public class BaseUser implements Serializable {
-    private static final long serialVersionUID = 285554897944761788L;
-    //    用户类型(1-监管端2-农企端 3-演示(免登) 4-大屏演示(免登))
-    public static int USER_TYPE_SUPERVISE = 1;
-    public static int USER_TYPE_ENTERPRISE = 2;
-    public static int USER_TYPE_LOGIN_FREE = 3;
-    public static int USER_TYPE_LOGIN_FREE_SCREEN = 4;
-    //用户权限类型（用于免登录区域用户）
-    public static String BUS_NODE_LOGIN_FREE = "Manage";//后台关联
-    public static String BUS_NODE_LOGIN_FREE_SCREEN = "Bulletin";//演示大屏
+public class BaseUserNewVO extends BaseDTO {
+    /**
+     * 搜索关键字
+     */
+    private String findStr;
     /**
      * 主键
      */
