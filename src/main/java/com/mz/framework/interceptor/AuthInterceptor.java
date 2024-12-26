@@ -7,7 +7,6 @@ import com.mz.common.model.BaseUser;
 import com.mz.common.util.*;
 import com.mz.common.util.cache.LocalCache;
 import com.mz.framework.annotation.NeedLogin;
-import com.mz.framework.annotation.NeedLoginName;
 import com.mz.framework.util.redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -116,19 +115,6 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
 //                return extracted(request, response);
             }
         }
-        // 检查方法是否有NeedLoginName注解，无则跳过认证
-        if (method.isAnnotationPresent(NeedLoginName.class)) {
-            NeedLoginName needLogin = method.getAnnotation(NeedLoginName.class);
-            if (needLogin.required()) {
-                String token = request.getHeader("token");
-                if (StringUtils.isBlank(token) || !checkLoginByName(token, request)) {
-                    String msg = ResponseCode.FAILURE_EXPIRE_TOKEN.getMsg();
-                    CommonUtil.printJson(response, ResponseCode.FAILURE_EXPIRE_TOKEN.getCode(), "操作失败, " + msg, msg);
-                    return false;
-                }
-//                return extracted(request, response);
-            }
-        }
         return true;
     }
 
@@ -138,7 +124,7 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
      * @Description: 判断ip是否被禁用
      */
     private Boolean ipIsLock(String ip) {
-        return redisUtil.hasKey(LOCK_IP_URL_KEY + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + ip);
+        return redisUtil.hasKey(LOCK_IP_URL_KEY + ip);
     }
 
     /**
@@ -149,7 +135,7 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
         if (redisUtil.hasKey(key)) {
             long time = redisUtil.incrBy(key, 1);
             if (time >= LIMIT_TIMES) {
-                redisUtil.getLock(LOCK_IP_URL_KEY + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + ip, ip, IP_LOCK_TIME);
+                redisUtil.getLock(LOCK_IP_URL_KEY + ip, ip, IP_LOCK_TIME);
                 return false;
             }
         } else {
@@ -243,7 +229,6 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
             if (!token.equalsIgnoreCase(redisAppToken)) {
                 return ResponseCode.FAILURE_USER_KICKOUT.getCode();
             }
-
             baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO_APP + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
         }
 
@@ -259,33 +244,6 @@ public class AuthInterceptor implements AsyncHandlerInterceptor {
             return ResponseCode.SUCCESS.getCode();
         }
         return ResponseCode.SERVER_ERROR.getCode();
-    }
-
-    /**
-     * 验证登录Redis
-     *
-     * @param token 主键
-     * @return 是否成功
-     */
-    public boolean checkLoginByName(String token, HttpServletRequest request) {
-        if (StringUtils.isAnyBlank(token)) {
-            return false;
-        }
-
-        String userKey = request.getHeader("userKey");//请求头有登录ID，则根据ID去库中获取用户信息
-        if (StringUtils.isAnyBlank(userKey)) {
-            return false;
-        }
-
-        String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userKey);//获取用户信息
-        if (StringUtils.isNoneBlank(baseUserStr)) {
-            JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
-            BaseUser sessionBaseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
-            redisUtil.setEx(ConstantsCacheUtil.LOGIN_TOKEN + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userKey, token, 300, TimeUnit.MINUTES);
-            redisUtil.setEx(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + userKey, JSON.toJSONString(sessionBaseUser), 300, TimeUnit.MINUTES);
-            return true;
-        }
-        return false;
     }
 
     /**

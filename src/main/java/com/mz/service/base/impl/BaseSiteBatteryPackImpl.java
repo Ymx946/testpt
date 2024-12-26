@@ -65,8 +65,8 @@ public class BaseSiteBatteryPackImpl extends ServiceImpl<BaseSiteBatteryPackMapp
         if (pojo.getId() == null) {
             IdWorker idWorker = new IdWorker(0L, 0L);
             pojo.setId(idWorker.nextId());
-            pojo.setCreateUser(baseUser.getRealName());
             pojo.setCreateTime(DateUtil.now());
+            pojo.setCreateUser(baseUser.getRealName());
             pojo.setModifyUser(baseUser.getRealName());
             pojo.setModifyTime(DateUtil.now());
             pojo.setDelState(ConstantsUtil.IS_DONT_DEL);

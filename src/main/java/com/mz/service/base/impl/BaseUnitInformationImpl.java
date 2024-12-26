@@ -59,21 +59,21 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
         String baseUserStr = redisUtil.get(ConstantsCacheUtil.LOGIN_USER_INFO + ConstantsCacheUtil.REDIS_DEFAULT_DELIMITER + loginID);
         JSONObject baseUserJson = JSONObject.parseObject(baseUserStr);
         BaseUser baseUser = JSONObject.toJavaObject(baseUserJson, BaseUser.class);
-        if(ObjectUtil.isNotEmpty(pojo.getPid())){
+        if (ObjectUtil.isNotEmpty(pojo.getPid())) {
             BaseUnitInformation information = getById(pojo.getPid());
-            if(ObjectUtil.isNotEmpty(information) && ObjectUtil.isNotEmpty(information.getUnitName())){
+            if (ObjectUtil.isNotEmpty(information) && ObjectUtil.isNotEmpty(information.getUnitName())) {
                 pojo.setHigherLevelUnit(information.getUnitName());
             }
         }
-        if(ObjectUtil.isEmpty(pojo.getPid())){
+        if (ObjectUtil.isEmpty(pojo.getPid())) {
             pojo.setLevel(1);
-        }else {
+        } else {
             BaseUnitInformation information = getById(pojo.getPid());
-            if(ObjectUtil.isNotEmpty(information) && ObjectUtil.isNotEmpty(information.getLevel())){
-                pojo.setLevel(information.getLevel()+1);
+            if (ObjectUtil.isNotEmpty(information) && ObjectUtil.isNotEmpty(information.getLevel())) {
+                pojo.setLevel(information.getLevel() + 1);
             }
         }
-        if(ObjectUtil.isEmpty(pojo.getState())){
+        if (ObjectUtil.isEmpty(pojo.getState())) {
             pojo.setState(ConstantsUtil.STATE_NORMAL);
         }
         if (pojo.getId() == null) {
@@ -133,6 +133,7 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
         List<BaseUnitInformation> list = lambdaQuery.orderByDesc(BaseUnitInformation::getCreateTime).list();
         return list;
     }
+
     @Override
     public List<BaseUnitInformationModel> queryTreeThree(BaseUnitInformationVO vo) {
         vo.setState(1);
@@ -209,9 +210,9 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
 
         // Build the second and third layers
         for (BaseUnitInformation unit : units) {
-            if (unit.getPid()!= null) { // Second and third layers
+            if (unit.getPid() != null) { // Second and third layers
                 Map<String, Object> parent = unitMap.get(unit.getPid());
-                if (parent!= null) {
+                if (parent != null) {
                     List<Map<String, Object>> children = (List<Map<String, Object>>) parent.get("children");
                     // Use Set to check duplicates
                     Set<Long> childIds = new HashSet<>();
@@ -277,16 +278,13 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
         List<BaseUnitInformation> units = queryAllUnits(vo); // Fetch units
         List<BaseSiteInformation> sites = queryAllSites(); // Fetch sites
         List<BaseSiteHost> hosts = queryAllHosts(); // Fetch hosts
-        List<BaseSiteBatteryPack> packs = queryAllPacks();
+        List<BaseSiteBatteryPack> packs = queryAllPacks(); // Fetch battery packs
 
         // Map for the first three layers
         Map<Long, Map<String, Object>> unitMap = new HashMap<>();
-        // Track added unit IDs
         Set<Long> addedUnitIds = new HashSet<>();
-        // Store BaseUnitInformation by id
         Map<Long, BaseUnitInformation> unitInfoMap = new HashMap<>();
 
-        // Build the first three layers
         for (BaseUnitInformation unit : units) {
             unitInfoMap.put(unit.getId(), unit);
             Map<String, Object> unitData = new HashMap<>();
@@ -296,12 +294,10 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
             unitMap.put(unit.getId(), unitData);
         }
 
-        // Prepare final structure
         Map<String, Object> result = new HashMap<>();
         List<Map<String, Object>> unitList = new ArrayList<>();
         result.put("units", unitList);
 
-        // Build the first layer
         for (BaseUnitInformation unit : units) {
             if (unit.getPid() == null) { // First layer
                 if (!addedUnitIds.contains(unit.getId())) {
@@ -313,13 +309,11 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
             }
         }
 
-        // Build the second and third layers
         for (BaseUnitInformation unit : units) {
-            if (unit.getPid()!= null) { // Second and third layers
+            if (unit.getPid() != null) { // Second and third layers
                 Map<String, Object> parent = unitMap.get(unit.getPid());
-                if (parent!= null) {
+                if (parent != null) {
                     List<Map<String, Object>> children = (List<Map<String, Object>>) parent.get("children");
-                    // Use Set to check duplicates
                     Set<Long> childIds = new HashSet<>();
                     for (Map<String, Object> child : children) {
                         childIds.add((Long) child.get("id"));
@@ -333,7 +327,7 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
 
         // Build fourth layer
         Map<Long, Map<String, Object>> siteMap = new HashMap<>();
-        Set<Long> addedSiteIds = new HashSet<>(); // Track added site IDs
+        Set<Long> addedSiteIds = new HashSet<>();
         for (BaseSiteInformation site : sites) {
             Map<String, Object> siteData = new HashMap<>();
             siteData.put("id", site.getId());
@@ -341,11 +335,9 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
             siteData.put("children", new ArrayList<Map<String, Object>>());
             siteMap.put(site.getId(), siteData);
         }
-
         for (BaseSiteInformation site : sites) {
             if (unitMap.containsKey(site.getUnitId())) {
                 List<Map<String, Object>> children = (List<Map<String, Object>>) unitMap.get(site.getUnitId()).get("children");
-                // Use Set to check duplicates
                 Set<Long> childIds = new HashSet<>();
                 for (Map<String, Object> child : children) {
                     childIds.add((Long) child.get("id"));
@@ -358,7 +350,7 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
 
         // Build fifth layer
         Map<Long, Map<String, Object>> hostMap = new HashMap<>();
-        Set<Long> addedHostIds = new HashSet<>(); // Track added site IDs
+        Set<Long> addedHostIds = new HashSet<>();
         for (BaseSiteHost baseSiteHost : hosts) {
             Map<String, Object> hostData = new HashMap<>();
             hostData.put("id", baseSiteHost.getId());
@@ -366,28 +358,22 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
             hostData.put("children", new ArrayList<Map<String, Object>>());
             hostMap.put(baseSiteHost.getId(), hostData);
         }
-
         for (BaseSiteHost host : hosts) {
-            Map<String, Object> hostData = new HashMap<>();
-            hostData.put("id", host.getId());
-            hostData.put("name", host.getHostName());
-            hostData.put("children", new ArrayList<Map<String, Object>>());
             if (siteMap.containsKey(host.getSiteId())) {
                 List<Map<String, Object>> children = (List<Map<String, Object>>) siteMap.get(host.getSiteId()).get("children");
-                // Use Set to check duplicates
                 Set<Long> childIds = new HashSet<>();
                 for (Map<String, Object> child : children) {
                     childIds.add((Long) child.get("id"));
                 }
                 if (!childIds.contains(host.getId())) {
-                    children.add(hostData);
+                    children.add(hostMap.get(host.getId()));
                 }
             }
         }
 
         // Build sixth layer
         Map<Long, Map<String, Object>> packMap = new HashMap<>();
-        Set<Long> addedPackIds = new HashSet<>(); // Track added pack IDs
+        Set<Long> addedPackIds = new HashSet<>();
         for (BaseSiteBatteryPack pack : packs) {
             Map<String, Object> packData = new HashMap<>();
             packData.put("id", pack.getId());
@@ -395,11 +381,9 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
             packData.put("children", new ArrayList<Map<String, Object>>());
             packMap.put(pack.getId(), packData);
         }
-
         for (BaseSiteBatteryPack pack : packs) {
             if (hostMap.containsKey(pack.getHostId())) {
                 List<Map<String, Object>> children = (List<Map<String, Object>>) hostMap.get(pack.getHostId()).get("children");
-                // Use Set to check duplicates
                 Set<Long> childIds = new HashSet<>();
                 for (Map<String, Object> child : children) {
                     childIds.add((Long) child.get("id"));
@@ -409,9 +393,9 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
                 }
             }
         }
-
         return result;
     }
+
 
     private List<BaseUnitInformation> queryAllUnits(BaseUnitInformationVO vo) {
         vo.setState(1);
@@ -430,6 +414,7 @@ public class BaseUnitInformationImpl extends ServiceImpl<BaseUnitInformationMapp
         List<BaseSiteHost> list = baseSiteHostService.queryAll(hostVO);
         return list;
     }
+
     private List<BaseSiteBatteryPack> queryAllPacks() {
         BaseSiteBatteryPackVO packVO = new BaseSiteBatteryPackVO();
         List<BaseSiteBatteryPack> list = baseSiteBatteryPackService.queryAll(packVO);
